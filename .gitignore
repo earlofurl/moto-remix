@@ -1,0 +1,17 @@
+node_modules
+
+/.cache
+/build
+/public/build
+.env
+
+/prisma/data.db
+/prisma/data.db-journal
+
+# Prisma shadow db
+/postgres-data
+
+# Supabase
+**/supabase/.branches
+**/supabase/.temp
+**/supabase/.env

@@ -1,0 +1,76 @@
+{
+  "name": "moto-remix",
+  "description": "",
+  "private": true,
+  "sideEffects": false,
+  "scripts": {
+    "build": "run-s build:*",
+    "build:css": "unocss app/**/*.tsx --out-file=app/styles/uno.css",
+    "build:remix": "remix build",
+    "dev": "run-p dev:*",
+    "dev:css": "unocss app/**/*.tsx --out-file=app/styles/uno.css --watch",
+    "dev:remix": "cross-env NODE_ENV=development binode --require ./mocks -- @remix-run/dev:remix dev",
+    "shadow-db:start": "docker-compose up -d",
+    "shadow-db:stop": "docker-compose stop",
+    "format": "prettier --write .",
+    "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint .",
+    "setup": "run-s shadow-db:start setup:wait-shadow-db setup:db setup:seed shadow-db:stop",
+    "setup:db": "prisma migrate dev",
+    "setup:seed": "prisma db seed",
+    "setup:wait-shadow-db": "dotenv -- node ./wait-shadow-db-setup.js",
+    "start": "remix-serve build",
+    "css": "unocss app/**/*.tsx --out-file=app/styles/uno.css"
+  },
+  "prettier": {
+    "singleAttributePerLine": true
+  },
+  "dependencies": {
+    "@prisma/client": "^3.15.1",
+    "@remix-run/node": "^1.5.1",
+    "@remix-run/react": "^1.5.1",
+    "@remix-run/serve": "^1.5.1",
+    "@supabase/supabase-js": "^1.35.3",
+    "@tanstack/react-table": "^8.0.0-beta.8",
+    "froebel": "^0.17.0",
+    "mapbox-gl": "^2.8.2",
+    "react": "^18.1.0",
+    "react-dom": "^18.1.0",
+    "react-map-gl": "^7.0.15",
+    "remix-params-helper": "^0.4.10",
+    "remix-utils": "^3.3.0",
+    "tiny-invariant": "^1.2.0",
+    "zod": "^3.17.3"
+  },
+  "devDependencies": {
+    "@iconify-json/fa6-solid": "^1.1.4",
+    "@remix-run/dev": "^1.5.1",
+    "@types/mapbox-gl": "^2.7.3",
+    "@types/react": "^18.0.12",
+    "@types/react-dom": "^18.0.5",
+    "@unocss/preset-icons": "^0.39.0",
+    "@unocss/reset": "^0.39.0",
+    "binode": "^1.0.5",
+    "c8": "^7.11.3",
+    "cross-env": "^7.0.3",
+    "dotenv-cli": "^5.1.0",
+    "eslint": "^8.15.0",
+    "eslint-config-galex": "^4.1.4",
+    "eslint-import-resolver-typescript": "^2.7.1",
+    "eslint-plugin-import": "^2.26.0",
+    "msw": "^0.42.1",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.7.0",
+    "prettier-plugin-tailwindcss": "^0.1.11",
+    "prisma": "^3.15.1",
+    "ts-node": "^10.8.1",
+    "typescript": "^4.6.4",
+    "unocss": "^0.39.0"
+  },
+  "engines": {
+    "node": ">=14"
+  },
+  "prisma": {
+    "schema": "app/core/database/schema.prisma",
+    "seed": "ts-node --require tsconfig-paths/register app/core/database/seed.server.ts"
+  }
+}
