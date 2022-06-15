@@ -37,11 +37,7 @@ export const meta: MetaFunction = () => ({
 });
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const url = new URL(request.url);
-  const forwardedProto = request.headers.get("X-Forwarded-Proto");
-  const host = request.headers.get("X-Forwarded-Host") ?? url.host;
-  const pathname = url.pathname;
-  const search = url.search ?? "";
+  const proto = request.headers.get("X-Forwarded-Proto");
 
   json({
     ENV: {
@@ -50,15 +46,13 @@ export const loader: LoaderFunction = async ({ request }) => {
     },
   });
 
-  if (forwardedProto === "http") {
-    return redirect(`https://${host}${pathname}${search}`, {
-      headers: {
-        "X-Forwarded-Proto": "https",
-        "Strict-Transport-Security": `max-age=${HUNDRED_YEARS}`,
-      },
-    });
+  if (proto === "http") {
+    const url = new URL(request.url);
+    url.protocol = "https:";
+    return redirect(url.toString(), { status: 302 });
   }
-  return null;
+
+  return {};
 };
 
 // export const loader: LoaderFunction = async ({ request }) =>
