@@ -55,7 +55,7 @@ export default function Index(): JSX.Element {
                 <div className="mx-auto mt-10 max-w-sm sm:flex sm:max-w-none sm:justify-center">
                   <div className="space-y-4 sm:mx-auto sm:inline-grid sm:grid-cols-2 sm:gap-5 sm:space-y-0">
                     <Link
-                      to="#"
+                      to="/#contact"
                       className="text-gray-1000 bg-brand-primary/80 flex items-center justify-center rounded-md border border-transparent px-4 py-3 text-base font-medium shadow-sm hover:bg-green-200 sm:px-8"
                     >
                       Contact Us
@@ -251,7 +251,7 @@ export default function Index(): JSX.Element {
                     </p>
                     <div className="mt-6">
                       <Link
-                        to="#"
+                        to="/#contact"
                         className="hover:bg-brand-secondary inline-flex rounded-md border border-transparent bg-green-800 bg-origin-border px-4 py-2 text-base font-medium text-white shadow-sm"
                       >
                         Get started
@@ -334,7 +334,7 @@ export default function Index(): JSX.Element {
                     </p>
                     <div className="mt-6">
                       <Link
-                        to="#"
+                        to="/#contact"
                         className="hover:from-red-00 inline-flex rounded-md border border-transparent bg-gradient-to-r from-emerald-600 to-green-600 bg-origin-border px-4 py-2 text-base font-medium text-white shadow-sm hover:to-red-500"
                       >
                         Get started
@@ -409,13 +409,13 @@ export default function Index(): JSX.Element {
             </h2>
             <div className="mt-6 space-y-4 sm:flex sm:space-y-0 sm:space-x-5">
               <Link
-                to="#"
+                to="/strains"
                 className="flex items-center justify-center rounded-md border border-transparent bg-gradient-to-r from-green-600 to-emerald-600 bg-origin-border px-4 py-3 text-base font-medium text-white shadow-sm hover:from-green-700 hover:to-emerald-700"
               >
                 Learn more
               </Link>
               <Link
-                to="#"
+                to="/#contact"
                 className="flex items-center justify-center rounded-md border border-transparent bg-indigo-50 px-4 py-3 text-base font-medium text-indigo-800 shadow-sm hover:bg-indigo-100"
               >
                 Get started

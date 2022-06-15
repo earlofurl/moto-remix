@@ -24,7 +24,7 @@ export default function Navbar() {
                 <Link
                   key={link.name}
                   to={link.to}
-                  className="text-2xl font-semibold text-black hover:text-gray-400"
+                  className="text-lg font-semibold text-black hover:text-gray-400 sm:text-2xl"
                 >
                   {link.name}
                 </Link>
@@ -43,7 +43,7 @@ export default function Navbar() {
                 <Link
                   key={link.name}
                   to={link.to}
-                  className="text-2xl font-semibold text-black hover:text-gray-400"
+                  className="text-lg font-semibold text-black hover:text-gray-400 sm:text-2xl"
                 >
                   {link.name}
                 </Link>
