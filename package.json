@@ -19,7 +19,8 @@
     "setup:seed": "prisma db seed",
     "setup:wait-shadow-db": "dotenv -- node ./wait-shadow-db-setup.js",
     "start": "remix-serve build",
-    "css": "unocss app/**/*.tsx --out-file=app/styles/uno.css"
+    "css": "unocss app/**/*.tsx --out-file=app/styles/uno.css",
+    "generate:css": "unocss app/**/*.tsx --out-file=app/styles/uno.css"
   },
   "prettier": {
     "singleAttributePerLine": true
