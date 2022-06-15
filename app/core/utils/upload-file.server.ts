@@ -5,7 +5,9 @@ async function convertToFile(
   filename: string,
   type?: string
 ) {
-  if (!data || !filename) return null;
+  if (!data || !filename) {
+    return null;
+  }
 
   const chunks = [];
   for await (const chunk of data) {
@@ -23,12 +25,12 @@ export function getPublicFileURL(filePath: string, bucketName: string) {
   return url?.publicURL;
 }
 
-export interface UploadOptions {
+export type UploadOptions = {
   bucketName?: string;
   filePath: string;
   filename: string;
   contentType: string;
-}
+};
 
 export async function uploadFile(
   data: AsyncIterable<Uint8Array>,
@@ -36,13 +38,17 @@ export async function uploadFile(
 ) {
   const file = await convertToFile(data, filename, contentType);
 
-  if (!file) return null;
+  if (!file) {
+    return null;
+  }
 
   const { data: result, error } = await supabaseAdmin.storage
     .from(bucketName)
     .upload(filePath, file);
 
-  if (!result || error) return null;
+  if (!result || error) {
+    return null;
+  }
 
   return getPublicFileURL(filePath, bucketName);
 }

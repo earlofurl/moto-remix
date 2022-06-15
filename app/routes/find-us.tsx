@@ -1,9 +1,9 @@
 import type { Location } from "@prisma/client";
 import { Link, useLoaderData } from "@remix-run/react";
 import React from "react";
+import { ClientOnly } from "remix-utils";
 import MapBoxMap from "~/core/components/mapbox-map";
 import { getAllLocations } from "~/modules/location/queries";
-import { ClientOnly } from "remix-utils";
 
 export function loader(): Promise<Location[]> {
   return getAllLocations();

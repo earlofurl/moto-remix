@@ -47,7 +47,9 @@ export async function createUserAccount(
   const authAccount = await createAuthAccount(email, password);
 
   // ok, no user account created
-  if (!authAccount) return null;
+  if (!authAccount) {
+    return null;
+  }
 
   const authSession = await signInWithEmail(email, password);
 
@@ -60,7 +62,9 @@ export async function createUserAccount(
 
   const user = await tryCreateUser(authSession);
 
-  if (!user) return null;
+  if (!user) {
+    return null;
+  }
 
   return authSession;
 }

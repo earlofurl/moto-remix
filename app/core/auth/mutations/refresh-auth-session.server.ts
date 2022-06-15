@@ -1,5 +1,4 @@
 import { redirect } from "@remix-run/node";
-
 import { supabaseAdmin } from "~/core/integrations/supabase/supabase.server";
 import {
   getCurrentPath,
@@ -13,13 +12,17 @@ import { commitAuthSession, getAuthSession } from "../session.server";
 import { mapAuthSession } from "../utils/map-auth-session";
 
 async function refreshAccessToken(refreshToken?: string) {
-  if (!refreshToken) return null;
+  if (!refreshToken) {
+    return null;
+  }
 
   const { data, error } = await supabaseAdmin.auth.api.refreshAccessToken(
     refreshToken
   );
 
-  if (!data || error) return null;
+  if (!data || error) {
+    return null;
+  }
 
   return mapAuthSession(data);
 }

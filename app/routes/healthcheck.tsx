@@ -1,6 +1,5 @@
 // learn more: https://fly.io/docs/reference/configuration/#services-http_checks
 import type { LoaderFunction } from "@remix-run/node";
-
 import { db } from "~/core/database";
 
 export const loader: LoaderFunction = async ({ request }) => {
@@ -14,7 +13,9 @@ export const loader: LoaderFunction = async ({ request }) => {
     await Promise.all([
       db.user.count(),
       fetch(url.toString(), { method: "HEAD" }).then((r) => {
-        if (!r.ok) return Promise.reject(r);
+        if (!r.ok) {
+          throw r;
+        }
       }),
     ]);
     return new Response("OK");

@@ -1,5 +1,3 @@
-import { useEffect, useRef } from "react";
-
 import type { ActionFunction, LoaderFunction } from "@remix-run/node";
 import {
   json,
@@ -7,7 +5,7 @@ import {
   unstable_parseMultipartFormData,
 } from "@remix-run/node";
 import { useFetcher } from "@remix-run/react";
-
+import { useEffect, useRef } from "react";
 import { requireAuthSession } from "~/core/auth/guards";
 import { commitAuthSession } from "~/core/auth/session.server";
 import { uploadFile } from "~/core/utils/upload-file.server";
@@ -111,7 +109,9 @@ export default function Upload() {
 
           const file = e.dataTransfer.files?.[0];
 
-          if (!file) return;
+          if (!file) {
+            return;
+          }
 
           const formData = new FormData();
           formData.set("avatar", file);

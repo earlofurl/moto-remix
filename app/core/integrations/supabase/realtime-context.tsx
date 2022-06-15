@@ -1,8 +1,6 @@
+import { useFetcher } from "@remix-run/react";
 import type { ReactElement } from "react";
 import { createContext, useContext, useState } from "react";
-
-import { useFetcher } from "@remix-run/react";
-
 import type { RealtimeAuthSession } from "~/core/auth/session.server";
 import { useInterval, useMatchesData } from "~/core/hooks";
 import { isBrowser } from "~/core/utils/is-browser";
@@ -22,11 +20,11 @@ const SupabaseRealtimeContext = createContext<SupabaseClient | undefined>(
 );
 
 // in root.tsx, wrap <Outlet /> with <SupabaseRealtimeProvider> to use realtime features
-export const SupabaseRealtimeProvider = ({
+export function SupabaseRealtimeProvider({
   children,
 }: {
   children: ReactElement;
-}) => {
+}) {
   // what root loader data returns
   const { accessToken, expiresIn, expiresAt } = useOptionalRealtimeSession();
   const [currentExpiresAt, setCurrentExpiresAt] = useState<
@@ -36,7 +34,9 @@ export const SupabaseRealtimeProvider = ({
     SupabaseClient | undefined
   >(() => {
     // prevents server side initial state
-    if (isBrowser) return getSupabaseClient(); // init a default client in browser. Needed for oauth callback
+    if (isBrowser) {
+      return getSupabaseClient();
+    } // init a default client in browser. Needed for oauth callback
   });
   const refresh = useFetcher();
 
@@ -44,11 +44,12 @@ export const SupabaseRealtimeProvider = ({
   useInterval(() => {
     // refreshes only if expiresIn is defined
     // prevents refresh when user is not logged in
-    if (expiresIn)
+    if (expiresIn) {
       refresh.submit(null, {
         method: "post",
         action: "/refresh-session",
       });
+    }
   }, expiresIn);
 
   // when client side
@@ -58,7 +59,9 @@ export const SupabaseRealtimeProvider = ({
     const client = getSupabaseClient();
 
     // if user is authenticated, set credential
-    if (accessToken) client.auth.setAuth(accessToken);
+    if (accessToken) {
+      client.auth.setAuth(accessToken);
+    }
 
     // refresh provider's state
     setCurrentExpiresAt(expiresAt);
@@ -70,7 +73,7 @@ export const SupabaseRealtimeProvider = ({
       {children}
     </SupabaseRealtimeContext.Provider>
   );
-};
+}
 
 export const useSupabaseRealtime = () => {
   const context = useContext(SupabaseRealtimeContext);

@@ -59,7 +59,7 @@ export const loader: LoaderFunction = async ({ request }) =>
   });
 
 export default function App(): JSX.Element {
-  const { ENV } = useLoaderData() as Window;
+  const { ENV } = useLoaderData();
 
   return (
     <html lang="en">

@@ -8,14 +8,14 @@ if (!SESSION_SECRET) {
   throw new Error("SESSION_SECRET is not set");
 }
 
-export interface AuthSession {
+export type AuthSession = {
   accessToken: string;
   refreshToken: string;
   userId: string;
   email: string;
   expiresIn: number;
   expiresAt: number;
-}
+};
 
 export type RealtimeAuthSession = Pick<
   AuthSession,

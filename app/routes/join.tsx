@@ -1,5 +1,3 @@
-import * as React from "react";
-
 import type {
   ActionFunction,
   LoaderFunction,
@@ -13,9 +11,9 @@ import {
   useSearchParams,
   useTransition,
 } from "@remix-run/react";
+import React from "react";
 import { getFormData, useFormInputProps } from "remix-params-helper";
 import { z } from "zod";
-
 import { createAuthSession, getAuthSession } from "~/core/auth/session.server";
 import { ContinueWithEmailForm } from "~/core/components";
 import { assertIsPost } from "~/core/utils/http.server";
@@ -25,7 +23,9 @@ import { getUserByEmail } from "~/modules/user/queries";
 export const loader: LoaderFunction = async ({ request }) => {
   const authSession = await getAuthSession(request);
 
-  if (authSession) return redirect("/notes");
+  if (authSession) {
+    return redirect("/notes");
+  }
 
   return json({});
 };
@@ -39,12 +39,12 @@ const JoinFormSchema = z.object({
   redirectTo: z.string().optional(),
 });
 
-interface ActionData {
+type ActionData = {
   errors: {
     email?: string;
     password?: string;
   };
-}
+};
 
 export const action: ActionFunction = async ({ request }) => {
   assertIsPost(request);
@@ -91,7 +91,7 @@ export const meta: MetaFunction = () => ({
   title: "Sign Up",
 });
 
-export default function Join() {
+export default function Join(): JSX.Element {
   const [searchParams] = useSearchParams();
   const redirectTo = searchParams.get("redirectTo") ?? undefined;
   const actionData = useActionData() as ActionData;
@@ -131,7 +131,6 @@ export default function Join() {
                 ref={emailRef}
                 id="email"
                 required
-                autoFocus={true}
                 name="email"
                 type="email"
                 autoComplete="email"

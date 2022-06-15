@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { createClient } from "@supabase/supabase-js";
+
 import { SUPABASE_SERVICE_ROLE, SUPABASE_URL } from "../utils/env.server";
 
 if (!SUPABASE_URL) {
@@ -24,7 +25,9 @@ const getUserId = async (): Promise<string> => {
     .listUsers()
     .then(({ data }) => data?.find((user) => user.email === email)?.id);
 
-  if (existingUserId) return existingUserId;
+  if (existingUserId) {
+    return existingUserId;
+  }
 
   const newUserId = await supabaseAdmin.auth.api
     .createUser({
@@ -34,7 +37,9 @@ const getUserId = async (): Promise<string> => {
     })
     .then(({ user }) => user?.id);
 
-  if (newUserId) return newUserId;
+  if (newUserId) {
+    return newUserId;
+  }
 
   throw new Error("Could not create or get user");
 };
@@ -61,8 +66,8 @@ async function seed() {
 }
 
 seed()
-  .catch((e) => {
-    console.error(e);
+  .catch((error) => {
+    console.error(error);
     process.exit(1);
   })
   .finally(async () => {

@@ -1,5 +1,3 @@
-import { matchRequestUrl, rest } from "msw";
-
 import {
   authSession,
   SUPABASE_AUTH_ADMIN_USER_API,
@@ -8,6 +6,7 @@ import {
 } from "mocks/handlers";
 import { server } from "mocks/start";
 import { USER_EMAIL, USER_ID, USER_PASSWORD } from "mocks/user";
+import { matchRequestUrl, rest } from "msw";
 import { db } from "~/core/database";
 
 import { createUserAccount } from "./create-user-account.server";
@@ -35,7 +34,9 @@ describe(createUserAccount.name, () => {
         SUPABASE_URL
       ).matches;
 
-      if (matchesMethod && matchesUrl) fetchAuthAdminUserAPI.set(req.id, req);
+      if (matchesMethod && matchesUrl) {
+        fetchAuthAdminUserAPI.set(req.id, req);
+      }
     });
 
     // https://mswjs.io/docs/api/setup-server/use#one-time-override
@@ -80,7 +81,9 @@ describe(createUserAccount.name, () => {
         SUPABASE_URL
       ).matches;
 
-      if (matchesMethod && matchesUrl) fetchAuthTokenAPI.set(req.id, req);
+      if (matchesMethod && matchesUrl) {
+        fetchAuthTokenAPI.set(req.id, req);
+      }
     });
 
     server.events.on("request:start", (req) => {
@@ -91,7 +94,9 @@ describe(createUserAccount.name, () => {
         SUPABASE_URL
       ).matches;
 
-      if (matchesMethod && matchesUrl) fetchAuthAdminUserAPI.set(req.id, req);
+      if (matchesMethod && matchesUrl) {
+        fetchAuthAdminUserAPI.set(req.id, req);
+      }
     });
 
     server.use(
@@ -137,7 +142,9 @@ describe(createUserAccount.name, () => {
         SUPABASE_URL
       ).matches;
 
-      if (matchesMethod && matchesUrl) fetchAuthTokenAPI.set(req.id, req);
+      if (matchesMethod && matchesUrl) {
+        fetchAuthTokenAPI.set(req.id, req);
+      }
     });
 
     server.events.on("request:start", (req) => {
@@ -148,10 +155,12 @@ describe(createUserAccount.name, () => {
         SUPABASE_URL
       ).matches;
 
-      if (matchesMethod && matchesUrl) fetchAuthAdminUserAPI.set(req.id, req);
+      if (matchesMethod && matchesUrl) {
+        fetchAuthAdminUserAPI.set(req.id, req);
+      }
     });
 
-    //@ts-expect-error missing vitest type
+    // @ts-expect-error missing vitest type
     db.user.create.mockResolvedValue(null);
 
     const result = await createUserAccount(USER_EMAIL, USER_PASSWORD);
@@ -183,7 +192,9 @@ describe(createUserAccount.name, () => {
         SUPABASE_URL
       ).matches;
 
-      if (matchesMethod && matchesUrl) fetchAuthAdminUserAPI.set(req.id, req);
+      if (matchesMethod && matchesUrl) {
+        fetchAuthAdminUserAPI.set(req.id, req);
+      }
     });
 
     server.events.on("request:start", (req) => {
@@ -194,10 +205,12 @@ describe(createUserAccount.name, () => {
         SUPABASE_URL
       ).matches;
 
-      if (matchesMethod && matchesUrl) fetchAuthTokenAPI.set(req.id, req);
+      if (matchesMethod && matchesUrl) {
+        fetchAuthTokenAPI.set(req.id, req);
+      }
     });
 
-    //@ts-expect-error missing vitest type
+    // @ts-expect-error missing vitest type
     db.user.create.mockResolvedValue({ id: USER_ID, email: USER_EMAIL });
 
     const result = await createUserAccount(USER_EMAIL, USER_PASSWORD);

@@ -83,7 +83,7 @@ describe(notFound.name, () => {
 describe(safeRedirect.name, () => {
   it("should return root path if invalid destination", () => {
     expect(safeRedirect(null)).toBe("/");
-    expect(safeRedirect(undefined)).toBe("/");
+    expect(safeRedirect()).toBe("/");
     // @ts-expect-error js wrong type
     expect(safeRedirect(false)).toBe("/");
     expect(safeRedirect("")).toBe("/");

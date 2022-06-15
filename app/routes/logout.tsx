@@ -1,6 +1,5 @@
 import type { ActionFunction, LoaderFunction } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
-
 import { destroyAuthSession } from "~/core/auth/session.server";
 import { assertIsPost } from "~/core/utils/http.server";
 

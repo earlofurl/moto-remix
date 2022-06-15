@@ -1,5 +1,4 @@
 import { createClient } from "@supabase/supabase-js";
-
 import {
   NODE_ENV,
   SERVER_URL,
@@ -22,8 +21,11 @@ if (!SUPABASE_SERVICE_ROLE) {
   throw new Error("SUPABASE_SERVICE_ROLE is not set");
 }
 
-if (!SERVER_URL) throw new Error("SERVER_URL is not set");
+if (!SERVER_URL) {
+  throw new Error("SERVER_URL is not set");
+}
 
+// eslint-disable-next-line import/no-mutable-exports
 let supabaseAdmin: SupabaseClient;
 
 // ⚠️ cloudflare needs you define fetch option : https://github.com/supabase/supabase-js#custom-fetch-implementation

@@ -5,8 +5,8 @@ export default function MapBoxMap(): JSX.Element {
   return (
     <Map
       initialViewState={{
-        latitude: 45.5366464,
-        longitude: -122.4202829,
+        latitude: 45.536_646_4,
+        longitude: -122.420_282_9,
         zoom: 14,
       }}
       style={{ width: 800, height: 600 }}
@@ -14,8 +14,8 @@ export default function MapBoxMap(): JSX.Element {
       mapboxAccessToken="pk.eyJ1IjoiZWFybG9mdXJsIiwiYSI6ImNsNGV3ajNwNjA3bnYzYmszYmU5NGh4ZG0ifQ.4qSxV7W5c3vdXXJXSYsR8g"
     >
       <Marker
-        longitude={-122.4202829}
-        latitude={45.5366464}
+        longitude={-122.420_282_9}
+        latitude={45.536_646_4}
         color="red"
       />
     </Map>

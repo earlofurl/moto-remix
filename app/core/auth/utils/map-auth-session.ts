@@ -5,7 +5,9 @@ import type { AuthSession } from "../session.server";
 export function mapAuthSession(
   supabaseAuthSession: SupabaseAuthSession | null
 ): AuthSession | null {
-  if (!supabaseAuthSession) return null;
+  if (!supabaseAuthSession) {
+    return null;
+  }
 
   return {
     accessToken: supabaseAuthSession.access_token,

@@ -9,7 +9,9 @@ export async function signInWithEmail(email: string, password: string) {
     password
   );
 
-  if (!data || error) return null;
+  if (!data || error) {
+    return null;
+  }
 
   return mapAuthSession(data);
 }

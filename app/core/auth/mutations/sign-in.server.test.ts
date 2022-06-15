@@ -1,5 +1,3 @@
-import { matchRequestUrl } from "msw";
-
 import {
   authSession,
   SUPABASE_AUTH_TOKEN_API,
@@ -7,6 +5,7 @@ import {
 } from "mocks/handlers";
 import { server } from "mocks/start";
 import { USER_EMAIL, USER_PASSWORD } from "mocks/user";
+import { matchRequestUrl } from "msw";
 import { signInWithEmail } from "~/core/auth/mutations/sign-in.server";
 
 vitest.mock("../models/user.server", () => ({
@@ -27,7 +26,9 @@ describe(signInWithEmail.name, () => {
         SUPABASE_URL
       ).matches;
 
-      if (matchesMethod && matchesUrl) fetchAuthTokenAPI.set(req.id, req);
+      if (matchesMethod && matchesUrl) {
+        fetchAuthTokenAPI.set(req.id, req);
+      }
     });
 
     const result = await signInWithEmail(USER_EMAIL, USER_PASSWORD);

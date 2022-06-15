@@ -1,6 +1,5 @@
 import type { ActionFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
-
 import { refreshAuthSession } from "~/core/auth/mutations";
 import { commitAuthSession } from "~/core/auth/session.server";
 import { assertIsPost } from "~/core/utils/http.server";

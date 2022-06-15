@@ -1,5 +1,3 @@
-import * as React from "react";
-
 import type {
   ActionFunction,
   LoaderFunction,
@@ -13,9 +11,9 @@ import {
   useSearchParams,
   useTransition,
 } from "@remix-run/react";
+import * as React from "react";
 import { getFormData, useFormInputProps } from "remix-params-helper";
 import { z } from "zod";
-
 import { signInWithEmail } from "~/core/auth/mutations";
 import { createAuthSession, getAuthSession } from "~/core/auth/session.server";
 import { ContinueWithEmailForm } from "~/core/components";
@@ -24,7 +22,9 @@ import { assertIsPost } from "~/core/utils/http.server";
 export const loader: LoaderFunction = async ({ request }) => {
   const authSession = await getAuthSession(request);
 
-  if (authSession) return redirect("/notes");
+  if (authSession) {
+    return redirect("/notes");
+  }
 
   return json({});
 };
@@ -38,12 +38,12 @@ const LoginFormSchema = z.object({
   redirectTo: z.string().optional(),
 });
 
-interface ActionData {
+type ActionData = {
   errors?: {
     email?: string;
     password?: string;
   };
-}
+};
 
 export const action: ActionFunction = async ({ request }) => {
   assertIsPost(request);
@@ -125,7 +125,7 @@ export default function LoginPage() {
                 id="email"
                 type="email"
                 required
-                autoFocus={true}
+                autoFocus
                 autoComplete="email"
                 aria-invalid={actionData?.errors?.email ? true : undefined}
                 aria-describedby="email-error"

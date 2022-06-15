@@ -2,7 +2,6 @@ import type { ActionFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { getFormData } from "remix-params-helper";
 import { z } from "zod";
-
 import { sendMagicLink } from "~/core/auth/mutations";
 import { assertIsPost } from "~/core/utils/http.server";
 
@@ -13,9 +12,9 @@ const MagicLinkSchema = z.object({
     .transform((email) => email.toLowerCase()),
 });
 
-interface ActionData {
+type ActionData = {
   error?: string;
-}
+};
 
 export const action: ActionFunction = async ({ request }) => {
   assertIsPost(request);

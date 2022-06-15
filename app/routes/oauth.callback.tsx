@@ -1,11 +1,9 @@
-import { useEffect } from "react";
-
 import type { ActionFunction, LoaderFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { useActionData, useFetcher, useSearchParams } from "@remix-run/react";
+import { useEffect } from "react";
 import { getFormData } from "remix-params-helper";
 import { z } from "zod";
-
 import { commitAuthSession, getAuthSession } from "~/core/auth/session.server";
 import { mapAuthSession } from "~/core/auth/utils/map-auth-session";
 import { getSupabaseClient } from "~/core/integrations/supabase/supabase.client";
@@ -18,14 +16,16 @@ import { getUserByEmail } from "~/modules/user/queries";
 export const loader: LoaderFunction = async ({ request }) => {
   const authSession = await getAuthSession(request);
 
-  if (authSession) return redirect("/notes");
+  if (authSession) {
+    return redirect("/notes");
+  }
 
   return json({});
 };
 
-interface ActionData {
+type ActionData = {
   message?: string;
-}
+};
 
 export const action: ActionFunction = async ({ request }) => {
   assertIsPost(request);
@@ -86,7 +86,7 @@ export const action: ActionFunction = async ({ request }) => {
   });
 };
 
-export default function LoginCallback() {
+export default function LoginCallback(): JSX.Element {
   const error = useActionData() as ActionData;
   const fetcher = useFetcher();
   const [searchParams] = useSearchParams();
@@ -105,7 +105,9 @@ export default function LoginCallback() {
           // so, we map what we need, and let's back-end to the work
           const authSession = mapAuthSession(supabaseSession);
 
-          if (!authSession) return;
+          if (!authSession) {
+            return;
+          }
 
           const formData = new FormData();
 

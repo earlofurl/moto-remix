@@ -589,7 +589,7 @@ export default function Index(): JSX.Element {
                       rows={4}
                       className="block w-full rounded-md border border-gray-300 py-3 px-4 placeholder-gray-500 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                       placeholder="Message"
-                      defaultValue={""}
+                      defaultValue=""
                     />
                   </div>
                   <div>
