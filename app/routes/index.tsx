@@ -79,15 +79,15 @@ export default function Index(): JSX.Element {
             <p className="text-center text-sm font-semibold uppercase tracking-wide text-gray-500">
               Trusted by experienced processors.
             </p>
-            <div className="mt-6 grid grid-cols-2 gap-8 md:grid-cols-4 lg:grid-cols-4">
-              <div className="col-span-1 flex justify-center md:col-span-2 lg:col-span-1">
+            <div className="mx-auto flex grid grid-cols-2 flex-wrap justify-between gap-10 py-6 sm:grid-cols-4">
+              <div>
                 <img
                   className="h-12"
                   src="https://res.cloudinary.com/ursine-design/image/upload/v1654629741/NWKind_Logo_nbr1xn.png"
                   alt="NW Kind"
                 />
               </div>
-              <div className="col-span-1 flex justify-center md:col-span-2 lg:col-span-1">
+              <div>
                 <svg
                   data-name="Curaleaf Logo"
                   width="120"
@@ -163,11 +163,11 @@ export default function Index(): JSX.Element {
                   />
                 </svg>
               </div>
-              <div className="col-span-1 flex justify-center md:col-span-2 lg:col-span-1">
+              <div>
                 <svg
                   className="Header--logo  "
                   width="120px"
-                  height="120px"
+                  height="60px"
                 >
                   <g
                     stroke="none"
@@ -196,9 +196,9 @@ export default function Index(): JSX.Element {
                   </g>
                 </svg>
               </div>
-              <div className="col-span-1 flex justify-center md:col-span-2 lg:col-span-1">
+              <div>
                 <img
-                  className="h-16"
+                  className="h-16 pr-8 pb-2"
                   src="https://res.cloudinary.com/ursine-design/image/upload/q_auto:good,f_auto/v1654649530/DRJ_web_rip_ze7zyo.png"
                   alt="Dr. Jolly's"
                 />
@@ -208,7 +208,10 @@ export default function Index(): JSX.Element {
         </div>
 
         {/* Alternating Feature Sections */}
-        <div className="relative overflow-hidden pt-16 pb-32">
+        <div
+          className="relative overflow-hidden pt-16 pb-32"
+          id="about"
+        >
           <div
             aria-hidden="true"
             className="absolute inset-x-0 top-0 h-48 bg-gradient-to-b from-gray-100"
@@ -235,17 +238,21 @@ export default function Index(): JSX.Element {
                       process is rooted in the belief that exceptional flower is
                       born from a sustained marriage of soil, climate and artful
                       post harvest stewardship; the interaction of the hand and
-                      the land. We firmly believe that a biologically active
-                      soil – rich in organic nutrients – produces the highest
-                      quality flower that is rich in terpenes and flavor. Our
-                      freshly frozen cannabis has led processors to multiple
-                      awards including High Times Cups and Oregon Grower Cups
-                      for various formats of concentrates and extracts.
+                      the land.
+                    </p>
+
+                    <p className="mt-4 text-lg text-gray-700">
+                      We firmly believe that a biologically active soil – rich
+                      in organic nutrients – produces the highest quality flower
+                      that is rich in terpenes and flavor. Our freshly frozen
+                      cannabis has led processors to multiple awards including
+                      High Times Cups and Oregon Grower Cups for various formats
+                      of concentrates and extracts.
                     </p>
                     <div className="mt-6">
                       <Link
                         to="#"
-                        className="bg-brand-accent-light hover:bg-brand-secondary inline-flex rounded-md border border-transparent bg-origin-border px-4 py-2 text-base font-medium text-white shadow-sm"
+                        className="hover:bg-brand-secondary inline-flex rounded-md border border-transparent bg-green-800 bg-origin-border px-4 py-2 text-base font-medium text-white shadow-sm"
                       >
                         Get started
                       </Link>
@@ -311,15 +318,19 @@ export default function Index(): JSX.Element {
                       we employ age-old organic and bio-dynamic farming
                       practices with an eye to the appropriate use of effective
                       and innovative technology to aid in the most efficient use
-                      of resources. These methods in addition to maintaining
-                      meticulous records of processor yields and terpene
-                      percentages from the past 6 years allow us to confidently
-                      offer strains that have historically yielded over 5% for
-                      Live Resin along with double-digit terpene yields. Our
-                      harvest method entails a unique, in-house approach that
-                      was successfully developed to yield better results for the
-                      processor. No other farm will deliver cleaner material for
-                      you to process.
+                      of resources.
+                    </p>
+
+                    <p className="mt-4 text-lg text-gray-700">
+                      These methods in addition to maintaining meticulous
+                      records of processor yields and terpene percentages from
+                      the past 6 years allow us to confidently offer strains
+                      that have historically yielded over 5% for Live Resin
+                      along with double-digit terpene yields. Our harvest method
+                      entails a unique, in-house approach that was successfully
+                      developed to yield better results for the processor. No
+                      other farm will deliver cleaner material for you to
+                      process.
                     </p>
                     <div className="mt-6">
                       <Link
@@ -353,10 +364,14 @@ export default function Index(): JSX.Element {
             </h2>
             <p className="mt-4 max-w-3xl text-lg text-purple-200">
               We offer Storage and Delivery for all processors across the state.
-              Your order is delivered to your door in freezers - never rising
-              above (fill in temp) degrees. In addition to these services, we
-              also offer Contract Crops. Having a hard time finding a particular
-              strain? Reach out to find out how we can help you reach your goal!
+              Your order is delivered to your door in freezers - frozen solid
+              from harvest to delivery.
+            </p>
+
+            <p className="mt-4 max-w-3xl text-lg text-purple-200">
+              In addition to these services, we also offer Contract Crops.
+              Having a hard time finding a particular strain? Reach out to find
+              out how we can help you reach your goal!
             </p>
             <div className="mt-12 grid grid-cols-1 gap-x-6 gap-y-12 sm:grid-cols-2 lg:mt-16 lg:grid-cols-4 lg:gap-x-8 lg:gap-y-16">
               {features.map((feature) => (
@@ -389,7 +404,7 @@ export default function Index(): JSX.Element {
             <h2 className="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
               <span className="block">Ready to get started?</span>
               <span className="from-brand-secondary -mb-1 block bg-gradient-to-r to-green-700 bg-clip-text pb-1 text-transparent">
-                Get in touch or create an account.
+                Get in touch!
               </span>
             </h2>
             <div className="mt-6 space-y-4 sm:flex sm:space-y-0 sm:space-x-5">
@@ -410,7 +425,10 @@ export default function Index(): JSX.Element {
         </div>
 
         {/*  Contact Section */}
-        <div className="relative bg-white">
+        <div
+          className="relative bg-white"
+          id="contact"
+        >
           <div className="absolute inset-0">
             <div className="absolute inset-y-0 left-0 w-1/2 bg-gray-50" />
           </div>
@@ -418,11 +436,11 @@ export default function Index(): JSX.Element {
             <div className="bg-gray-50 py-16 px-4 sm:px-6 lg:col-span-2 lg:px-8 lg:py-24 xl:pr-12">
               <div className="mx-auto max-w-lg">
                 <h2 className="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl">
-                  Get in touch
+                  Say hey.
                 </h2>
                 <p className="mt-3 text-lg leading-6 text-gray-500">
-                  Nullam risus blandit ac aliquam justo ipsum. Quam mauris
-                  volutpat massa dictumst amet. Sapien tortor lacus arcu.
+                  Check us out on social media or send us an email. Use the form
+                  on the right to send an email right away.
                 </p>
                 <dl className="mt-8 text-base text-gray-500">
                   <div>
@@ -436,11 +454,12 @@ export default function Index(): JSX.Element {
                   <div className="mt-6">
                     <dt className="sr-only">Phone number</dt>
                     <dd className="flex">
-                      <div
-                        className="i-fa6-solid-phone h-6 w-6 flex-shrink-0 text-gray-400"
-                        aria-hidden="true"
+                      <img
+                        className="h-6 w-6 flex-shrink-0"
+                        src="https://res.cloudinary.com/ursine-design/image/upload/q_auto,f_auto,h_20,w_20/v1655324486/Instagram_Glyph_Black_c0soj4.png"
+                        alt="Instagram Logo"
                       />
-                      <span className="ml-3">+1 (555) 123-4567</span>
+                      <span className="ml-3">@motoperpetuofarm</span>
                     </dd>
                   </div>
                   <div className="mt-3">
@@ -450,20 +469,20 @@ export default function Index(): JSX.Element {
                         className="i-fa6-solid-square-envelope h-6 w-6 flex-shrink-0 text-gray-400"
                         aria-hidden="true"
                       />
-                      <span className="ml-3">support@example.com</span>
+                      <span className="ml-3">info@motoperpetuofarm.com</span>
                     </dd>
                   </div>
                 </dl>
-                <p className="mt-6 text-base text-gray-500">
-                  Looking for careers?{" "}
-                  <a
-                    href="#"
-                    className="font-medium text-gray-700 underline"
-                  >
-                    View all job openings
-                  </a>
-                  .
-                </p>
+                {/*<p className="mt-6 text-base text-gray-500">*/}
+                {/*  Looking for careers?{" "}*/}
+                {/*  <a*/}
+                {/*    href="#"*/}
+                {/*    className="font-medium text-gray-700 underline"*/}
+                {/*  >*/}
+                {/*    View all job openings*/}
+                {/*  </a>*/}
+                {/*  .*/}
+                {/*</p>*/}
               </div>
             </div>
             <div className="bg-white py-16 px-4 sm:px-6 lg:col-span-3 lg:py-24 lg:px-8 xl:pl-12">
