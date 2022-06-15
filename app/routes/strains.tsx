@@ -11,6 +11,7 @@ import { suffix } from "froebel/string";
 import React from "react";
 import { toCommonCase } from "~/core/utils/mytools";
 import { getAllStrains } from "~/modules/strain/queries/get-strains.server";
+import Navbar from "~/core/components/navbar";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -53,7 +54,13 @@ const terpeneCellColor = (value: string) => {
 };
 
 const checkMark = (value: boolean) => {
-  return value ? <span className="i-fa6-solid-check h-4" /> : <span />;
+  return value ? (
+    <span className="flex items-center justify-center">
+      <div className="i-fa6-solid-circle-check h-6 w-6 text-green-500" />
+    </span>
+  ) : (
+    <span />
+  );
 };
 
 const percentageValue = (value: string): JSX.Element => {
@@ -82,15 +89,7 @@ const defaultColumns = [
   table.createDataColumn("yield_average", {
     header: "Avg Historical Yield",
     cell: (info) => {
-      let value = info.getValue().toString();
-      return value === "0" ? (value = "N/A") : percentageValue(value);
-    },
-    footer: (props) => props.column.id,
-  }),
-  table.createDataColumn("terp_average_total", {
-    header: "Avg Terpenes",
-    cell: (info) => {
-      let value = info.getValue().toString();
+      let value = Number(info.getValue()).toFixed(2);
       return value === "0" ? (value = "N/A") : percentageValue(value);
     },
     footer: (props) => props.column.id,
@@ -151,6 +150,14 @@ const defaultColumns = [
     },
     footer: (props) => props.column.id,
   }),
+  table.createDataColumn("terp_average_total", {
+    header: "Avg Terpenes Extracted",
+    cell: (info) => {
+      let value = info.getValue().toString();
+      return value === "0" ? (value = "N/A") : percentageValue(value);
+    },
+    footer: (props) => props.column.id,
+  }),
   table.createDataColumn("light_dep_2022", {
     header: "Summer 2022",
     cell: (info) => {
@@ -192,56 +199,7 @@ export default function Strains(): JSX.Element {
 
   return (
     <div className="bg-brand-primary min-h-screen">
-      <header>
-        <div className="relative flex max-h-16 min-w-full items-center justify-center pt-4 pb-4 md:space-x-6">
-          <div className="relative right-40 flex items-center justify-around">
-            <div className="flex contents items-center justify-start space-x-10">
-              <Link
-                to="/strains"
-                className="mx-auto text-2xl font-bold"
-              >
-                Strain Information
-              </Link>
-              <Link
-                to="/find-us"
-                className="mx-auto text-2xl font-bold"
-              >
-                Find Us
-              </Link>
-            </div>
-          </div>
-          <div className="absolute mx-auto flex items-center justify-center">
-            <div className="from-brand-primary z-1 relative flex contents items-center overflow-visible rounded-full bg-gradient-to-b to-transparent pt-10">
-              <Link
-                to="/"
-                className="font-bold"
-              >
-                <img
-                  src="https://res.cloudinary.com/ursine-design/image/upload/q_auto:good,f_auto/v1654565806/Moto_Logo_Badge_Dark_x2xjut.png"
-                  alt="Moto Logo"
-                  className="h-24 w-24 rounded-full"
-                />
-              </Link>
-            </div>
-          </div>
-          <div className="relative left-14 flex items-center justify-around">
-            <div className="flex contents items-center justify-start space-x-10">
-              <Link
-                to="#"
-                className="text-2xl font-bold"
-              >
-                Contact
-              </Link>
-              <Link
-                to="#"
-                className="text-2xl font-bold"
-              >
-                About
-              </Link>
-            </div>
-          </div>
-        </div>
-      </header>
+      <Navbar />
       <div className="py-4 px-4 sm:px-6 lg:px-8">
         <div className="mt-8 flex flex-col">
           <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
