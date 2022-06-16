@@ -80,14 +80,16 @@ export default function Index(): JSX.Element {
               Trusted by experienced processors.
             </p>
             <div className="mx-auto flex grid grid-cols-2 flex-wrap justify-between gap-10 py-6 sm:grid-cols-4">
-              <div>
+              <a href="https://nwkind.com/">
+                <span className="sr-only">NW Kind</span>
                 <img
                   className="h-12"
                   src="https://res.cloudinary.com/ursine-design/image/upload/v1654629741/NWKind_Logo_nbr1xn.png"
                   alt="NW Kind"
                 />
-              </div>
-              <div>
+              </a>
+              <a href="https://curaleaf.com/">
+                <span className="sr-only">Curaleaf</span>
                 <svg
                   data-name="Curaleaf Logo"
                   width="120"
@@ -162,8 +164,9 @@ export default function Index(): JSX.Element {
                     fill="none"
                   />
                 </svg>
-              </div>
-              <div>
+              </a>
+              <a href="https://selectcannabis.com/">
+                <span className="sr-only">Select Cannabis</span>
                 <svg
                   className="Header--logo  "
                   width="120px"
@@ -195,14 +198,15 @@ export default function Index(): JSX.Element {
                     </g>
                   </g>
                 </svg>
-              </div>
-              <div>
+              </a>
+              <a href="https://www.jollybend.com/">
+                <span className="sr-only">Dr. Jolly's</span>
                 <img
                   className="h-16 pr-8 pb-2"
                   src="https://res.cloudinary.com/ursine-design/image/upload/q_auto:good,f_auto/v1654649530/DRJ_web_rip_ze7zyo.png"
                   alt="Dr. Jolly's"
                 />
-              </div>
+              </a>
             </div>
           </div>
         </div>
@@ -459,7 +463,11 @@ export default function Index(): JSX.Element {
                         src="https://res.cloudinary.com/ursine-design/image/upload/q_auto,f_auto,h_20,w_20/v1655324486/Instagram_Glyph_Black_c0soj4.png"
                         alt="Instagram Logo"
                       />
-                      <span className="ml-3">@motoperpetuofarm</span>
+                      <span className="ml-3">
+                        <a href="https://instagram.com/motoperpetuofarm">
+                          @motoperpetuofarm
+                        </a>
+                      </span>
                     </dd>
                   </div>
                   <div className="mt-3">
@@ -469,7 +477,11 @@ export default function Index(): JSX.Element {
                         className="i-fa6-solid-square-envelope h-6 w-6 flex-shrink-0 text-gray-400"
                         aria-hidden="true"
                       />
-                      <span className="ml-3">info@motoperpetuofarm.com</span>
+                      <span className="ml-3">
+                        <a href="mailto:info@motoperpetuofarm.com">
+                          info@motoperpetuofarm.com
+                        </a>
+                      </span>
                     </dd>
                   </div>
                 </dl>
