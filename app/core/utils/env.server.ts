@@ -5,6 +5,7 @@ declare global {
       SUPABASE_URL: string;
       SUPABASE_ANON_PUBLIC: string;
       REACT_APP_MAPBOX_ACCESS_TOKEN: string;
+      SENDGRID_API_KEY: string;
     };
   }
 }
@@ -17,6 +18,7 @@ declare global {
       SUPABASE_SERVICE_ROLE: string;
       SERVER_URL: string;
       REACT_APP_MAPBOX_ACCESS_TOKEN: string;
+      SENDGRID_API_KEY: string;
     }
   }
 }
@@ -29,3 +31,4 @@ export const { SUPABASE_ANON_PUBLIC } = process.env;
 export const { SUPABASE_SERVICE_ROLE } = process.env;
 export const { SESSION_SECRET } = process.env;
 export const { REACT_APP_MAPBOX_ACCESS_TOKEN } = process.env;
+export const { SENDGRID_API_KEY } = process.env;

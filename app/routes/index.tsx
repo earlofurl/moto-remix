@@ -1,5 +1,8 @@
-import { Form, Link } from "@remix-run/react";
+import type { Request } from "@remix-run/node";
+import { Form, Link, useActionData, useTransition } from "@remix-run/react";
+import { useRef, useEffect } from "react";
 import Navbar from "~/core/components/navbar";
+import { sendMail } from "~/core/integrations/mail/sendgrid.server";
 
 const features = [
   {
@@ -22,7 +25,39 @@ const features = [
   },
 ];
 
+export async function action({ request }: { request: Request }): Promise<null> {
+  const body = await request.formData();
+  const name = body.get("full-name") as string;
+  const email = body.get("email") as string;
+  const phone = body.get("phone") as string;
+  const message = body.get("message") as string;
+
+  if (name && email && phone && message) {
+    await sendMail({ name, email, phone, message });
+    console.log("Mail supposedly sent.");
+  } else {
+    throw new Error("Missing required fields.");
+  }
+
+  return null;
+}
+
 export default function Index(): JSX.Element {
+  const data = useActionData();
+  const transition = useTransition();
+  const formRef = useRef<HTMLFormElement>(null);
+
+  // Detect when form is submitting
+  const isSending =
+    transition.state === "submitting" &&
+    transition.submission.formData.get("_action") === "send";
+
+  useEffect(() => {
+    if (!isSending) {
+      formRef.current?.reset();
+    }
+  }, [isSending]);
+
   return (
     <div className="bg-brand-primary">
       <Navbar />
@@ -500,8 +535,8 @@ export default function Index(): JSX.Element {
             <div className="bg-white py-16 px-4 sm:px-6 lg:col-span-3 lg:py-24 lg:px-8 xl:pl-12">
               <div className="mx-auto max-w-lg lg:max-w-none">
                 <Form
-                  action="#"
                   method="post"
+                  ref={formRef}
                   className="grid grid-cols-1 gap-y-6"
                 >
                   <div>
@@ -571,10 +606,14 @@ export default function Index(): JSX.Element {
                   <div>
                     <button
                       type="submit"
+                      disabled={isSending}
+                      name="_action"
+                      value="send"
                       className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-3 px-6 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                     >
                       Submit
                     </button>
+                    {isSending ? <p>Sending...</p> : null}
                   </div>
                 </Form>
               </div>
