@@ -1,5 +1,5 @@
 import type { Strain } from "@prisma/client";
-import { Link, useLoaderData } from "@remix-run/react";
+import { useLoaderData } from "@remix-run/react";
 import type { SortingState } from "@tanstack/react-table";
 import {
   createTable,
@@ -18,7 +18,6 @@ function classNames(...classes: string[]) {
 }
 
 // Could add color associated with terpene to object and use that to color the cell
-// eslint-disable-next-line sonarjs/cognitive-complexity
 const terpeneClassNames = (value: string) =>
   value.toLowerCase() === "pinene"
     ? "bg-green-200 text-green-800"
@@ -71,6 +70,7 @@ const table = createTable().setRowType<Strain>();
 
 const defaultColumns = [
   table.createDataColumn("name", {
+    id: "name",
     header: "Name",
     cell: (info) => {
       const value = info.getValue();
@@ -185,7 +185,9 @@ export default function Strains(): JSX.Element {
   const [columns] = React.useState<typeof defaultColumns>(() => [
     ...defaultColumns,
   ]);
-  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [sorting, setSorting] = React.useState<SortingState>([
+    { id: "name", desc: false },
+  ]);
   const instance = useTableInstance(table, {
     data,
     columns,

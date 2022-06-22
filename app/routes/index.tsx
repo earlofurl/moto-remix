@@ -2,7 +2,7 @@ import type { Request } from "@remix-run/node";
 import { Form, Link, useActionData, useTransition } from "@remix-run/react";
 import { useRef, useEffect } from "react";
 import Navbar from "~/core/components/navbar";
-import { sendMail } from "~/core/integrations/mail/sendgrid.server";
+import { sendMail, trapSpam } from "~/core/integrations/mail/sendgrid.server";
 
 const features = [
   {
@@ -31,12 +31,21 @@ export async function action({ request }: { request: Request }): Promise<null> {
   const email = body.get("email") as string;
   const phone = body.get("phone") as string;
   const message = body.get("message") as string;
+  const human_test = body.get("query") as string;
 
-  if (name && email && phone && message) {
+  if (
+    (human_test.toLowerCase() === "oregon" ||
+      human_test.toLowerCase() === "or") &&
+    name &&
+    email &&
+    phone &&
+    message
+  ) {
     await sendMail({ name, email, phone, message });
     console.log("Mail supposedly sent.");
   } else {
-    throw new Error("Missing required fields.");
+    await trapSpam({ name, email, phone, message, human_test });
+    console.log("Bot caught in snare.");
   }
 
   return null;
@@ -601,6 +610,21 @@ export default function Index(): JSX.Element {
                       className="block w-full rounded-md border border-gray-300 py-3 px-4 placeholder-gray-500 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                       placeholder="Message"
                       defaultValue=""
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="tricky-question"
+                      className="block text-sm font-medium text-gray-700"
+                    >
+                      Which state is located between Washington and California?
+                    </label>
+                    <input
+                      type="text"
+                      name="query"
+                      id="query"
+                      className="block w-full rounded-md border-gray-300 py-3 px-4 placeholder-gray-500 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                      placeholder="Tricky Question"
                     />
                   </div>
                   <div>
