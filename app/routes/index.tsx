@@ -8,7 +8,7 @@ const features = [
   {
     name: "Delivery",
     description:
-      "We offer Storage and Delivery for all processors across the state. Your order is delivered to your door in freezers - never rising above (fill in temp) degrees.",
+      "We offer Storage and Delivery for all processors across the state. Your order is delivered to your door in freezers - frozen solid from harvest to delivery.",
     icon: "i-fa6-solid-truck",
   },
   {
@@ -298,37 +298,37 @@ export default function Index(): JSX.Element {
                     </div>
                   </div>
                 </div>
-                <div className="mt-8 border-t border-gray-200 pt-6">
-                  <blockquote>
-                    <div>
-                      <p className="text-base font-bold text-gray-800">
-                        &ldquo;Wow, we squeezed a lot of dank chronic out of
-                        this phyre bud, brah!&rdquo;
-                      </p>
-                    </div>
-                    <footer className="mt-3">
-                      <div className="flex items-center space-x-3">
-                        <div className="flex-shrink-0">
-                          <img
-                            className="h-20 w-20 rounded-full"
-                            src="https://res.cloudinary.com/ursine-design/image/upload/c_thumb,w_200,g_face,q_auto:good,f_auto/v1654568623/20170604_1559482_hnleee.jpg"
-                            alt=""
-                          />
-                        </div>
-                        <div className="text-base font-medium text-gray-600">
-                          Tom Grubbs, Cascade Chronic Drangletang
-                        </div>
-                      </div>
-                    </footer>
-                  </blockquote>
-                </div>
+                {/*<div className="mt-8 border-t border-gray-200 pt-6">*/}
+                {/*  <blockquote>*/}
+                {/*    <div>*/}
+                {/*      <p className="text-base font-bold text-gray-800">*/}
+                {/*        &ldquo;Wow, we squeezed a lot of dank chronic out of*/}
+                {/*        this phyre bud, brah!&rdquo;*/}
+                {/*      </p>*/}
+                {/*    </div>*/}
+                {/*    <footer className="mt-3">*/}
+                {/*      <div className="flex items-center space-x-3">*/}
+                {/*        <div className="flex-shrink-0">*/}
+                {/*          <img*/}
+                {/*            className="h-20 w-20 rounded-full"*/}
+                {/*            src="https://res.cloudinary.com/ursine-design/image/upload/c_thumb,w_200,g_face,q_auto:good,f_auto/v1654568623/20170604_1559482_hnleee.jpg"*/}
+                {/*            alt=""*/}
+                {/*          />*/}
+                {/*        </div>*/}
+                {/*        <div className="text-base font-medium text-gray-600">*/}
+                {/*          Tom Grubbs, Cascade Chronic Drangletang*/}
+                {/*        </div>*/}
+                {/*      </div>*/}
+                {/*    </footer>*/}
+                {/*  </blockquote>*/}
+                {/*</div>*/}
               </div>
               <div className="mt-12 sm:mt-16 lg:mt-0">
                 <div className="-mr-48 pl-4 sm:pl-6 md:-mr-16 lg:relative lg:m-0 lg:h-full lg:px-0">
                   <img
                     className="w-full rounded-xl shadow-xl ring-1 ring-black ring-opacity-5 lg:absolute lg:left-0 lg:h-full lg:w-auto lg:max-w-none"
-                    src="https://res.cloudinary.com/ursine-design/image/upload/q_auto,f_auto/v1654562866/180412_Moto_Perpetuo_46-e1538151370707_iblhyi.jpg"
-                    alt="Hand holding flowers."
+                    src="https://res.cloudinary.com/ursine-design/image/upload/q_auto,f_auto/v1655925822/JPEG_20181012_092822.427_kewqdb.jpg"
+                    alt="Frosty Bud."
                   />
                 </div>
               </div>
