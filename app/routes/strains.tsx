@@ -90,7 +90,7 @@ const defaultColumns = [
     header: "Avg Historical Yield",
     cell: (info) => {
       let value = Number(info.getValue()).toFixed(2);
-      return value === "0" ? (value = "N/A") : percentageValue(value);
+      return value === "0.00" ? (value = "N/A") : percentageValue(value);
     },
     footer: (props) => props.column.id,
   }),
