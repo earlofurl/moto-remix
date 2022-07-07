@@ -1,5 +1,5 @@
 import type { Strain } from "@prisma/client";
-import { useLoaderData } from "@remix-run/react";
+import { Link, useLoaderData } from "@remix-run/react";
 import type { SortingState } from "@tanstack/react-table";
 import {
   Column,
@@ -65,23 +65,23 @@ function classNames(...classes: string[]) {
 // Could add color associated with terpene to object and use that to color the cell
 const terpeneClassNames = (value: string) =>
   value.toLowerCase() === "pinene"
-    ? "bg-green-200 text-green-800"
+    ? "bg-green-200 text-green-800 font-semibold"
     : value.toLowerCase() === "caryophyllene"
-    ? "bg-orange-100 text-orange-800"
+    ? "bg-orange-100 text-orange-800 font-semibold"
     : value.toLowerCase() === "myrcene"
-    ? "bg-red-100 text-red-800"
+    ? "bg-red-100 text-red-800 font-semibold"
     : value.toLowerCase() === "limonene"
-    ? "bg-yellow-100 text-yellow-800"
+    ? "bg-yellow-100 text-yellow-800 font-semibold"
     : value.toLowerCase() === "terpinolene"
-    ? "bg-cyan-100 text-cyan-800"
+    ? "bg-cyan-100 text-cyan-800 font-semibold"
     : value.toLowerCase() === "humulene"
-    ? "bg-purple-100 text-purple-800"
+    ? "bg-purple-100 text-purple-800 font-semibold"
     : value.toLowerCase() === "linalool"
-    ? "bg-emerald-100 text-emerald-800"
+    ? "bg-emerald-100 text-emerald-800 font-semibold"
     : value.toLowerCase() === "fenchol"
-    ? "bg-pink-100 text-pink-800"
+    ? "bg-pink-100 text-pink-800 font-semibold"
     : value.toLowerCase() === "bisabolol"
-    ? "bg-indigo-100 text-indigo-800"
+    ? "bg-indigo-100 text-indigo-800 font-semibold"
     : "bg-gray-100 text-gray-800";
 
 const terpeneCellColor = (value: string) => {
@@ -108,7 +108,7 @@ const checkMark = (value: boolean) => {
 };
 
 const percentageValue = (value: string): JSX.Element => {
-  return <span className="font-semibold">{suffix(value, "%")}</span>;
+  return <span className="font-bold">{suffix(value, "%")}</span>;
 };
 
 const defaultColumns: ColumnDef<Strain>[] = [
@@ -310,7 +310,24 @@ export default function Strains(): JSX.Element {
   return (
     <div className="bg-brand-primary min-h-screen">
       <Navbar />
-      <div className="py-4 px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl py-2 px-4 sm:py-4 sm:px-6 lg:px-8">
+        <div className="text-center">
+          <p className="mt-1 text-4xl font-extrabold text-gray-900 sm:text-5xl sm:tracking-tight lg:text-6xl">
+            Know what you're going to get.
+          </p>
+          <p className="mx-auto mt-5 max-w-xl pb-2 text-2xl text-gray-500">
+            We continuously curate the best strain selection to match your
+            needs.
+          </p>
+          <Link
+            to="/#contact"
+            className="inline-flex items-center justify-center rounded-md border border-transparent bg-green-700 px-5 py-3 text-base font-medium text-white hover:bg-green-600"
+          >
+            Contact Us
+          </Link>
+        </div>
+      </div>
+      <div className="px-4 sm:px-6 lg:px-8">
         <div className="mt-8 flex flex-col">
           <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
