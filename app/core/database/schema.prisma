@@ -1,11 +1,11 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
 datasource db {
   provider          = "postgresql"
   url               = env("DATABASE_URL")
   shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
-}
-
-generator client {
-  provider = "prisma-client-js"
 }
 
 model User {
@@ -16,33 +16,33 @@ model User {
 }
 
 model Strain {
-  id                        String  @id @default(cuid())
+  id                        String   @id @default(cuid())
   name                      String
   type                      String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-  yield_average             Decimal @default(0)
-  terp_average_total        Decimal @default(0)
-  terp_1                    String  @default("N/A")
-  terp_1_value              Decimal @default(0)
-  terp_2                    String  @default("N/A")
-  terp_2_value              Decimal @default(0)
-  terp_3                    String  @default("N/A")
-  terp_3_value              Decimal @default(0)
-  terp_4                    String  @default("N/A")
-  terp_4_value              Decimal @default(0)
-  terp_5                    String  @default("N/A")
-  terp_5_value              Decimal @default(0)
-  thc_average               Decimal @default(0)
-  total_cannabinoid_average Decimal @default(0)
-  light_dep_2022            Boolean @default(false)
-  fall_harvest_2022         Boolean @default(false)
+  createdAt                 DateTime @default(now())
+  updatedAt                 DateTime @updatedAt
+  yield_average             Decimal  @default(0)
+  terp_average_total        Decimal  @default(0)
+  terp_1                    String   @default("N/A")
+  terp_1_value              Decimal  @default(0)
+  terp_2                    String   @default("N/A")
+  terp_2_value              Decimal  @default(0)
+  terp_3                    String   @default("N/A")
+  terp_3_value              Decimal  @default(0)
+  terp_4                    String   @default("N/A")
+  terp_4_value              Decimal  @default(0)
+  terp_5                    String   @default("N/A")
+  terp_5_value              Decimal  @default(0)
+  thc_average               Decimal  @default(0)
+  total_cannabinoid_average Decimal  @default(0)
+  light_dep_2022            Boolean  @default(false)
+  fall_harvest_2022         Boolean  @default(false)
 }
 
 model Location {
-  id           String  @id @default(cuid())
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+  id           String   @id @default(cuid())
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
   name         String
   address      String
   city         String
@@ -50,8 +50,8 @@ model Location {
   zip          String
   latitude     Float
   longitude    Float
-  note         String  @default("")
-  flower       Boolean @default(false)
-  prerolls     Boolean @default(false)
-  pressed_hash Boolean @default(false)
+  note         String   @default("")
+  flower       Boolean  @default(false)
+  prerolls     Boolean  @default(false)
+  pressed_hash Boolean  @default(false)
 }

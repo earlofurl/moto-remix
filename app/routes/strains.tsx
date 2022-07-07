@@ -2,16 +2,61 @@ import type { Strain } from "@prisma/client";
 import { useLoaderData } from "@remix-run/react";
 import type { SortingState } from "@tanstack/react-table";
 import {
-  createTable,
+  Column,
+  Table,
+  ColumnFiltersState,
+  getFilteredRowModel,
+  getFacetedRowModel,
+  getFacetedMinMaxValues,
+  getFacetedUniqueValues,
+  getPaginationRowModel,
+  sortingFns,
+  FilterFn,
+  SortingFn,
+  ColumnDef,
+  flexRender,
   getCoreRowModel,
   getSortedRowModel,
-  useTableInstance,
+  useReactTable,
+  PaginationState,
 } from "@tanstack/react-table";
+import {
+  RankingInfo,
+  rankItem,
+  compareItems,
+  rankings,
+} from "@tanstack/match-sorter-utils";
 import { suffix } from "froebel/string";
 import React from "react";
 import { toCommonCase } from "~/core/utils/mytools";
 import { getAllStrains } from "~/modules/strain/queries/get-strains.server";
 import Navbar from "~/core/components/navbar";
+
+const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
+  // Rank the item
+  const itemRank = rankItem(row.getValue(columnId), value);
+
+  // Store the ranking info
+  addMeta(itemRank);
+
+  // Return if the item should be filtered in/out
+  return itemRank.passed;
+};
+
+const fuzzySort: SortingFn<any> = (rowA, rowB, columnId) => {
+  let dir = 0;
+
+  // Only sort by rank if the column has ranking information
+  if (rowA.columnFiltersMeta[columnId]) {
+    dir = compareItems(
+      rowA.columnFiltersMeta[columnId]!,
+      rowB.columnFiltersMeta[columnId]!
+    );
+  }
+
+  // Provide an alphanumeric fallback for when the item ranks are equal
+  return dir === 0 ? sortingFns.alphanumeric(rowA, rowB, columnId) : dir;
+};
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -63,117 +108,151 @@ const checkMark = (value: boolean) => {
 };
 
 const percentageValue = (value: string): JSX.Element => {
-  return <span className="font-medium">{suffix(value, "%")}</span>;
+  return <span className="font-semibold">{suffix(value, "%")}</span>;
 };
 
-const table = createTable().setRowType<Strain>();
+const defaultColumns: ColumnDef<Strain>[] = [
+  {
+    header: "General",
+    footer: (props) => props.column.id,
+    columns: [
+      {
+        header: "Name",
+        accessorKey: "name",
+        cell: (info) => {
+          const value = info.getValue();
+          return <span className="font-bold">{value}</span>;
+        },
+        filterFn: fuzzyFilter,
+        sortingFn: fuzzySort,
+      },
+      {
+        accessorKey: "type",
+        header: () => "Type",
+        cell: (info) => {
+          const value = info.getValue();
+          return <span className="font-semibold">{toCommonCase(value)}</span>;
+        },
+      },
+    ],
+  },
+  {
+    header: "Information",
+    footer: (props) => props.column.id,
+    columns: [
+      {
+        accessorKey: "yield_average",
+        header: () => "Avg Historical Yield",
+        cell: (info) => {
+          let value = Number(info.getValue()).toFixed(2);
+          return value === "0.00" ? (
+            (value = "N/A")
+          ) : (
+            <span className="font-bold">{percentageValue(value)}</span>
+          );
+        },
+        enableColumnFilter: false,
+      },
+      {
+        header: "Terpenes",
+        footer: (props) => props.column.id,
+        columns: [
+          {
+            accessorKey: "terp_1",
+            header: () => "Top Terpene",
+            cell: (info) => {
+              const value = info.getValue();
+              return terpeneCellColor(value);
+            },
+          },
+          {
+            accessorKey: "terp_2",
+            header: () => "2nd Terpene",
+            cell: (info) => {
+              const value = info.getValue();
+              return terpeneCellColor(value);
+            },
+          },
+          {
+            accessorKey: "terp_3",
+            header: () => "3rd Terpene",
+            cell: (info) => {
+              const value = info.getValue();
+              return terpeneCellColor(value);
+            },
+          },
+          {
+            accessorKey: "terp_4",
+            header: () => "4th Terpene",
+            cell: (info) => {
+              const value = info.getValue();
+              return terpeneCellColor(value);
+            },
+          },
+          {
+            accessorKey: "terp_5",
+            header: () => "5th Terpene",
+            cell: (info) => {
+              const value = info.getValue();
+              return terpeneCellColor(value);
+            },
+          },
+          {
+            accessorKey: "terp_average_total",
+            header: () => "Avg Terpenes Extracted",
+            cell: (info) => {
+              let value = info.getValue().toString();
+              return value === "0" ? (value = "N/A") : percentageValue(value);
+            },
+            enableColumnFilter: false,
+          },
+        ],
+      },
 
-const defaultColumns = [
-  table.createDataColumn("name", {
-    id: "name",
-    header: "Name",
-    cell: (info) => {
-      const value = info.getValue();
-      return <span className="font-bold">{value}</span>;
-    },
-    footer: (props) => props.column.id,
-  }),
-  table.createDataColumn("type", {
-    header: "Type",
-    cell: (info) => {
-      const value = info.getValue();
-      return <span className="font-medium">{toCommonCase(value)}</span>;
-    },
-    footer: (props) => props.column.id,
-  }),
-  table.createDataColumn("yield_average", {
-    header: "Avg Historical Yield",
-    cell: (info) => {
-      let value = Number(info.getValue()).toFixed(2);
-      return value === "0.00" ? (value = "N/A") : percentageValue(value);
-    },
-    footer: (props) => props.column.id,
-  }),
-  table.createDataColumn("terp_1", {
-    header: "Top Terpene",
-    cell: (info) => {
-      const value = info.getValue();
-      return terpeneCellColor(value);
-    },
-    footer: (props) => props.column.id,
-  }),
-  table.createDataColumn("terp_2", {
-    header: "2nd Terpene",
-    cell: (info) => {
-      const value = info.getValue();
-      return terpeneCellColor(value);
-    },
-    footer: (props) => props.column.id,
-  }),
-  table.createDataColumn("terp_3", {
-    header: "3rd Terpene",
-    cell: (info) => {
-      const value = info.getValue();
-      return terpeneCellColor(value);
-    },
-    footer: (props) => props.column.id,
-  }),
-  table.createDataColumn("terp_4", {
-    header: "4th Terpene",
-    cell: (info) => {
-      const value = info.getValue();
-      return terpeneCellColor(value);
-    },
-    footer: (props) => props.column.id,
-  }),
-  table.createDataColumn("terp_5", {
-    header: "5th Terpene",
-    cell: (info) => {
-      const value = info.getValue();
-      return terpeneCellColor(value);
-    },
-    footer: (props) => props.column.id,
-  }),
-  table.createDataColumn("thc_average", {
-    header: "Avg THC",
-    cell: (info) => {
-      let value = info.getValue().toString();
-      return value === "0" ? (value = "N/A") : percentageValue(value);
-    },
-    footer: (props) => props.column.id,
-  }),
-  table.createDataColumn("total_cannabinoid_average", {
-    header: "Avg Total Cannabinoids",
-    cell: (info) => {
-      let value = info.getValue().toString();
-      return value === "0" ? (value = "N/A") : percentageValue(value);
-    },
-    footer: (props) => props.column.id,
-  }),
-  table.createDataColumn("terp_average_total", {
-    header: "Avg Terpenes Extracted",
-    cell: (info) => {
-      let value = info.getValue().toString();
-      return value === "0" ? (value = "N/A") : percentageValue(value);
-    },
-    footer: (props) => props.column.id,
-  }),
-  table.createDataColumn("light_dep_2022", {
-    header: "Summer 2022",
-    cell: (info) => {
-      const value = info.getValue();
-      return checkMark(value);
-    },
-    footer: (props) => props.column.id,
-  }),
-  table.createDataColumn("fall_harvest_2022", {
-    header: "Fall 2022",
-    cell: (info) => {
-      const value = info.getValue();
-      return checkMark(value);
-    },
-    footer: (props) => props.column.id,
-  }),
+      {
+        accessorKey: "thc_average",
+        header: () => "Avg THC",
+        cell: (info) => {
+          let value = info.getValue().toString();
+          return value === "0" ? (value = "N/A") : percentageValue(value);
+        },
+        enableColumnFilter: false,
+      },
+      {
+        accessorKey: "total_cannabinoid_average",
+        header: () => "Avg Total Cannabinoids",
+        cell: (info) => {
+          let value = info.getValue().toString();
+          return value === "0" ? (value = "N/A") : percentageValue(value);
+        },
+        enableColumnFilter: false,
+      },
+      {
+        header: "Availability",
+        footer: (props) => props.column.id,
+        columns: [
+          {
+            accessorKey: "light_dep_2022",
+            header: () => "Summer 2022",
+            cell: (info) => {
+              const value = info.getValue();
+              return checkMark(value);
+            },
+            enableColumnFilter: false,
+          },
+          {
+            accessorKey: "fall_harvest_2022",
+            header: () => "Fall 2022",
+            cell: (info) => {
+              const value = info.getValue();
+              return checkMark(value);
+            },
+            enableColumnFilter: false,
+          },
+        ],
+      },
+    ],
+  },
 ];
 
 export function loader(): Promise<Strain[]> {
@@ -188,16 +267,45 @@ export default function Strains(): JSX.Element {
   const [sorting, setSorting] = React.useState<SortingState>([
     { id: "name", desc: false },
   ]);
-  const instance = useTableInstance(table, {
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    []
+  );
+  const [globalFilter, setGlobalFilter] = React.useState("");
+  const [pagination, setPagination] = React.useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 20,
+  });
+
+  const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     state: {
       sorting,
+      columnFilters,
+      globalFilter,
+      pagination,
     },
+    onColumnFiltersChange: setColumnFilters,
+    onGlobalFilterChange: setGlobalFilter,
+    globalFilterFn: fuzzyFilter,
     onSortingChange: setSorting,
+    onPaginationChange: setPagination,
     getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getFacetedRowModel: getFacetedRowModel(),
+    getFacetedUniqueValues: getFacetedUniqueValues(),
+    getFacetedMinMaxValues: getFacetedMinMaxValues(),
   });
+
+  React.useEffect(() => {
+    if (table.getState().columnFilters[0]?.id === "name") {
+      if (table.getState().sorting[0]?.id !== "name") {
+        table.setSorting([{ id: "name", desc: false }]);
+      }
+    }
+  }, [table.getState().columnFilters[0]?.id]);
 
   return (
     <div className="bg-brand-primary min-h-screen">
@@ -206,35 +314,58 @@ export default function Strains(): JSX.Element {
         <div className="mt-8 flex flex-col">
           <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
+              <div>
+                <DebouncedInput
+                  value={globalFilter ?? ""}
+                  onChange={(value) => setGlobalFilter(String(value))}
+                  className="block w-auto rounded-md border-gray-300 py-2 shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm"
+                  placeholder="Search all columns..."
+                />
+              </div>
               <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
                 <table className="min-w-full divide-y divide-gray-300">
                   <thead className="z-1 bg-gradient-to-b from-emerald-600 to-emerald-500">
-                    {instance.getHeaderGroups().map((headerGroup) => (
+                    {table.getHeaderGroups().map((headerGroup) => (
                       <tr key={headerGroup.id}>
                         {headerGroup.headers.map((header) => (
                           <th
                             key={header.id}
                             colSpan={header.colSpan}
-                            className="py-1.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
+                            className="pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
                           >
-                            <div className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                            <div className="px-3 text-left text-sm font-semibold text-gray-900">
                               {header.isPlaceholder ? null : (
-                                <div
-                                  {...{
-                                    className: header.column.getCanSort()
-                                      ? "cursor-pointer select-none"
-                                      : "",
-                                    onClick:
-                                      header.column.getToggleSortingHandler(),
-                                  }}
-                                >
-                                  {header.renderHeader()}
-                                  {{
-                                    asc: " 🔼",
-                                    desc: " 🔽",
-                                  }[header.column.getIsSorted() as string] ??
-                                    null}
-                                </div>
+                                <>
+                                  <div
+                                    {...{
+                                      className: header.column.getCanSort()
+                                        ? "cursor-pointer select-none"
+                                        : "",
+                                      onClick:
+                                        header.column.getToggleSortingHandler(),
+                                    }}
+                                  >
+                                    {flexRender(
+                                      header.column.columnDef.header,
+                                      header.getContext()
+                                    )}
+                                    {{
+                                      asc: " 🔼",
+                                      desc: " 🔽",
+                                    }[header.column.getIsSorted() as string] ??
+                                      null}
+                                  </div>
+                                  <div>
+                                    {header.column.getCanFilter() ? (
+                                      <div>
+                                        <Filter
+                                          column={header.column}
+                                          table={table}
+                                        />
+                                      </div>
+                                    ) : null}
+                                  </div>
+                                </>
                               )}
                             </div>
                           </th>
@@ -243,20 +374,90 @@ export default function Strains(): JSX.Element {
                     ))}
                   </thead>
                   <tbody className="divide-y divide-gray-200 bg-gray-50">
-                    {instance.getRowModel().rows.map((row) => (
+                    {table.getRowModel().rows.map((row) => (
                       <tr key={row.id}>
                         {row.getVisibleCells().map((cell) => (
                           <td
                             key={cell.id}
                             className="whitespace-nowrap py-4 pl-4 pr-3 text-right text-sm font-medium text-gray-900 sm:pl-6"
                           >
-                            {cell.renderCell()}
+                            {flexRender(
+                              cell.column.columnDef.cell,
+                              cell.getContext()
+                            )}
                           </td>
                         ))}
                       </tr>
                     ))}
                   </tbody>
                 </table>
+                <div className="flex items-center gap-2">
+                  <button
+                    className="rounded border p-1"
+                    onClick={() => table.setPageIndex(0)}
+                    disabled={!table.getCanPreviousPage()}
+                  >
+                    {"<<"}
+                  </button>
+                  <button
+                    className="rounded border p-1"
+                    onClick={() => table.previousPage()}
+                    disabled={!table.getCanPreviousPage()}
+                  >
+                    {"<"}
+                  </button>
+                  <button
+                    className="rounded border p-1"
+                    onClick={() => table.nextPage()}
+                    disabled={!table.getCanNextPage()}
+                  >
+                    {">"}
+                  </button>
+                  <button
+                    className="rounded border p-1"
+                    onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+                    disabled={!table.getCanNextPage()}
+                  >
+                    {">>"}
+                  </button>
+                  <span className="flex items-center gap-1">
+                    <div>Page</div>
+                    <strong>
+                      {table.getState().pagination.pageIndex + 1} of{" "}
+                      {table.getPageCount()}
+                    </strong>
+                  </span>
+                  <span className="flex items-center gap-1">
+                    | Go to page:
+                    <input
+                      type="number"
+                      defaultValue={table.getState().pagination.pageIndex + 1}
+                      onChange={(e) => {
+                        const page = e.target.value
+                          ? Number(e.target.value) - 1
+                          : 0;
+                        table.setPageIndex(page);
+                      }}
+                      className="w-16 rounded border p-1"
+                    />
+                  </span>
+                  <select
+                    value={table.getState().pagination.pageSize}
+                    onChange={(e) => {
+                      table.setPageSize(Number(e.target.value));
+                    }}
+                  >
+                    {[20, 50, 100].map((pageSize) => (
+                      <option
+                        key={pageSize}
+                        value={pageSize}
+                      >
+                        Show {pageSize}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div>{table.getPrePaginationRowModel().rows.length} Rows</div>
               </div>
             </div>
           </div>
@@ -266,4 +467,111 @@ export default function Strains(): JSX.Element {
     </div>
   );
 }
-// Lil test change
+
+function Filter({ column, table }: { column: Column<any>; table: Table<any> }) {
+  const firstValue = table
+    .getPreFilteredRowModel()
+    .flatRows[0]?.getValue(column.id);
+
+  const columnFilterValue = column.getFilterValue();
+
+  const sortedUniqueValues = React.useMemo(
+    () =>
+      typeof firstValue === "number"
+        ? []
+        : Array.from(column.getFacetedUniqueValues().keys()).sort(),
+    [column.getFacetedUniqueValues()]
+  );
+
+  return typeof firstValue === "number" ? (
+    <div>
+      <div className="flex space-x-2">
+        <DebouncedInput
+          type="number"
+          min={Number(column.getFacetedMinMaxValues()?.[0] ?? "")}
+          max={Number(column.getFacetedMinMaxValues()?.[1] ?? "")}
+          value={(columnFilterValue as [number, number])?.[0] ?? ""}
+          onChange={(value) =>
+            column.setFilterValue((old: [number, number]) => [value, old?.[1]])
+          }
+          placeholder={`Min ${
+            column.getFacetedMinMaxValues()?.[0]
+              ? `(${column.getFacetedMinMaxValues()?.[0]})`
+              : ""
+          }`}
+          className="w-24 rounded border shadow"
+        />
+        <DebouncedInput
+          type="number"
+          min={Number(column.getFacetedMinMaxValues()?.[0] ?? "")}
+          max={Number(column.getFacetedMinMaxValues()?.[1] ?? "")}
+          value={(columnFilterValue as [number, number])?.[1] ?? ""}
+          onChange={(value) =>
+            column.setFilterValue((old: [number, number]) => [old?.[0], value])
+          }
+          placeholder={`Max ${
+            column.getFacetedMinMaxValues()?.[1]
+              ? `(${column.getFacetedMinMaxValues()?.[1]})`
+              : ""
+          }`}
+          className="w-24 rounded border shadow"
+        />
+      </div>
+      <div className="h-1" />
+    </div>
+  ) : (
+    <>
+      <datalist id={column.id + "list"}>
+        {sortedUniqueValues.slice(0, 5000).map((value: any) => (
+          <option
+            value={value}
+            key={value}
+          />
+        ))}
+      </datalist>
+      <DebouncedInput
+        type="text"
+        value={(columnFilterValue ?? "") as string}
+        onChange={(value) => column.setFilterValue(value)}
+        placeholder={`Search... (${column.getFacetedUniqueValues().size})`}
+        className="w-36 rounded border shadow"
+        list={column.id + "list"}
+      />
+      <div className="h-1" />
+    </>
+  );
+}
+
+// A debounced input react component
+function DebouncedInput({
+  value: initialValue,
+  onChange,
+  debounce = 500,
+  ...props
+}: {
+  value: string | number;
+  onChange: (value: string | number) => void;
+  debounce?: number;
+} & Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange">) {
+  const [value, setValue] = React.useState(initialValue);
+
+  React.useEffect(() => {
+    setValue(initialValue);
+  }, [initialValue]);
+
+  React.useEffect(() => {
+    const timeout = setTimeout(() => {
+      onChange(value);
+    }, debounce);
+
+    return () => clearTimeout(timeout);
+  }, [value]);
+
+  return (
+    <input
+      {...props}
+      value={value}
+      onChange={(e) => setValue(e.target.value)}
+    />
+  );
+}
