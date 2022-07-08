@@ -255,6 +255,56 @@ export default function Index(): JSX.Element {
           </div>
         </div>
 
+        {/* Gradient Feature Section */}
+        <div className="from-brand-secondary/80 bg-gradient-to-r to-green-700">
+          <div className="mx-auto max-w-4xl px-4 py-16 sm:px-6 sm:pt-20 sm:pb-24 lg:max-w-7xl lg:px-8 lg:pt-24">
+            <h2 className="text-3xl font-extrabold tracking-tight text-white">
+              Storage, Delivery, and Contract Crops
+            </h2>
+            <p className="mt-4 max-w-3xl text-lg text-gray-300">
+              We offer Storage and Delivery for all processors across the state.
+              Your order is delivered to your door in freezers - frozen solid
+              from harvest to delivery.
+            </p>
+
+            <p className="mt-4 max-w-3xl text-lg text-gray-300">
+              In addition to these services, we also offer Contract Crops.
+              Having a hard time finding a particular strain? Reach out to find
+              out how we can help you reach your goal!
+            </p>
+            <div className="mt-12 grid grid-cols-1 gap-x-6 gap-y-12 sm:grid-cols-2 lg:mt-16 lg:grid-cols-4 lg:gap-x-8 lg:gap-y-16">
+              {features.map((feature) => (
+                <div key={feature.name}>
+                  <div>
+                    <span className="flex h-12 w-12 items-center justify-center rounded-md bg-white bg-opacity-10">
+                      <div
+                        className={`${feature.icon} h-6 w-6 text-white`}
+                        aria-hidden="true"
+                      />
+                    </span>
+                  </div>
+                  <div className="mt-6">
+                    <h3 className="text-lg font-medium text-white">
+                      {feature.name}
+                    </h3>
+                    <p className="mt-2 text-base text-purple-200">
+                      {feature.description}
+                    </p>
+                  </div>
+                </div>
+              ))}
+              <span>
+                <Link
+                  to="/#contact"
+                  className="flex items-center justify-center rounded-md border border-transparent bg-green-900 px-4 py-3 text-base font-medium text-gray-200 shadow-sm hover:bg-opacity-70 sm:px-8"
+                >
+                  Get Started
+                </Link>
+              </span>
+            </div>
+          </div>
+        </div>
+
         {/* Alternating Feature Sections */}
         <div
           className="relative overflow-hidden pt-16 pb-32"
@@ -404,50 +454,8 @@ export default function Index(): JSX.Element {
           </div>
         </div>
 
-        {/* Gradient Feature Section */}
-        <div className="from-brand-secondary bg-gradient-to-r to-green-900">
-          <div className="mx-auto max-w-4xl px-4 py-16 sm:px-6 sm:pt-20 sm:pb-24 lg:max-w-7xl lg:px-8 lg:pt-24">
-            <h2 className="text-3xl font-extrabold tracking-tight text-white">
-              Storage, Delivery, and Contract Crops
-            </h2>
-            <p className="mt-4 max-w-3xl text-lg text-purple-200">
-              We offer Storage and Delivery for all processors across the state.
-              Your order is delivered to your door in freezers - frozen solid
-              from harvest to delivery.
-            </p>
-
-            <p className="mt-4 max-w-3xl text-lg text-purple-200">
-              In addition to these services, we also offer Contract Crops.
-              Having a hard time finding a particular strain? Reach out to find
-              out how we can help you reach your goal!
-            </p>
-            <div className="mt-12 grid grid-cols-1 gap-x-6 gap-y-12 sm:grid-cols-2 lg:mt-16 lg:grid-cols-4 lg:gap-x-8 lg:gap-y-16">
-              {features.map((feature) => (
-                <div key={feature.name}>
-                  <div>
-                    <span className="flex h-12 w-12 items-center justify-center rounded-md bg-white bg-opacity-10">
-                      <div
-                        className={`${feature.icon} h-6 w-6 text-white`}
-                        aria-hidden="true"
-                      />
-                    </span>
-                  </div>
-                  <div className="mt-6">
-                    <h3 className="text-lg font-medium text-white">
-                      {feature.name}
-                    </h3>
-                    <p className="mt-2 text-base text-purple-200">
-                      {feature.description}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
         {/* CTA Section */}
-        <div className="bg-brand-primary">
+        <div className="bg-green-200">
           <div className="mx-auto max-w-4xl py-16 px-4 sm:px-6 sm:py-24 lg:flex lg:max-w-7xl lg:items-center lg:justify-between lg:px-8">
             <h2 className="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
               <span className="block">Ready to get started?</span>

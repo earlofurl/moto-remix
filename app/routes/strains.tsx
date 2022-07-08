@@ -142,7 +142,7 @@ const defaultColumns: ColumnDef<Strain>[] = [
     columns: [
       {
         accessorKey: "yield_average",
-        header: () => "Avg Historical Yield",
+        header: () => "Avg. Yield (Live Resin)",
         cell: (info) => {
           let value = Number(info.getValue()).toFixed(2);
           return value === "0.00" ? (
@@ -316,8 +316,8 @@ export default function Strains(): JSX.Element {
             Know what you're going to get.
           </p>
           <p className="mx-auto mt-5 max-w-xl pb-2 text-2xl text-gray-500">
-            We continuously curate the best strain selection to match your
-            needs.
+            Browse our selection of over 100 strains and find exactly what you
+            need. We store and ship on demand.
           </p>
           <Link
             to="/#contact"
@@ -331,17 +331,25 @@ export default function Strains(): JSX.Element {
         <div className="mt-8 flex flex-col">
           <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
-              <div>
-                <DebouncedInput
-                  value={globalFilter ?? ""}
-                  onChange={(value) => setGlobalFilter(String(value))}
-                  className="block w-auto rounded-md border-gray-300 py-2 shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm"
-                  placeholder="Search all columns..."
-                />
-              </div>
-              <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
+              <div className="max-w-screen overflow-x-auto bg-emerald-400 shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
+                <div className="px-4 sm:px-6 lg:px-8">
+                  <div className="sm:flex sm:items-center">
+                    <div className="sm:flex-auto">
+                      <h1 className="pt-1 text-2xl font-semibold text-gray-900">
+                        Fresh Frozen Strain Data
+                      </h1>
+                    </div>
+                  </div>
+
+                  <DebouncedInput
+                    value={globalFilter ?? ""}
+                    onChange={(value) => setGlobalFilter(String(value))}
+                    className="my-2 block w-auto rounded border-gray-300 py-2 pl-2 shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm"
+                    placeholder="Search all columns..."
+                  />
+                </div>
                 <table className="min-w-full divide-y divide-gray-300">
-                  <thead className="z-1 bg-gradient-to-b from-emerald-600 to-emerald-500">
+                  <thead className="z-1 bg-emerald-500 shadow-sm ring-2 ring-black ring-opacity-5">
                     {table.getHeaderGroups().map((headerGroup) => (
                       <tr key={headerGroup.id}>
                         {headerGroup.headers.map((header) => (
