@@ -3,25 +3,32 @@ import { Form, Link, useActionData, useTransition } from "@remix-run/react";
 import { useRef, useEffect } from "react";
 import Navbar from "~/core/components/navbar";
 import { sendMail, trapSpam } from "~/core/integrations/mail/sendgrid.server";
+import {
+  TruckIcon,
+  NewspaperIcon,
+  DatabaseIcon,
+  GlobeIcon,
+  HandIcon,
+} from "@heroicons/react/solid";
 
 const features = [
   {
     name: "Delivery",
     description:
       "We offer Storage and Delivery for all processors across the state. Your order is delivered to your door in freezers - frozen solid from harvest to delivery.",
-    icon: "i-fa6-solid-truck",
+    icon: TruckIcon,
   },
   {
     name: "Contract Crops",
     description:
       "In addition to these services, we also offer Contract Crops. Having a hard time finding a particular strain? Reach out to find out how we can help you reach your goal!",
-    icon: "i-fa6-solid-file-contract",
+    icon: NewspaperIcon,
   },
   {
     name: "Strain Information",
     description:
       "Take the guesswork out of your extraction projections. We have a database of strains that you can use to help you plan.",
-    icon: "i-fa6-solid-database",
+    icon: DatabaseIcon,
   },
 ];
 
@@ -82,17 +89,17 @@ export default function Index(): JSX.Element {
                   src="https://res.cloudinary.com/ursine-design/image/upload/q_auto,f_auto/v1654560593/moto_trellis_splash.jpg"
                   alt="Cannabis in trellis"
                 />
-                <div className="from-brand-primary to-brand-primary/25 absolute inset-0 bg-gradient-to-b" />
+                <div className="absolute inset-0 bg-gradient-to-b from-brand-primary to-brand-primary/25" />
               </div>
               <div className="relative px-4 py-16 sm:px-6 sm:py-24 lg:py-32 lg:px-8">
                 <img
-                  className="bg-brand-primary mx-auto mb-6 h-64 w-64 rounded-full bg-opacity-60"
+                  className="mx-auto mb-6 h-64 w-64 rounded-full bg-brand-primary bg-opacity-60"
                   src="https://res.cloudinary.com/ursine-design/image/upload/q_auto:good,f_auto/v1654562278/Moto_Logo_Primary_BLACK_fyxgwa.png"
                   alt="Moto Perpetuo Farm Logo"
                 />
                 <h1 className="text-center text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl">
                   <span className="block text-black">Moto Perpetuo Farm</span>
-                  <span className="text-brand-secondary block">
+                  <span className="block text-brand-secondary">
                     find your high
                   </span>
                 </h1>
@@ -100,15 +107,15 @@ export default function Index(): JSX.Element {
                   <div className="space-y-4 sm:mx-auto sm:inline-grid sm:grid-cols-2 sm:gap-5 sm:space-y-0">
                     <Link
                       to="/#contact"
-                      className="text-gray-1000 bg-brand-primary/80 flex items-center justify-center rounded-md border border-transparent px-4 py-3 text-base font-medium shadow-sm hover:bg-green-200 sm:px-8"
+                      className="text-gray-1000 flex items-center justify-center rounded-md border border-transparent bg-brand-primary/80 px-4 py-3 text-base font-semibold shadow-sm hover:bg-green-200 sm:px-8"
                     >
                       Contact Us
                     </Link>
                     <Link
-                      to="/strains"
-                      className="flex items-center justify-center rounded-md border border-transparent bg-green-800 bg-opacity-90 px-4 py-3 text-base font-medium text-gray-200 shadow-sm hover:bg-green-900 hover:bg-opacity-100 sm:px-8"
+                      to="/strain-and-processing-data"
+                      className="flex items-center justify-center rounded-md border border-transparent bg-green-800 px-4 py-3 text-base font-semibold text-gray-200 shadow-sm hover:bg-green-900 hover:text-green-100 sm:px-8"
                     >
-                      View 2022 Selection
+                      View 2022 Fresh Frozen
                     </Link>
                   </div>
                 </div>
@@ -256,7 +263,7 @@ export default function Index(): JSX.Element {
         </div>
 
         {/* Gradient Feature Section */}
-        <div className="from-brand-secondary/80 bg-gradient-to-r to-green-700">
+        <div className="bg-gradient-to-r from-brand-secondary/80 to-green-700">
           <div className="mx-auto max-w-4xl px-4 py-16 sm:px-6 sm:pt-20 sm:pb-24 lg:max-w-7xl lg:px-8 lg:pt-24">
             <h2 className="text-3xl font-extrabold tracking-tight text-white">
               Storage, Delivery, and Contract Crops
@@ -277,10 +284,7 @@ export default function Index(): JSX.Element {
                 <div key={feature.name}>
                   <div>
                     <span className="flex h-12 w-12 items-center justify-center rounded-md bg-white bg-opacity-10">
-                      <div
-                        className={`${feature.icon} h-6 w-6 text-white`}
-                        aria-hidden="true"
-                      />
+                      <feature.icon className="h-8 w-8 text-green-200" />
                     </span>
                   </div>
                   <div className="mt-6">
@@ -296,7 +300,7 @@ export default function Index(): JSX.Element {
               <span>
                 <Link
                   to="/#contact"
-                  className="flex items-center justify-center rounded-md border border-transparent bg-green-900 px-4 py-3 text-base font-medium text-gray-200 shadow-sm hover:bg-opacity-70 sm:px-8"
+                  className="flex items-center justify-center rounded-md border border-transparent bg-green-900 px-4 py-3 text-base font-semibold text-gray-200 shadow-sm hover:bg-opacity-70 sm:px-8"
                 >
                   Get Started
                 </Link>
@@ -319,9 +323,9 @@ export default function Index(): JSX.Element {
               <div className="mx-auto max-w-xl px-4 sm:px-6 lg:mx-0 lg:max-w-none lg:py-16 lg:px-0">
                 <div>
                   <div>
-                    <span className="to-brand-accent-light flex h-12 w-12 items-center justify-center rounded-md bg-gradient-to-br from-green-800">
-                      <div
-                        className="i-fa6-solid-leaf h-6 w-6 text-white"
+                    <span className="flex h-12 w-12 items-center justify-center rounded-md bg-gradient-to-br from-green-800 to-brand-accent-light">
+                      <GlobeIcon
+                        className="h-8 w-8 text-green-100"
                         aria-hidden="true"
                       />
                     </span>
@@ -350,7 +354,7 @@ export default function Index(): JSX.Element {
                     <div className="mt-6">
                       <Link
                         to="/#contact"
-                        className="hover:bg-brand-secondary inline-flex rounded-md border border-transparent bg-green-800 bg-origin-border px-4 py-2 text-base font-medium text-white shadow-sm"
+                        className="inline-flex rounded-md border border-transparent bg-green-800 bg-origin-border px-4 py-2 text-base font-semibold text-white shadow-sm hover:bg-brand-secondary"
                       >
                         Get started
                       </Link>
@@ -399,8 +403,8 @@ export default function Index(): JSX.Element {
                 <div>
                   <div>
                     <span className="flex h-12 w-12 items-center justify-center rounded-md bg-lime-600">
-                      <div
-                        className="i-fa6-solid-sun h-6 w-6 text-white"
+                      <HandIcon
+                        className="h-8 w-8 text-green-100"
                         aria-hidden="true"
                       />
                     </span>
@@ -433,7 +437,7 @@ export default function Index(): JSX.Element {
                     <div className="mt-6">
                       <Link
                         to="/#contact"
-                        className="hover:from-red-00 inline-flex rounded-md border border-transparent bg-gradient-to-r from-emerald-600 to-green-600 bg-origin-border px-4 py-2 text-base font-medium text-white shadow-sm hover:to-red-500"
+                        className="hover:from-red-00 inline-flex rounded-md border border-transparent bg-gradient-to-r from-emerald-600 to-green-600 bg-origin-border px-4 py-2 text-base font-semibold text-white shadow-sm hover:to-red-500"
                       >
                         Get started
                       </Link>
@@ -459,13 +463,13 @@ export default function Index(): JSX.Element {
           <div className="mx-auto max-w-4xl py-16 px-4 sm:px-6 sm:py-24 lg:flex lg:max-w-7xl lg:items-center lg:justify-between lg:px-8">
             <h2 className="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
               <span className="block">Ready to get started?</span>
-              <span className="from-brand-secondary -mb-1 block bg-gradient-to-r to-green-700 bg-clip-text pb-1 text-transparent">
+              <span className="-mb-1 block bg-gradient-to-r from-brand-secondary to-green-700 bg-clip-text pb-1 text-transparent">
                 Get in touch!
               </span>
             </h2>
             <div className="mt-6 space-y-4 sm:flex sm:space-y-0 sm:space-x-5">
               <Link
-                to="/strains"
+                to="/strain-and-processing-data"
                 className="flex items-center justify-center rounded-md border border-transparent bg-gradient-to-r from-green-600 to-emerald-600 bg-origin-border px-4 py-3 text-base font-medium text-white shadow-sm hover:from-green-700 hover:to-emerald-700"
               >
                 Learn more

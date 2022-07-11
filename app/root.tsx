@@ -13,17 +13,12 @@ import {
   ScrollRestoration,
   useLoaderData,
 } from "@remix-run/react";
-import reset from "@unocss/reset/tailwind.css";
 
+import tailwindStylesheetUrl from "./styles/tailwind.css";
 import { SUPABASE_ANON_PUBLIC, SUPABASE_URL } from "./core/utils/env.server";
-import unocssStylesheetUrl from "./styles/uno.css";
 
 export const links: LinksFunction = () => [
-  {
-    rel: "stylesheet",
-    href: reset,
-  },
-  { rel: "stylesheet", href: unocssStylesheetUrl },
+  { rel: "stylesheet", href: tailwindStylesheetUrl },
   {
     rel: "stylesheet",
     href: "https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.css",

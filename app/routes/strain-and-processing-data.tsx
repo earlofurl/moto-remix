@@ -31,6 +31,7 @@ import React from "react";
 import { toCommonCase } from "~/core/utils/mytools";
 import { getAllStrains } from "~/modules/strain/queries/get-strains.server";
 import Navbar from "~/core/components/navbar";
+import { CheckCircleIcon } from "@heroicons/react/solid";
 
 const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
   // Rank the item
@@ -100,7 +101,7 @@ const terpeneCellColor = (value: string) => {
 const checkMark = (value: boolean) => {
   return value ? (
     <span className="flex items-center justify-center">
-      <div className="i-fa6-solid-circle-check h-6 w-6 text-green-500" />
+      <CheckCircleIcon className="h-6 w-6 text-green-500" />
     </span>
   ) : (
     <span />
@@ -259,13 +260,13 @@ export function loader(): Promise<Strain[]> {
   return getAllStrains();
 }
 
-export default function Strains(): JSX.Element {
+export default function StrainAndProcessingData(): JSX.Element {
   const data = useLoaderData();
   const [columns] = React.useState<typeof defaultColumns>(() => [
     ...defaultColumns,
   ]);
   const [sorting, setSorting] = React.useState<SortingState>([
-    { id: "name", desc: false },
+    { id: "yield_average", desc: true },
   ]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -308,7 +309,7 @@ export default function Strains(): JSX.Element {
   }, [table.getState().columnFilters[0]?.id]);
 
   return (
-    <div className="bg-brand-primary min-h-screen">
+    <div className="min-h-screen bg-brand-primary">
       <Navbar />
       <div className="mx-auto max-w-7xl py-2 px-4 sm:py-4 sm:px-6 lg:px-8">
         <div className="text-center">
