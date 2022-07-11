@@ -31,7 +31,13 @@ import React from "react";
 import { toCommonCase } from "~/core/utils/mytools";
 import { getAllStrains } from "~/modules/strain/queries/get-strains.server";
 import Navbar from "~/core/components/navbar";
-import { CheckCircleIcon } from "@heroicons/react/solid";
+import {
+  CheckCircleIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
+} from "@heroicons/react/solid";
+
+// Filter and DebouncedInput are at the bottom of the file
 
 const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
   // Rank the item
@@ -311,6 +317,8 @@ export default function StrainAndProcessingData(): JSX.Element {
   return (
     <div className="min-h-screen bg-brand-primary">
       <Navbar />
+
+      {/* Hero */}
       <div className="mx-auto max-w-7xl py-2 px-4 sm:py-4 sm:px-6 lg:px-8">
         <div className="text-center">
           <p className="mt-1 text-4xl font-extrabold text-gray-900 sm:text-5xl sm:tracking-tight lg:text-6xl">
@@ -328,12 +336,14 @@ export default function StrainAndProcessingData(): JSX.Element {
           </Link>
         </div>
       </div>
+      {/* End Hero*/}
+
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="mt-8 flex flex-col">
           <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
-              <div className="max-w-screen overflow-x-auto bg-emerald-400 shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
-                <div className="px-4 sm:px-6 lg:px-8">
+              <div className="max-w-screen overflow-x-auto bg-emerald-400 px-4 shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
+                <div className="py-2 sm:px-2 lg:px-4">
                   <div className="sm:flex sm:items-center">
                     <div className="sm:flex-auto">
                       <h1 className="pt-1 text-2xl font-semibold text-gray-900">
@@ -345,12 +355,12 @@ export default function StrainAndProcessingData(): JSX.Element {
                   <DebouncedInput
                     value={globalFilter ?? ""}
                     onChange={(value) => setGlobalFilter(String(value))}
-                    className="my-2 block w-auto rounded border-gray-300 py-2 pl-2 shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm"
+                    className="my-2 block w-auto rounded-md border-gray-300 py-2 pl-2 shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm"
                     placeholder="Search all columns..."
                   />
                 </div>
-                <table className="min-w-full divide-y divide-gray-300">
-                  <thead className="z-1 bg-emerald-500 shadow-sm ring-2 ring-black ring-opacity-5">
+                <table className="min-w-full divide-y divide-gray-300 rounded ring-1 ring-green-600 ring-opacity-50">
+                  <thead className="z-1 bg-emerald-500 shadow-sm ring-1 ring-black ring-opacity-5">
                     {table.getHeaderGroups().map((headerGroup) => (
                       <tr key={headerGroup.id}>
                         {headerGroup.headers.map((header) => (
@@ -365,7 +375,7 @@ export default function StrainAndProcessingData(): JSX.Element {
                                   <div
                                     {...{
                                       className: header.column.getCanSort()
-                                        ? "cursor-pointer select-none"
+                                        ? "group inline-flex cursor-pointer select-none"
                                         : "",
                                       onClick:
                                         header.column.getToggleSortingHandler(),
@@ -376,8 +386,22 @@ export default function StrainAndProcessingData(): JSX.Element {
                                       header.getContext()
                                     )}
                                     {{
-                                      asc: " 🔼",
-                                      desc: " 🔽",
+                                      asc: (
+                                        <span className="ml-2 max-h-6 flex-none rounded bg-blue-400/60 text-gray-800 ring-1 ring-gray-500">
+                                          <ChevronUpIcon
+                                            className="h-6 w-auto"
+                                            aria-hidden="true"
+                                          />
+                                        </span>
+                                      ),
+                                      desc: (
+                                        <span className="ml-2 max-h-6 flex-none rounded bg-blue-400/60 text-gray-800 ring-1 ring-gray-500">
+                                          <ChevronDownIcon
+                                            className="h-6 w-auto"
+                                            aria-hidden="true"
+                                          />
+                                        </span>
+                                      ),
                                     }[header.column.getIsSorted() as string] ??
                                       null}
                                   </div>
@@ -417,35 +441,22 @@ export default function StrainAndProcessingData(): JSX.Element {
                     ))}
                   </tbody>
                 </table>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 py-2">
                   <button
-                    className="rounded border p-1"
+                    className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
                     onClick={() => table.setPageIndex(0)}
                     disabled={!table.getCanPreviousPage()}
                   >
-                    {"<<"}
+                    {"<< First"}
                   </button>
                   <button
-                    className="rounded border p-1"
+                    className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
                     onClick={() => table.previousPage()}
                     disabled={!table.getCanPreviousPage()}
                   >
-                    {"<"}
+                    {"< Prev"}
                   </button>
-                  <button
-                    className="rounded border p-1"
-                    onClick={() => table.nextPage()}
-                    disabled={!table.getCanNextPage()}
-                  >
-                    {">"}
-                  </button>
-                  <button
-                    className="rounded border p-1"
-                    onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-                    disabled={!table.getCanNextPage()}
-                  >
-                    {">>"}
-                  </button>
+
                   <span className="flex items-center gap-1">
                     <div>Page</div>
                     <strong>
@@ -453,6 +464,20 @@ export default function StrainAndProcessingData(): JSX.Element {
                       {table.getPageCount()}
                     </strong>
                   </span>
+                  <button
+                    className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                    onClick={() => table.nextPage()}
+                    disabled={!table.getCanNextPage()}
+                  >
+                    {"> Next"}
+                  </button>
+                  <button
+                    className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                    onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+                    disabled={!table.getCanNextPage()}
+                  >
+                    {">> Last"}
+                  </button>
                   <span className="flex items-center gap-1">
                     | Go to page:
                     <input
@@ -464,7 +489,7 @@ export default function StrainAndProcessingData(): JSX.Element {
                           : 0;
                         table.setPageIndex(page);
                       }}
-                      className="w-16 rounded border p-1"
+                      className="block w-16 rounded-md border-gray-300 p-1 focus:border-indigo-500 focus:ring-indigo-500"
                     />
                   </span>
                   <select
@@ -472,6 +497,7 @@ export default function StrainAndProcessingData(): JSX.Element {
                     onChange={(e) => {
                       table.setPageSize(Number(e.target.value));
                     }}
+                    className="block w-auto rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                   >
                     {[20, 50, 100].map((pageSize) => (
                       <option
@@ -483,7 +509,7 @@ export default function StrainAndProcessingData(): JSX.Element {
                     ))}
                   </select>
                 </div>
-                <div>{table.getPrePaginationRowModel().rows.length} Rows</div>
+                {/*<div>{table.getPrePaginationRowModel().rows.length} Rows</div>*/}
               </div>
             </div>
           </div>
@@ -525,7 +551,7 @@ function Filter({ column, table }: { column: Column<any>; table: Table<any> }) {
               ? `(${column.getFacetedMinMaxValues()?.[0]})`
               : ""
           }`}
-          className="w-24 rounded border shadow"
+          className="my-2 block w-auto rounded-md border-gray-300 py-2 pl-2 shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm"
         />
         <DebouncedInput
           type="number"
@@ -540,7 +566,7 @@ function Filter({ column, table }: { column: Column<any>; table: Table<any> }) {
               ? `(${column.getFacetedMinMaxValues()?.[1]})`
               : ""
           }`}
-          className="w-24 rounded border shadow"
+          className="my-2 block w-auto rounded-md border-gray-300 py-2 pl-2 shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm"
         />
       </div>
       <div className="h-1" />
@@ -560,7 +586,7 @@ function Filter({ column, table }: { column: Column<any>; table: Table<any> }) {
         value={(columnFilterValue ?? "") as string}
         onChange={(value) => column.setFilterValue(value)}
         placeholder={`Search... (${column.getFacetedUniqueValues().size})`}
-        className="w-36 rounded border shadow"
+        className="my-2 block w-auto rounded-md border-gray-300 py-2 pl-2 shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm"
         list={column.id + "list"}
       />
       <div className="h-1" />
