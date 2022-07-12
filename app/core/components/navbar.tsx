@@ -10,7 +10,7 @@ const informations = [
     name: "For Processors",
     description:
       "See our upcoming harvests of Fresh Frozen material. Data collected in previous years helps you choose the perfect strains.",
-    to: "/strain-and-processing-data",
+    to: "/db/strain-and-processing-data",
     icon: ChartBarIcon,
   },
 ];

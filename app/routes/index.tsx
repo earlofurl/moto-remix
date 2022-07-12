@@ -112,7 +112,7 @@ export default function Index(): JSX.Element {
                       Contact Us
                     </Link>
                     <Link
-                      to="/strain-and-processing-data"
+                      to="/db/strain-and-processing-data"
                       className="flex items-center justify-center rounded-md border border-transparent bg-green-800 px-4 py-3 text-base font-semibold text-gray-200 shadow-sm hover:bg-green-900 hover:text-green-100 sm:px-8"
                     >
                       View 2022 Fresh Frozen
@@ -297,14 +297,24 @@ export default function Index(): JSX.Element {
                   </div>
                 </div>
               ))}
-              <span>
+              <div className="relative grid grid-cols-1">
+              <div className="row-span-1 col-span-1">
                 <Link
                   to="/#contact"
-                  className="flex items-center justify-center rounded-md border border-transparent bg-green-900 px-4 py-3 text-base font-semibold text-gray-200 shadow-sm hover:bg-opacity-70 sm:px-8"
+                  className="flex items-center justify-center rounded-md border border-transparent bg-green-800 px-4 py-3 text-base font-semibold text-gray-200 shadow-sm hover:bg-green-700 sm:px-8"
                 >
                   Get Started
                 </Link>
-              </span>
+              </div>
+              <div className="row-span-1 col-span-1">
+                <Link
+                  to="/db/strain-and-processing-data"
+                  className="flex items-center justify-center rounded-md border border-transparent bg-green-900 px-4 py-3 text-base font-semibold text-gray-200 shadow-sm hover:bg-opacity-70 sm:px-8"
+                >
+                  View Processing Data
+                </Link>
+              </div>
+              </div>
             </div>
           </div>
         </div>
@@ -469,7 +479,7 @@ export default function Index(): JSX.Element {
             </h2>
             <div className="mt-6 space-y-4 sm:flex sm:space-y-0 sm:space-x-5">
               <Link
-                to="/strain-and-processing-data"
+                to="/db/strain-and-processing-data"
                 className="flex items-center justify-center rounded-md border border-transparent bg-gradient-to-r from-green-600 to-emerald-600 bg-origin-border px-4 py-3 text-base font-medium text-white shadow-sm hover:from-green-700 hover:to-emerald-700"
               >
                 Learn more

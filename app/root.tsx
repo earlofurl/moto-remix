@@ -5,6 +5,7 @@ import type {
 } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import {
+  Link,
   Links,
   LiveReload,
   Meta,
@@ -12,10 +13,12 @@ import {
   Scripts,
   ScrollRestoration,
   useLoaderData,
+  useCatch
 } from "@remix-run/react";
 
 import tailwindStylesheetUrl from "./styles/tailwind.css";
 import { SUPABASE_ANON_PUBLIC, SUPABASE_URL } from "./core/utils/env.server";
+import TW404page from './core/components/TW404page';
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: tailwindStylesheetUrl },
@@ -72,7 +75,31 @@ export const loader: LoaderFunction = async ({ request }) => {
 //     },
 //   });
 
-export default function App(): JSX.Element {
+// export default function App(): JSX.Element {
+//   const { ENV } = useLoaderData();
+
+//   return (
+//     <html lang="en">
+//       <head>
+//         <Meta />
+//         <Links />
+//       </head>
+//       <body>
+//         <Outlet />
+//         <ScrollRestoration />
+//         <script
+//           dangerouslySetInnerHTML={{
+//             __html: `window.ENV = ${JSON.stringify(ENV)}`,
+//           }}
+//         />
+//         <Scripts />
+//         <LiveReload />
+//       </body>
+//     </html>
+//   );
+// }
+
+function Document({ children }: { children: React.ReactNode }): JSX.Element {
   const { ENV } = useLoaderData();
 
   return (
@@ -91,6 +118,51 @@ export default function App(): JSX.Element {
         />
         <Scripts />
         <LiveReload />
+      </body>
+    </html>
+  );
+}
+
+export default function App(): JSX.Element {
+  return (
+    <Document>
+      <Outlet />
+    </Document>
+  );
+}
+
+export function ErrorBoundary({ error }: { error: Error }): JSX.Element {
+  return (
+    <Document>
+      <div className="flex h-full flex-col items-center justify-center">
+        <h1 className="text-4xl font-bold">
+          <span role="img" aria-label="Sad face">
+            😢
+          </span>
+        </h1>
+        <p className="text-lg">There was an error: {error.message}</p>
+        <div className="mt-6">
+                  <Link to="/" className="text-base font-medium text-indigo-600 hover:text-indigo-500">
+                    Go back home<span aria-hidden="true"> &rarr;</span>
+                  </Link>
+                </div>
+      </div>
+    </Document>
+  );
+}
+
+export function CatchBoundary(): JSX.Element {
+  const caught = useCatch();
+  return (
+    <html>
+      <head>
+        <title>Oops!</title>
+        <Meta />
+        <Links />
+      </head>
+      <body>
+        <TW404page status={caught.status} statusText={caught.statusText} />
+        <Scripts />
       </body>
     </html>
   );
