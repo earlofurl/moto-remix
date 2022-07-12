@@ -72,23 +72,23 @@ function classNames(...classes: string[]) {
 // Could add color associated with terpene to object and use that to color the cell
 const terpeneClassNames = (value: string) =>
   value.toLowerCase() === "pinene"
-    ? "bg-green-200 text-green-800 font-semibold"
+    ? "bg-green-200 text-green-800 font-semibold text-lg h-8 w-auto"
     : value.toLowerCase() === "caryophyllene"
-    ? "bg-orange-100 text-orange-800 font-semibold"
+    ? "bg-orange-100 text-orange-800 font-semibold text-lg h-8 w-auto"
     : value.toLowerCase() === "myrcene"
-    ? "bg-red-100 text-red-800 font-semibold"
+    ? "bg-red-100 text-red-800 font-semibold text-lg h-8 w-auto"
     : value.toLowerCase() === "limonene"
-    ? "bg-yellow-100 text-yellow-800 font-semibold"
+    ? "bg-yellow-100 text-yellow-800 font-semibold text-lg h-8 w-auto"
     : value.toLowerCase() === "terpinolene"
-    ? "bg-cyan-100 text-cyan-800 font-semibold"
+    ? "bg-cyan-100 text-cyan-800 font-semibold text-lg h-8 w-auto"
     : value.toLowerCase() === "humulene"
-    ? "bg-purple-100 text-purple-800 font-semibold"
+    ? "bg-purple-100 text-purple-800 font-semibold text-lg h-8 w-auto"
     : value.toLowerCase() === "linalool"
-    ? "bg-emerald-100 text-emerald-800 font-semibold"
+    ? "bg-emerald-100 text-emerald-800 font-semibold text-lg h-8 w-auto"
     : value.toLowerCase() === "fenchol"
-    ? "bg-pink-100 text-pink-800 font-semibold"
+    ? "bg-pink-100 text-pink-800 font-semibold text-lg h-8 w-auto"
     : value.toLowerCase() === "bisabolol"
-    ? "bg-indigo-100 text-indigo-800 font-semibold"
+    ? "bg-indigo-100 text-indigo-800 font-semibold text-lg h-8 w-auto"
     : "bg-gray-100 text-gray-800";
 
 const terpeneCellColor = (value: string) => {
@@ -321,13 +321,13 @@ export default function StrainAndProcessingData(): JSX.Element {
       {/* Hero */}
       <div className="mx-auto max-w-7xl py-2 px-4 sm:py-4 sm:px-6 lg:px-8">
         <div className="text-center">
-          <p className="mt-1 text-4xl font-extrabold text-gray-900 sm:text-5xl sm:tracking-tight lg:text-6xl">
+          <h1 className="mt-1 text-4xl font-extrabold text-gray-900 sm:text-5xl sm:tracking-tight lg:text-6xl">
             Know what you're going to get.
-          </p>
-          <p className="mx-auto mt-5 max-w-xl pb-2 text-2xl text-gray-500">
+          </h1>
+          <h2 className="mx-auto mt-5 max-w-xl pb-2 text-2xl text-gray-500">
             Browse our selection of over 100 strains and find exactly what you
             need. We store and ship on demand.
-          </p>
+          </h2>
           <Link
             to="/#contact"
             className="inline-flex items-center justify-center rounded-md border border-transparent bg-green-700 px-5 py-3 text-base font-medium text-white hover:bg-green-600"
@@ -345,19 +345,18 @@ export default function StrainAndProcessingData(): JSX.Element {
               <div className="max-w-screen overflow-x-auto bg-emerald-400 px-4 shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
                 <div className="py-2 sm:px-2 lg:px-4">
                   <div className="sm:flex sm:items-center">
-                    <div className="sm:flex-auto">
-                      <h1 className="pt-1 text-2xl font-semibold text-gray-900">
+                    <div className="group inline-flex sm:flex-auto">
+                      <h1 className="pt-1 text-3xl font-semibold text-gray-900">
                         Fresh Frozen Strain Data
                       </h1>
+                      <DebouncedInput
+                        value={globalFilter ?? ""}
+                        onChange={(value) => setGlobalFilter(String(value))}
+                        className="my-1 mx-8 block w-auto rounded-md border-gray-300 py-2 pl-2 shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm"
+                        placeholder="Search all columns..."
+                      />
                     </div>
                   </div>
-
-                  <DebouncedInput
-                    value={globalFilter ?? ""}
-                    onChange={(value) => setGlobalFilter(String(value))}
-                    className="my-2 block w-auto rounded-md border-gray-300 py-2 pl-2 shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm"
-                    placeholder="Search all columns..."
-                  />
                 </div>
                 <table className="min-w-full divide-y divide-gray-300 rounded ring-1 ring-green-600 ring-opacity-50">
                   <thead className="z-1 bg-emerald-500 shadow-sm ring-1 ring-black ring-opacity-5">
@@ -424,9 +423,15 @@ export default function StrainAndProcessingData(): JSX.Element {
                     ))}
                   </thead>
                   <tbody className="divide-y divide-gray-200 bg-gray-50">
-                    {table.getRowModel().rows.map((row) => (
-                      <tr key={row.id}>
-                        {row.getVisibleCells().map((cell) => (
+                    {table.getRowModel().rows.map((row, rowIdx) => (
+                      <tr
+                        key={row.id}
+                        {...{
+                          className:
+                            rowIdx % 2 === 0 ? undefined : "bg-gray-100/50",
+                        }}
+                      >
+                        {row.getVisibleCells().map((cell, cellIdx) => (
                           <td
                             key={cell.id}
                             className="whitespace-nowrap py-4 pl-4 pr-3 text-right text-sm font-medium text-gray-900 sm:pl-6"
