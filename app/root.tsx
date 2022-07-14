@@ -13,12 +13,13 @@ import {
   Scripts,
   ScrollRestoration,
   useLoaderData,
-  useCatch
+  useCatch,
 } from "@remix-run/react";
 
 import tailwindStylesheetUrl from "./styles/tailwind.css";
 import { SUPABASE_ANON_PUBLIC, SUPABASE_URL } from "./core/utils/env.server";
-import TW404page from './core/components/TW404page';
+import TW404page from "./core/components/TW404page";
+import React from "react";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: tailwindStylesheetUrl },
@@ -136,16 +137,22 @@ export function ErrorBoundary({ error }: { error: Error }): JSX.Element {
     <Document>
       <div className="flex h-full flex-col items-center justify-center">
         <h1 className="text-4xl font-bold">
-          <span role="img" aria-label="Sad face">
+          <span
+            role="img"
+            aria-label="Sad face"
+          >
             😢
           </span>
         </h1>
         <p className="text-lg">There was an error: {error.message}</p>
         <div className="mt-6">
-                  <Link to="/" className="text-base font-medium text-indigo-600 hover:text-indigo-500">
-                    Go back home<span aria-hidden="true"> &rarr;</span>
-                  </Link>
-                </div>
+          <Link
+            to="/"
+            className="text-base font-medium text-indigo-600 hover:text-indigo-500"
+          >
+            Go back home<span aria-hidden="true"> &rarr;</span>
+          </Link>
+        </div>
       </div>
     </Document>
   );
@@ -161,7 +168,10 @@ export function CatchBoundary(): JSX.Element {
         <Links />
       </head>
       <body>
-        <TW404page status={caught.status} statusText={caught.statusText} />
+        <TW404page
+          status={caught.status}
+          statusText={caught.statusText}
+        />
         <Scripts />
       </body>
     </html>

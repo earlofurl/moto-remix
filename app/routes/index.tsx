@@ -1,5 +1,5 @@
 import type { Request } from "@remix-run/node";
-import { Form, Link, useActionData, useTransition } from "@remix-run/react";
+import { Form, Link, useTransition } from "@remix-run/react";
 import { useRef, useEffect } from "react";
 import Navbar from "~/core/components/navbar";
 import { sendMail, trapSpam } from "~/core/integrations/mail/sendgrid.server";
@@ -59,7 +59,6 @@ export async function action({ request }: { request: Request }): Promise<null> {
 }
 
 export default function Index(): JSX.Element {
-  const data = useActionData();
   const transition = useTransition();
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -298,22 +297,22 @@ export default function Index(): JSX.Element {
                 </div>
               ))}
               <div className="relative grid grid-cols-1">
-              <div className="row-span-1 col-span-1">
-                <Link
-                  to="/#contact"
-                  className="flex items-center justify-center rounded-md border border-transparent bg-green-800 px-4 py-3 text-base font-semibold text-gray-200 shadow-sm hover:bg-green-700 sm:px-8"
-                >
-                  Get Started
-                </Link>
-              </div>
-              <div className="row-span-1 col-span-1">
-                <Link
-                  to="/db/strain-and-processing-data"
-                  className="flex items-center justify-center rounded-md border border-transparent bg-green-900 px-4 py-3 text-base font-semibold text-gray-200 shadow-sm hover:bg-opacity-70 sm:px-8"
-                >
-                  View Processing Data
-                </Link>
-              </div>
+                <div className="col-span-1 row-span-1">
+                  <Link
+                    to="/#contact"
+                    className="flex items-center justify-center rounded-md border border-transparent bg-green-800 px-4 py-3 text-base font-semibold text-gray-200 shadow-sm hover:bg-green-700 sm:px-8"
+                  >
+                    Get Started
+                  </Link>
+                </div>
+                <div className="col-span-1 row-span-1">
+                  <Link
+                    to="/db/strain-and-processing-data"
+                    className="flex items-center justify-center rounded-md border border-transparent bg-green-900 px-4 py-3 text-base font-semibold text-gray-200 shadow-sm hover:bg-opacity-70 sm:px-8"
+                  >
+                    View Processing Data
+                  </Link>
+                </div>
               </div>
             </div>
           </div>

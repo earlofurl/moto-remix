@@ -1,6 +1,6 @@
 import type { Strain } from "@prisma/client";
 import { Link, useLoaderData } from "@remix-run/react";
-import type { SortingState } from "@tanstack/react-table";
+import type { RowData, SortingState } from "@tanstack/react-table";
 import {
   Column,
   Table,
@@ -20,12 +20,7 @@ import {
   useReactTable,
   PaginationState,
 } from "@tanstack/react-table";
-import {
-  RankingInfo,
-  rankItem,
-  compareItems,
-  rankings,
-} from "@tanstack/match-sorter-utils";
+import { rankItem, compareItems } from "@tanstack/match-sorter-utils";
 import { suffix } from "froebel/string";
 import React from "react";
 import { toCommonCase } from "~/core/utils/mytools";
@@ -56,8 +51,8 @@ const fuzzySort: SortingFn<any> = (rowA, rowB, columnId) => {
   // Only sort by rank if the column has ranking information
   if (rowA.columnFiltersMeta[columnId]) {
     dir = compareItems(
-      rowA.columnFiltersMeta[columnId]!,
-      rowB.columnFiltersMeta[columnId]!
+      rowA.columnFiltersMeta[columnId],
+      rowB.columnFiltersMeta[columnId]
     );
   }
 
@@ -306,13 +301,16 @@ export default function StrainAndProcessingData(): JSX.Element {
     getFacetedMinMaxValues: getFacetedMinMaxValues(),
   });
 
+  const tableDep = table.getState().columnFilters[0]?.id;
+
   React.useEffect(() => {
-    if (table.getState().columnFilters[0]?.id === "name") {
-      if (table.getState().sorting[0]?.id !== "name") {
-        table.setSorting([{ id: "name", desc: false }]);
-      }
+    if (
+      table.getState().columnFilters[0]?.id === "name" &&
+      table.getState().sorting[0]?.id !== "name"
+    ) {
+      table.setSorting([{ id: "name", desc: false }]);
     }
-  }, [table.getState().columnFilters[0]?.id]);
+  }, [table, tableDep]);
 
   return (
     <div className="min-h-screen bg-brand-primary">
@@ -431,7 +429,7 @@ export default function StrainAndProcessingData(): JSX.Element {
                             rowIdx % 2 === 0 ? undefined : "bg-gray-100/50",
                         }}
                       >
-                        {row.getVisibleCells().map((cell, cellIdx) => (
+                        {row.getVisibleCells().map((cell) => (
                           <td
                             key={cell.id}
                             className="whitespace-nowrap py-4 pl-4 pr-3 text-right text-sm font-medium text-gray-900 sm:pl-6"
@@ -451,6 +449,7 @@ export default function StrainAndProcessingData(): JSX.Element {
                     className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
                     onClick={() => table.setPageIndex(0)}
                     disabled={!table.getCanPreviousPage()}
+                    type="button"
                   >
                     {"<< First"}
                   </button>
@@ -458,6 +457,7 @@ export default function StrainAndProcessingData(): JSX.Element {
                     className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
                     onClick={() => table.previousPage()}
                     disabled={!table.getCanPreviousPage()}
+                    type="button"
                   >
                     {"< Prev"}
                   </button>
@@ -473,6 +473,7 @@ export default function StrainAndProcessingData(): JSX.Element {
                     className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
                     onClick={() => table.nextPage()}
                     disabled={!table.getCanNextPage()}
+                    type="button"
                   >
                     {"> Next"}
                   </button>
@@ -480,6 +481,7 @@ export default function StrainAndProcessingData(): JSX.Element {
                     className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
                     onClick={() => table.setPageIndex(table.getPageCount() - 1)}
                     disabled={!table.getCanNextPage()}
+                    type="button"
                   >
                     {">> Last"}
                   </button>
@@ -536,7 +538,7 @@ function Filter({ column, table }: { column: Column<any>; table: Table<any> }) {
     () =>
       typeof firstValue === "number"
         ? []
-        : Array.from(column.getFacetedUniqueValues().keys()).sort(),
+        : [...column.getFacetedUniqueValues().keys()].sort(),
     [column.getFacetedUniqueValues()]
   );
 
