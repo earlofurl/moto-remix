@@ -1,6 +1,14 @@
 import type { Request } from "@remix-run/node";
-import { Form, Link, useTransition } from "@remix-run/react";
-import { useRef, useEffect } from "react";
+import {
+  Form,
+  Link,
+  useTransition,
+  useCatch,
+  Meta,
+  Links,
+  Scripts,
+} from "@remix-run/react";
+import React, { useRef, useEffect } from "react";
 import Navbar from "~/core/components/navbar";
 import { sendMail, trapSpam } from "~/core/integrations/mail/sendgrid.server";
 import {
@@ -10,6 +18,7 @@ import {
   GlobeIcon,
   HandIcon,
 } from "@heroicons/react/solid";
+import TW404page from "~/core/components/TW404page";
 
 const features = [
   {
@@ -667,5 +676,49 @@ export default function Index(): JSX.Element {
         </div>
       </main>
     </div>
+  );
+}
+
+export function ErrorBoundary({ error }: { error: Error }): JSX.Element {
+  return (
+    <div className="flex h-full flex-col items-center justify-center">
+      <h1 className="text-4xl font-bold">
+        <span
+          role="img"
+          aria-label="Sad face"
+        >
+          😢
+        </span>
+      </h1>
+      <p className="text-lg">There was an error: {error.message}</p>
+      <div className="mt-6">
+        <Link
+          to="/"
+          className="text-base font-medium text-indigo-600 hover:text-indigo-500"
+        >
+          Go back home<span aria-hidden="true"> &rarr;</span>
+        </Link>
+      </div>
+    </div>
+  );
+}
+
+export function CatchBoundary(): JSX.Element {
+  const caught = useCatch();
+  return (
+    <html>
+      <head>
+        <title>Oops!</title>
+        <Meta />
+        <Links />
+      </head>
+      <body>
+        <TW404page
+          status={caught.status}
+          statusText={caught.statusText}
+        />
+        <Scripts />
+      </body>
+    </html>
   );
 }

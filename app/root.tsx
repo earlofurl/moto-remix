@@ -3,7 +3,7 @@ import type {
   LoaderFunction,
   MetaFunction,
 } from "@remix-run/node";
-import { json, redirect } from "@remix-run/node";
+import { ActionFunction, json, redirect } from "@remix-run/node";
 import {
   Link,
   Links,
@@ -20,6 +20,8 @@ import tailwindStylesheetUrl from "./styles/tailwind.css";
 import { SUPABASE_ANON_PUBLIC, SUPABASE_URL } from "./core/utils/env.server";
 import TW404page from "./core/components/TW404page";
 import React from "react";
+import { ageGate } from "~/core/utils/cookies";
+import AgeGate from "~/core/components/AgeGate";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: tailwindStylesheetUrl },
@@ -37,6 +39,8 @@ export const meta: MetaFunction = () => ({
 
 export const loader: LoaderFunction = async ({ request }) => {
   const proto = request.headers.get("X-Forwarded-Proto");
+  const cookieHeader = request.headers.get("Cookie");
+  const cookie = (await ageGate.parse(cookieHeader)) || {};
 
   json({
     ENV: {
@@ -51,7 +55,23 @@ export const loader: LoaderFunction = async ({ request }) => {
     return redirect(url.toString(), { status: 302 });
   }
 
-  return {};
+  return json({ showAgeGate: cookie.showAgeGate });
+};
+
+export const action: ActionFunction = async ({ request }) => {
+  const cookieHeader = request.headers.get("Cookie");
+  const cookie = (await ageGate.parse(cookieHeader)) || {};
+  const bodyParams = await request.formData();
+
+  if (bodyParams.get("disableAgeGate") === "true") {
+    cookie.showAgeGate = false;
+  }
+
+  return redirect("/", {
+    headers: {
+      "Set-Cookie": await ageGate.serialize(cookie),
+    },
+  });
 };
 
 // export const loader: LoaderFunction = async ({ request }) =>
@@ -76,32 +96,8 @@ export const loader: LoaderFunction = async ({ request }) => {
 //     },
 //   });
 
-// export default function App(): JSX.Element {
-//   const { ENV } = useLoaderData();
-
-//   return (
-//     <html lang="en">
-//       <head>
-//         <Meta />
-//         <Links />
-//       </head>
-//       <body>
-//         <Outlet />
-//         <ScrollRestoration />
-//         <script
-//           dangerouslySetInnerHTML={{
-//             __html: `window.ENV = ${JSON.stringify(ENV)}`,
-//           }}
-//         />
-//         <Scripts />
-//         <LiveReload />
-//       </body>
-//     </html>
-//   );
-// }
-
 function Document({ children }: { children: React.ReactNode }): JSX.Element {
-  const { ENV } = useLoaderData();
+  const { ENV, showAgeGate } = useLoaderData();
 
   return (
     <html lang="en">
@@ -110,7 +106,7 @@ function Document({ children }: { children: React.ReactNode }): JSX.Element {
         <Links />
       </head>
       <body>
-        <Outlet />
+        {showAgeGate === false ? <Outlet /> : <AgeGate />}
         <ScrollRestoration />
         <script
           dangerouslySetInnerHTML={{
