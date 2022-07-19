@@ -51,7 +51,9 @@ model Location {
   latitude     Float
   longitude    Float
   note         String   @default("")
+  website      String?
   flower       Boolean  @default(false)
   prerolls     Boolean  @default(false)
   pressed_hash Boolean  @default(false)
+  created_by   String   @default("")
 }

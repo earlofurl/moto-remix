@@ -6,7 +6,6 @@ import type {
 import { json, redirect } from "@remix-run/node";
 import {
   Form,
-  Link,
   useActionData,
   useSearchParams,
   useTransition,
@@ -23,7 +22,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   const authSession = await getAuthSession(request);
 
   if (authSession) {
-    return redirect("/notes");
+    return redirect("/admin");
   }
 
   return json({});
@@ -59,7 +58,7 @@ export const action: ActionFunction = async ({ request }) => {
     );
   }
 
-  const { email, password, redirectTo = "/notes" } = formValidation.data;
+  const { email, password, redirectTo = "/admin" } = formValidation.data;
 
   const authSession = await signInWithEmail(email, password);
 
@@ -81,7 +80,7 @@ export const meta: MetaFunction = () => ({
   title: "Login",
 });
 
-export default function LoginPage() {
+export default function LoginPage(): JSX.Element {
   const [searchParams] = useSearchParams();
   const redirectTo = searchParams.get("redirectTo") ?? undefined;
   const actionData = useActionData() as ActionData;
@@ -185,20 +184,6 @@ export default function LoginPage() {
           >
             Log in
           </button>
-          <div className="flex items-center justify-center">
-            <div className="text-center text-sm text-gray-500">
-              Don't have an account?{" "}
-              <Link
-                className="text-blue-500 underline"
-                to={{
-                  pathname: "/join",
-                  search: searchParams.toString(),
-                }}
-              >
-                Sign up
-              </Link>
-            </div>
-          </div>
         </Form>
         <div className="mt-6">
           <div className="relative">

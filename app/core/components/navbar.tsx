@@ -1,11 +1,17 @@
-import { Link } from "@remix-run/react";
+import { Form, Link, useLoaderData } from "@remix-run/react";
 /* This example requires Tailwind CSS v2.0+ */
 import { Fragment } from "react";
 import { Popover, Transition } from "@headlessui/react";
 import { ChartBarIcon, MenuIcon, XIcon } from "@heroicons/react/outline";
 import { ChevronDownIcon } from "@heroicons/react/solid";
+import { json, LoaderFunction } from "@remix-run/node";
+import { getAuthSession } from "~/core/auth/session.server";
 
-const informations = [
+type LoaderData = {
+  email?: string;
+};
+
+const menuFeatures = [
   {
     name: "For Processors",
     description:
@@ -14,6 +20,11 @@ const informations = [
     icon: ChartBarIcon,
   },
 ];
+
+export const loader: LoaderFunction = async ({ request }) => {
+  const { email } = (await getAuthSession(request)) ?? {};
+  return json<LoaderData>({ email });
+};
 
 function classNames(...classes: (string | boolean)[]) {
   return classes.filter(Boolean).join(" ");
@@ -77,24 +88,24 @@ export default function Navbar(): JSX.Element {
                   <Popover.Panel className="absolute z-10 -ml-4 mt-3 w-screen max-w-md transform lg:left-1/2 lg:ml-0 lg:max-w-2xl lg:-translate-x-1/2">
                     <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
                       <div className="relative grid gap-6 bg-brand-secondary/80 px-5 py-6 sm:gap-8 sm:p-8 lg:grid-cols-2">
-                        {informations.map((information) => (
+                        {menuFeatures.map((menuFeature) => (
                           <Link
-                            key={information.name}
-                            to={information.to}
+                            key={menuFeature.name}
+                            to={menuFeature.to}
                             className="-m-3 flex items-start rounded-lg p-3 font-medium text-gray-100 hover:bg-gray-50 hover:text-gray-900"
                           >
                             <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-md bg-indigo-500 text-white sm:h-12 sm:w-12">
-                              <information.icon
+                              <menuFeature.icon
                                 className="h-6 w-6"
                                 aria-hidden="true"
                               />
                             </div>
                             <div className="ml-4">
                               <p className="text-base font-semibold">
-                                {information.name}
+                                {menuFeature.name}
                               </p>
                               <p className="mt-1 text-base">
-                                {information.description}
+                                {menuFeature.description}
                               </p>
                             </div>
                           </Link>
@@ -199,18 +210,21 @@ export default function Navbar(): JSX.Element {
           {/*</Popover>*/}
         </Popover.Group>
         <div className="hidden items-center justify-end md:flex md:flex-1 lg:w-0">
-          {/*<a*/}
-          {/*  href="#"*/}
-          {/*  className="whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900"*/}
-          {/*>*/}
-          {/*  Sign in*/}
-          {/*</a>*/}
-          {/*<a*/}
-          {/*  href="#"*/}
-          {/*  className="ml-8 inline-flex items-center justify-center whitespace-nowrap rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700"*/}
-          {/*>*/}
-          {/*  Sign up*/}
-          {/*</a>*/}
+          {/*{email ? (*/}
+          {/*  <Form*/}
+          {/*    method="post"*/}
+          {/*    action="/logout"*/}
+          {/*  >*/}
+          {/*    <button*/}
+          {/*      type="submit"*/}
+          {/*      className="whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900"*/}
+          {/*    >*/}
+          {/*      Logout*/}
+          {/*    </button>*/}
+          {/*  </Form>*/}
+          {/*) : (*/}
+          {/*  <p>Auth Not Found</p>*/}
+          {/*)}*/}
         </div>
       </div>
 
@@ -249,20 +263,20 @@ export default function Navbar(): JSX.Element {
               </div>
               <div className="mt-6">
                 <nav className="grid grid-cols-1 gap-7">
-                  {informations.map((information) => (
+                  {menuFeatures.map((menuFeatures) => (
                     <Link
-                      key={information.name}
-                      to={information.to}
+                      key={menuFeatures.name}
+                      to={menuFeatures.to}
                       className="-m-3 flex items-center rounded-lg p-3 hover:bg-gray-50"
                     >
                       <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-md bg-indigo-500 text-white">
-                        <information.icon
+                        <menuFeatures.icon
                           className="h-6 w-6"
                           aria-hidden="true"
                         />
                       </div>
                       <div className="ml-4 text-base font-semibold text-gray-900">
-                        {information.name}
+                        {menuFeatures.name}
                       </div>
                     </Link>
                   ))}
@@ -300,21 +314,19 @@ export default function Navbar(): JSX.Element {
                 </Link>
               </div>
               <div className="mt-6">
-                {/*<a*/}
-                {/*  href="#"*/}
-                {/*  className="flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700"*/}
-                {/*>*/}
-                {/*  Sign up*/}
-                {/*</a>*/}
-                {/*<p className="mt-6 text-center text-base font-medium text-gray-500">*/}
-                {/*  Existing customer?{" "}*/}
-                {/*  <a*/}
-                {/*    href="#"*/}
-                {/*    className="text-indigo-600 hover:text-indigo-500"*/}
+                {/*{email ? (*/}
+                {/*  <Form*/}
+                {/*    method="post"*/}
+                {/*    action="/logout"*/}
                 {/*  >*/}
-                {/*    Sign in*/}
-                {/*  </a>*/}
-                {/*</p>*/}
+                {/*    <button*/}
+                {/*      type="submit"*/}
+                {/*      className="whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900"*/}
+                {/*    >*/}
+                {/*      Logout*/}
+                {/*    </button>*/}
+                {/*  </Form>*/}
+                {/*) : null}*/}
               </div>
             </div>
           </div>

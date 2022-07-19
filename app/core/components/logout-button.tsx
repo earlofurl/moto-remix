@@ -1,6 +1,6 @@
 import { Form } from "@remix-run/react";
 
-export function LogoutButton() {
+export function LogoutButton(): JSX.Element {
   return (
     <Form
       action="/logout"
