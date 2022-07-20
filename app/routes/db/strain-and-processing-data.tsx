@@ -32,6 +32,12 @@ import {
   ChevronUpIcon,
 } from "@heroicons/react/solid";
 
+enum Availability {
+  True = "TRUE",
+  False = "FALSE",
+  SoldOut = "SOLD_OUT",
+}
+
 // Filter and DebouncedInput are at the bottom of the file
 
 const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
@@ -109,11 +115,71 @@ const checkMark = (value: boolean) => {
   );
 };
 
+const soldOut = () => {
+  return (
+    <span className="inline-flex h-8 w-auto items-center rounded bg-red-100 px-2 py-0.5 text-xs text-lg font-medium font-semibold text-red-800">
+      Sold Out
+    </span>
+  );
+};
+
 const percentageValue = (value: string): JSX.Element => {
   return <span className="font-bold">{suffix(value, "%")}</span>;
 };
 
 const defaultColumns: ColumnDef<Strain>[] = [
+  {
+    header: "Availability",
+    footer: (props) => props.column.id,
+    columns: [
+      {
+        id: "light_dep_availability",
+        accessorKey: "light_dep_2022",
+        header: () => "Summer 2022",
+        cell: (info) => {
+          const value = info.getValue();
+          if (value === "TRUE") {
+            return checkMark(true);
+          } else if (value === "FALSE") {
+            return checkMark(false);
+          } else {
+            return soldOut();
+          }
+        },
+        enableColumnFilter: false,
+      },
+      {
+        id: "fall_availability",
+        accessorKey: "fall_harvest_2022",
+        header: () => "Fall 2022",
+        cell: (info) => {
+          const value = info.getValue();
+          if (value === "TRUE") {
+            return checkMark(true);
+          } else if (value === "FALSE") {
+            return checkMark(false);
+          } else {
+            return soldOut();
+          }
+        },
+        enableColumnFilter: false,
+      },
+      {
+        id: "quantity_available",
+        accessorKey: "quantity_available",
+        header: () => "Pounds Available",
+        cell: (info) => {
+          const value = info.getValue();
+          if (value === "0") {
+            return null;
+          } else {
+            return <span className="text-lg font-semibold">{value}</span>;
+          }
+        },
+        enableColumnFilter: false,
+      },
+    ],
+  },
   {
     header: "General",
     footer: (props) => props.column.id,
@@ -132,7 +198,7 @@ const defaultColumns: ColumnDef<Strain>[] = [
         accessorKey: "type",
         header: () => "Type",
         cell: (info) => {
-          const value = info.getValue();
+          const value = info.getValue() as string;
           return <span className="font-semibold">{toCommonCase(value)}</span>;
         },
       },
@@ -191,14 +257,14 @@ const defaultColumns: ColumnDef<Strain>[] = [
               return terpeneCellColor(value);
             },
           },
-          {
-            accessorKey: "terp_5",
-            header: () => "5th Terpene",
-            cell: (info) => {
-              const value = info.getValue();
-              return terpeneCellColor(value);
-            },
-          },
+          // {
+          //   accessorKey: "terp_5",
+          //   header: () => "5th Terpene",
+          //   cell: (info) => {
+          //     const value = info.getValue();
+          //     return terpeneCellColor(value);
+          //   },
+          // },
           {
             accessorKey: "terp_average_total",
             header: () => "Avg Terpenes Extracted",
@@ -228,30 +294,6 @@ const defaultColumns: ColumnDef<Strain>[] = [
           return value === "0" ? (value = "N/A") : percentageValue(value);
         },
         enableColumnFilter: false,
-      },
-      {
-        header: "Availability",
-        footer: (props) => props.column.id,
-        columns: [
-          {
-            accessorKey: "light_dep_2022",
-            header: () => "Summer 2022",
-            cell: (info) => {
-              const value = info.getValue();
-              return checkMark(value);
-            },
-            enableColumnFilter: false,
-          },
-          {
-            accessorKey: "fall_harvest_2022",
-            header: () => "Fall 2022",
-            cell: (info) => {
-              const value = info.getValue();
-              return checkMark(value);
-            },
-            enableColumnFilter: false,
-          },
-        ],
       },
     ],
   },
