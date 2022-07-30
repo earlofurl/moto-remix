@@ -311,8 +311,8 @@ export default function StrainAndProcessingData(): JSX.Element {
     ...defaultColumns,
   ]);
   const [sorting, setSorting] = React.useState<SortingState>([
-    { id: "yield_average", desc: true },
     { id: "quantity_available", desc: true },
+    { id: "yield_average", desc: true },
   ]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
