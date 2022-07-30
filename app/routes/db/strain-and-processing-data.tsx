@@ -177,6 +177,7 @@ const defaultColumns: ColumnDef<Strain>[] = [
           }
         },
         enableColumnFilter: false,
+        enableMultiSort: true,
       },
     ],
   },
@@ -220,6 +221,7 @@ const defaultColumns: ColumnDef<Strain>[] = [
           );
         },
         enableColumnFilter: false,
+        enableMultiSort: true,
       },
       {
         header: "Terpenes",
@@ -310,6 +312,7 @@ export default function StrainAndProcessingData(): JSX.Element {
   ]);
   const [sorting, setSorting] = React.useState<SortingState>([
     { id: "yield_average", desc: true },
+    { id: "quantity_available", desc: true },
   ]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -317,7 +320,7 @@ export default function StrainAndProcessingData(): JSX.Element {
   const [globalFilter, setGlobalFilter] = React.useState("");
   const [pagination, setPagination] = React.useState<PaginationState>({
     pageIndex: 0,
-    pageSize: 20,
+    pageSize: 50,
   });
 
   const table = useReactTable({
