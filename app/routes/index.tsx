@@ -134,7 +134,7 @@ export default function Index(): JSX.Element {
 
         {/* Logo Cloud */}
         <div className="bg-gray-100">
-          <div className="mx-auto max-w-7xl py-16 px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-7xl py-12 px-4 sm:px-6 lg:px-8">
             <p className="text-center text-sm font-semibold uppercase tracking-wide text-gray-500">
               Trusted by experienced processors.
             </p>
@@ -271,13 +271,13 @@ export default function Index(): JSX.Element {
         </div>
 
         {/* Awards Section */}
-        <div className="bg-gray-100 pt-16 lg:py-24">
+        <div className="bg-gray-100 pt-4 lg:pt-16 lg:pb-24">
           <div className="bg-brand-primary pb-16 lg:relative lg:z-10 lg:pb-0">
             <div className="lg:mx-auto lg:grid lg:max-w-7xl lg:grid-cols-3 lg:gap-8 lg:px-8">
               <div className="relative lg:-my-8">
                 <div
                   aria-hidden="true"
-                  className="absolute inset-x-0 top-0 h-1/2 bg-white lg:hidden"
+                  className="absolute inset-x-0 top-0 h-1/2 bg-gray-100 lg:hidden"
                 />
                 <div className="mx-auto max-w-md px-4 sm:max-w-3xl sm:px-6 lg:h-full lg:p-0">
                   <div className="aspect-w-10 aspect-h-6 sm:aspect-w-16 sm:aspect-h-7 lg:aspect-none overflow-hidden rounded-xl shadow-xl lg:h-full">

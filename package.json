@@ -39,6 +39,7 @@
     "@remix-run/serve": "^1.6.3",
     "@sendgrid/mail": "^7.7.0",
     "@supabase/supabase-js": "^1.35.4",
+    "@tailwindcss/aspect-ratio": "^0.4.0",
     "@tanstack/match-sorter-utils": "^8.1.1",
     "@tanstack/react-table": "^8.1.4",
     "froebel": "^0.17.0",
