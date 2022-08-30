@@ -38,6 +38,30 @@ enum Availability {
   SoldOut = "SOLD_OUT",
 }
 
+const additionalInv = [
+  {
+    type: "Flower",
+    quantity: 204,
+    uom: "lbs",
+    varieties: 70,
+    varietyType: "batches",
+  },
+  {
+    type: "Hash",
+    quantity: 274,
+    uom: "grams",
+    varieties: 2,
+    varietyType: "strains",
+  },
+  {
+    type: "Pre-Rolls",
+    quantity: 46000,
+    uom: "0.5g joints",
+    varieties: 54,
+    varietyType: "batches",
+  },
+];
+
 // Filter and DebouncedInput are at the bottom of the file
 
 const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
@@ -381,6 +405,51 @@ export default function StrainAndProcessingData(): JSX.Element {
       </div>
       {/* End Hero*/}
 
+      {/* Additional Inventory */}
+      <div className="mx-auto max-w-7xl p-4 shadow ring-black ring-opacity-25">
+        <h2 className="text-3xl font-semibold leading-6 text-gray-900">
+          Other Inventory Available
+        </h2>
+        <dl className="mt-5 grid grid-cols-1 divide-y divide-gray-300 overflow-hidden rounded-lg bg-gray-50 shadow md:grid-cols-3 md:divide-y-0 md:divide-x">
+          {additionalInv.map((item) => (
+            <div
+              key={item.type}
+              className="px-4 py-5 sm:p-6"
+            >
+              <dt className="text-lg font-medium text-gray-600">{item.type}</dt>
+              <dd className="mt-1 flex items-baseline justify-between md:block lg:flex">
+                <div className="flex items-baseline text-3xl font-semibold text-gray-700">
+                  {item.quantity}
+                  <span className="ml-2 text-sm font-medium text-gray-500">
+                    {item.uom}
+                  </span>
+                </div>
+
+                <div className="text-md inline-flex items-baseline rounded-full px-2.5 py-0.5 font-medium md:mt-2 lg:mt-0">
+                  {item.varieties} {item.varietyType}
+                </div>
+              </dd>
+            </div>
+          ))}
+        </dl>
+        {/*<dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">*/}
+        {/*  {additionalInv.map((item) => (*/}
+        {/*    <div*/}
+        {/*      key={item.type}*/}
+        {/*      className="overflow-hidden rounded-lg bg-gray-100 px-4 py-5 shadow sm:p-6"*/}
+        {/*    >*/}
+        {/*      <dt className="truncate text-lg font-medium text-gray-600">*/}
+        {/*        {item.type}*/}
+        {/*      </dt>*/}
+        {/*      <dd className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">*/}
+        {/*        {item.quantity}*/}
+        {/*      </dd>*/}
+        {/*    </div>*/}
+        {/*  ))}*/}
+        {/*</dl>*/}
+      </div>
+      {/* End Additional Inventory */}
+
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="mt-8 flex flex-col">
           <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -389,7 +458,7 @@ export default function StrainAndProcessingData(): JSX.Element {
                 <div className="py-2 sm:px-2 lg:px-4">
                   <div className="sm:flex sm:items-center">
                     <div className="group inline-flex sm:flex-auto">
-                      <h1 className="pt-1 text-3xl font-semibold text-gray-900">
+                      <h1 className="pt-1 text-4xl font-semibold text-gray-900">
                         Fresh Frozen Strain Data
                       </h1>
                       <DebouncedInput
@@ -471,7 +540,7 @@ export default function StrainAndProcessingData(): JSX.Element {
                         key={row.id}
                         {...{
                           className:
-                            rowIdx % 2 === 0 ? undefined : "bg-gray-100/50",
+                            rowIdx % 2 === 0 ? undefined : "bg-gray-100",
                         }}
                       >
                         {row.getVisibleCells().map((cell) => (
