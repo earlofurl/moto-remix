@@ -21,7 +21,6 @@
     "setup:seed": "prisma db seed",
     "start": "remix-serve build",
     "start:ci": "dotenv -- remix-serve build",
-    "typecheck": "tsc -b && tsc -b cypress",
     "generate:css": "tailwindcss -o ./app/styles/tailwind.css"
   },
   "prettier": {
