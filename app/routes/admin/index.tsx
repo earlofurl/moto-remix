@@ -1,22 +1,22 @@
-import * as React from "react";
+import React from "react";
 import type { LoaderFunction } from "@remix-run/node";
 import { redirect, json } from "@remix-run/node";
 import { Form, Link, useLoaderData } from "@remix-run/react";
 
-import { requireAuthSession } from "~/core/auth/guards";
-import { AuthSession } from "~/core/auth/session.server";
-import Navbar from "~/core/components/navbar";
-import { LogoutButton } from "~/core/components";
+import { requireAuthSession } from "~/modules/auth/guards";
+import { AuthSession } from "~/modules/auth/session.server";
+import Navbar from "~/components/navbar";
+import { LogoutButton } from "~/components";
+import { authSession } from "mocks/handlers";
 
 type LoaderData = {
   authSession: AuthSession;
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const authSession = await requireAuthSession(request, {
-    onFailRedirectTo: "/login",
-  });
-  return json<LoaderData>({ authSession });
+  await requireAuthSession(request, { onFailRedirectTo: "/login" });
+
+  return authSession;
 };
 
 export default function AdminDashboard(): JSX.Element {
@@ -29,9 +29,8 @@ export default function AdminDashboard(): JSX.Element {
         <h1>Admin Dashboard</h1>
       </div>
       <div>
-        <p>{data.authSession.userId}</p>
-        <p>{data.authSession.email}</p>
-        <p>{data.authSession.accessToken}</p>
+        {/* Display authSession object */}
+        <p>{JSON.stringify(data)}</p>
       </div>
       <div>
         <Link to="locations">Locations</Link>

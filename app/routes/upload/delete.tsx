@@ -1,11 +1,13 @@
-import type { ActionFunction } from "@remix-run/node";
+import type { ActionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { requireAuthSession } from "~/core/auth/guards";
-import { commitAuthSession } from "~/core/auth/session.server";
-import { supabaseAdmin } from "~/core/integrations/supabase/supabase.server";
 
-export const action: ActionFunction = async ({ request }) => {
+import { getSupabaseAdmin } from "~/integrations/supabase";
+import { requireAuthSession } from "~/modules/auth/guards";
+import { commitAuthSession } from "~/modules/auth/session.server";
+
+export async function action({ request }: ActionArgs) {
   const authSession = await requireAuthSession(request);
+  const supabaseAdmin = getSupabaseAdmin();
 
   const { data: files } = await supabaseAdmin.storage
     .from("public")
@@ -18,14 +20,13 @@ export const action: ActionFunction = async ({ request }) => {
     .from("public")
     .remove(userFiles);
 
-  if (!data || error) {
+  if (!data || error)
     return json("Unable to delete file", {
       status: 500,
       headers: {
         "Set-Cookie": await commitAuthSession(request, { authSession }),
       },
     });
-  }
 
   return json(
     { success: true },
@@ -35,4 +36,4 @@ export const action: ActionFunction = async ({ request }) => {
       },
     }
   );
-};
+}

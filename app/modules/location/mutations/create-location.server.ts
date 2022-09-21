@@ -1,5 +1,5 @@
 import type { Location, User } from "@prisma/client";
-import { db } from "~/core/database";
+import { db } from "~/database";
 
 type CreateLocationArgs = Pick<
   Location,

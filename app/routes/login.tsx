@@ -1,32 +1,31 @@
-import type {
-  ActionFunction,
-  LoaderFunction,
-  MetaFunction,
-} from "@remix-run/node";
+import * as React from "react";
+
+import type { ActionArgs, LoaderArgs, MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import {
   Form,
+  Link,
   useActionData,
   useSearchParams,
   useTransition,
 } from "@remix-run/react";
-import * as React from "react";
 import { getFormData, useFormInputProps } from "remix-params-helper";
 import { z } from "zod";
-import { signInWithEmail } from "~/core/auth/mutations";
-import { createAuthSession, getAuthSession } from "~/core/auth/session.server";
-import { ContinueWithEmailForm } from "~/core/components";
-import { assertIsPost } from "~/core/utils/http.server";
 
-export const loader: LoaderFunction = async ({ request }) => {
+import { ContinueWithEmailForm } from "~/modules/auth/components";
+import { signInWithEmail } from "~/modules/auth/mutations";
+import {
+  createAuthSession,
+  getAuthSession,
+} from "~/modules/auth/session.server";
+import { assertIsPost } from "~/utils/http.server";
+
+export async function loader({ request }: LoaderArgs) {
   const authSession = await getAuthSession(request);
+  if (authSession) return redirect("/admin");
 
-  if (authSession) {
-    return redirect("/admin");
-  }
-
-  return json({});
-};
+  return null;
+}
 
 const LoginFormSchema = z.object({
   email: z
@@ -37,22 +36,18 @@ const LoginFormSchema = z.object({
   redirectTo: z.string().optional(),
 });
 
-type ActionData = {
-  errors?: {
-    email?: string;
-    password?: string;
-  };
-};
-
-export const action: ActionFunction = async ({ request }) => {
+export async function action({ request }: ActionArgs) {
   assertIsPost(request);
 
   const formValidation = await getFormData(request, LoginFormSchema);
 
   if (!formValidation.success) {
-    return json<ActionData>(
+    return json(
       {
-        errors: formValidation.errors,
+        errors: {
+          email: formValidation.errors.email,
+          password: formValidation.errors.password,
+        },
       },
       { status: 400 }
     );
@@ -63,8 +58,8 @@ export const action: ActionFunction = async ({ request }) => {
   const authSession = await signInWithEmail(email, password);
 
   if (!authSession) {
-    return json<ActionData>(
-      { errors: { email: "invalid-email-password" } },
+    return json(
+      { errors: { email: "invalid-email-password", password: null } },
       { status: 400 }
     );
   }
@@ -74,19 +69,18 @@ export const action: ActionFunction = async ({ request }) => {
     authSession,
     redirectTo,
   });
-};
+}
 
 export const meta: MetaFunction = () => ({
   title: "Login",
 });
 
-export default function LoginPage(): JSX.Element {
+export default function LoginPage() {
   const [searchParams] = useSearchParams();
   const redirectTo = searchParams.get("redirectTo") ?? undefined;
-  const actionData = useActionData() as ActionData;
+  const actionData = useActionData<typeof action>();
   const emailRef = React.useRef<HTMLInputElement>(null);
   const passwordRef = React.useRef<HTMLInputElement>(null);
-  const formRef = React.useRef<HTMLFormElement>(null);
   const inputProps = useFormInputProps(LoginFormSchema);
   const transition = useTransition();
   const disabled =
@@ -106,7 +100,6 @@ export default function LoginPage(): JSX.Element {
         <Form
           method="post"
           className="space-y-6"
-          ref={formRef}
           replace
         >
           <div>
@@ -114,17 +107,18 @@ export default function LoginPage(): JSX.Element {
               htmlFor="email"
               className="block text-sm font-medium text-gray-700"
             >
-              Email address
+              email
             </label>
 
             <div className="mt-1">
               <input
                 {...inputProps("email")}
+                data-test-id="email"
                 ref={emailRef}
                 id="email"
                 type="email"
                 required
-                autoFocus
+                autoFocus={true}
                 autoComplete="email"
                 aria-invalid={actionData?.errors?.email ? true : undefined}
                 aria-describedby="email-error"
@@ -147,11 +141,12 @@ export default function LoginPage(): JSX.Element {
               htmlFor="password"
               className="block text-sm font-medium text-gray-700"
             >
-              Password
+              password
             </label>
             <div className="mt-1">
               <input
                 {...inputProps("password")}
+                data-test-id="password"
                 type="password"
                 id="password"
                 ref={passwordRef}
@@ -178,12 +173,27 @@ export default function LoginPage(): JSX.Element {
             value={redirectTo}
           />
           <button
+            data-test-id="login"
             type="submit"
             className="w-full rounded bg-blue-500  py-2 px-4 text-white hover:bg-blue-600 focus:bg-blue-400"
             disabled={disabled}
           >
-            Log in
+            login action
           </button>
+          <div className="flex items-center justify-center">
+            <div className="text-center text-sm text-gray-500">
+              login noaccount{" "}
+              <Link
+                className="text-blue-500 underline"
+                to={{
+                  pathname: "/join",
+                  search: searchParams.toString(),
+                }}
+              >
+                sign up
+              </Link>
+            </div>
+          </div>
         </Form>
         <div className="mt-6">
           <div className="relative">
@@ -192,7 +202,7 @@ export default function LoginPage(): JSX.Element {
             </div>
             <div className="relative flex justify-center text-sm">
               <span className="bg-white px-2 text-gray-500">
-                Or continue with
+                login orcontinuewith
               </span>
             </div>
           </div>

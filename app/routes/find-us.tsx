@@ -3,7 +3,7 @@ import { useLoaderData } from "@remix-run/react";
 import React, { useMemo, useState } from "react";
 import { ClientOnly } from "remix-utils";
 import { getAllLocations } from "~/modules/location/queries";
-import Navbar from "~/core/components/navbar";
+import Navbar from "~/components/navbar";
 import Map, { Marker, Popup } from "react-map-gl";
 
 export async function loader(): Promise<{

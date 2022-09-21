@@ -1,5 +1,5 @@
 import type { Strain } from "@prisma/client";
-import { db } from "~/core/database";
+import { db } from "~/database";
 
 export type { Strain } from "@prisma/client";
 

@@ -4,8 +4,8 @@ import {
   LoaderFunction,
   redirect,
 } from "@remix-run/node";
-import { requireAuthSession } from "~/core/auth/guards";
-import { AuthSession, commitAuthSession } from "~/core/auth/session.server";
+import { requireAuthSession } from "~/modules/auth/guards";
+import { AuthSession, commitAuthSession } from "~/modules/auth/session.server";
 import {
   Form,
   Link,
@@ -15,10 +15,10 @@ import {
   useCatch,
   useLoaderData,
 } from "@remix-run/react";
-import Navbar from "~/core/components/navbar";
+import Navbar from "~/components/navbar";
 import { createLocation } from "~/modules/location/mutations";
-import { assertIsPost } from "~/core/utils/http.server";
-import TW404page from "~/core/components/TW404page";
+import { assertIsPost } from "~/utils/http.server";
+import TW404page from "~/components/TW404page";
 import React from "react";
 
 type LoaderData = {

@@ -9,8 +9,8 @@ import {
   Scripts,
 } from "@remix-run/react";
 import React, { useRef, useEffect } from "react";
-import Navbar from "~/core/components/navbar";
-import { sendMail, trapSpam } from "~/core/integrations/mail/sendgrid.server";
+import Navbar from "~/components/navbar";
+import { sendMail, trapSpam } from "~/integrations/mail/sendgrid.server";
 import {
   TruckIcon,
   NewspaperIcon,
@@ -18,7 +18,7 @@ import {
   GlobeIcon,
   HandIcon,
 } from "@heroicons/react/solid";
-import TW404page from "~/core/components/TW404page";
+import TW404page from "~/components/TW404page";
 
 const features = [
   {

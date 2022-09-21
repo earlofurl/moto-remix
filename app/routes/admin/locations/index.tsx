@@ -1,7 +1,7 @@
 import { json, LoaderFunction } from "@remix-run/node";
-import { requireAuthSession } from "~/core/auth/guards";
-import { AuthSession } from "~/core/auth/session.server";
-import Navbar from "~/core/components/navbar";
+import { requireAuthSession } from "~/modules/auth/guards";
+import { AuthSession } from "~/modules/auth/session.server";
+import Navbar from "~/components/navbar";
 import { Link, Outlet } from "@remix-run/react";
 
 type LoaderData = {

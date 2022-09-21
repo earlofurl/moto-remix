@@ -1,5 +1,5 @@
 import type { Location } from "@prisma/client";
-import { db } from "~/core/database";
+import { db } from "~/database";
 
 export type { Location } from "@prisma/client";
 

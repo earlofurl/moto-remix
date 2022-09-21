@@ -23,9 +23,9 @@ import {
 import { rankItem, compareItems } from "@tanstack/match-sorter-utils";
 import { suffix } from "froebel/string";
 import React from "react";
-import { toCommonCase } from "~/core/utils/mytools";
+import { toCommonCase } from "~/utils/mytools";
 import { getAllStrains } from "~/modules/strain/queries/get-strains.server";
-import Navbar from "~/core/components/navbar";
+import Navbar from "~/components/navbar";
 import {
   CheckCircleIcon,
   ChevronDownIcon,

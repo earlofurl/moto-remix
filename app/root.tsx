@@ -17,11 +17,12 @@ import {
 } from "@remix-run/react";
 
 import tailwindStylesheetUrl from "./styles/tailwind.css";
-import { SUPABASE_ANON_PUBLIC, SUPABASE_URL } from "./core/utils/env.server";
-import TW404page from "./core/components/TW404page";
+import { SUPABASE_ANON_PUBLIC, SUPABASE_URL } from "~/utils/env";
+import TW404page from "./components/TW404page";
 import React from "react";
-import { ageGate } from "~/core/utils/cookies";
-import AgeGate from "~/core/components/AgeGate";
+import { ageGate } from "~/utils/cookies";
+import AgeGate from "~/components/AgeGate";
+import { getBrowserEnv } from "./utils/env";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: tailwindStylesheetUrl },
@@ -42,20 +43,13 @@ export const loader: LoaderFunction = async ({ request }) => {
   const cookieHeader = request.headers.get("Cookie");
   const cookie = (await ageGate.parse(cookieHeader)) || {};
 
-  json({
-    ENV: {
-      SUPABASE_URL,
-      SUPABASE_ANON_PUBLIC,
-    },
-  });
-
   if (proto === "http") {
     const url = new URL(request.url);
     url.protocol = "https:";
     return redirect(url.toString(), { status: 302 });
   }
 
-  return json({ showAgeGate: cookie.showAgeGate });
+  return json({ showAgeGate: cookie.showAgeGate, env: getBrowserEnv() });
 };
 
 export const action: ActionFunction = async ({ request }) => {
@@ -97,7 +91,7 @@ export const action: ActionFunction = async ({ request }) => {
 //   });
 
 function Document({ children }: { children: React.ReactNode }): JSX.Element {
-  const { ENV, showAgeGate } = useLoaderData();
+  const { env, showAgeGate } = useLoaderData<typeof loader>();
 
   return (
     <html lang="en">
@@ -110,7 +104,7 @@ function Document({ children }: { children: React.ReactNode }): JSX.Element {
         <ScrollRestoration />
         <script
           dangerouslySetInnerHTML={{
-            __html: `window.ENV = ${JSON.stringify(ENV)}`,
+            __html: `window.env = ${JSON.stringify(env)}`,
           }}
         />
         <Scripts />
@@ -128,48 +122,48 @@ export default function App(): JSX.Element {
   );
 }
 
-export function ErrorBoundary({ error }: { error: Error }): JSX.Element {
-  return (
-    <Document>
-      <div className="flex h-full flex-col items-center justify-center">
-        <h1 className="text-4xl font-bold">
-          <span
-            role="img"
-            aria-label="Sad face"
-          >
-            😢
-          </span>
-        </h1>
-        <p className="text-lg">There was an error: {error.message}</p>
-        <div className="mt-6">
-          <Link
-            to="/"
-            className="text-base font-medium text-indigo-600 hover:text-indigo-500"
-          >
-            Go back home<span aria-hidden="true"> &rarr;</span>
-          </Link>
-        </div>
-      </div>
-    </Document>
-  );
-}
+// export function ErrorBoundary({ error }: { error: Error }): JSX.Element {
+//   return (
+//     <Document>
+//       <div className="flex h-full flex-col items-center justify-center">
+//         <h1 className="text-4xl font-bold">
+//           <span
+//             role="img"
+//             aria-label="Sad face"
+//           >
+//             😢
+//           </span>
+//         </h1>
+//         <p className="text-lg">There was an error: {error.message}</p>
+//         <div className="mt-6">
+//           <Link
+//             to="/"
+//             className="text-base font-medium text-indigo-600 hover:text-indigo-500"
+//           >
+//             Go back home<span aria-hidden="true"> &rarr;</span>
+//           </Link>
+//         </div>
+//       </div>
+//     </Document>
+//   );
+// }
 
-export function CatchBoundary(): JSX.Element {
-  const caught = useCatch();
-  return (
-    <html>
-      <head>
-        <title>Oops!</title>
-        <Meta />
-        <Links />
-      </head>
-      <body>
-        <TW404page
-          status={caught.status}
-          statusText={caught.statusText}
-        />
-        <Scripts />
-      </body>
-    </html>
-  );
-}
+// export function CatchBoundary(): JSX.Element {
+//   const caught = useCatch();
+//   return (
+//     <html>
+//       <head>
+//         <title>Oops!</title>
+//         <Meta />
+//         <Links />
+//       </head>
+//       <body>
+//         <TW404page
+//           status={caught.status}
+//           statusText={caught.statusText}
+//         />
+//         <Scripts />
+//       </body>
+//     </html>
+//   );
+// }

@@ -1,19 +1,24 @@
-import type { ActionFunction, LoaderFunction } from "@remix-run/node";
+import { useEffect, useRef } from "react";
+
+import type { ActionArgs, LoaderArgs } from "@remix-run/node";
 import {
-  json,
   unstable_composeUploadHandlers,
+  json,
   unstable_parseMultipartFormData,
 } from "@remix-run/node";
-import { useFetcher } from "@remix-run/react";
-import { useEffect, useRef } from "react";
-import { requireAuthSession } from "~/core/auth/guards";
-import { commitAuthSession } from "~/core/auth/session.server";
-import { uploadFile } from "~/core/utils/upload-file.server";
 
-export const loader: LoaderFunction = ({ request }) =>
-  requireAuthSession(request);
+import { useTypedFetcher } from "~/hooks/use-fetcher";
+import { requireAuthSession } from "~/modules/auth/guards";
+import { commitAuthSession } from "~/modules/auth/session.server";
+import { uploadFile } from "~/utils/upload-file.server";
 
-export const action: ActionFunction = async ({ request }) => {
+import type { action as deleteAction } from "./delete";
+
+export function loader({ request }: LoaderArgs) {
+  return requireAuthSession(request);
+}
+
+export async function action({ request }: ActionArgs) {
   const authSession = await requireAuthSession(request);
 
   // check : https://remix.run/docs/en/v1/api/remix#uploadhandler
@@ -25,7 +30,6 @@ export const action: ActionFunction = async ({ request }) => {
 
       // we could test for filename already exists before uploading
       // I won't do it here for simplicity
-
       return uploadFile(data, {
         filename,
         contentType,
@@ -40,18 +44,18 @@ export const action: ActionFunction = async ({ request }) => {
   );
 
   return json(
-    { url: fileForm.get("avatar") },
+    { url: fileForm.get("avatar") as string },
     {
       headers: {
         "Set-Cookie": await commitAuthSession(request, { authSession }),
       },
     }
   );
-};
+}
 
 export default function Upload() {
-  const upload = useFetcher();
-  const remove = useFetcher();
+  const upload = useTypedFetcher<typeof action>();
+  const remove = useTypedFetcher<typeof deleteAction>();
   const formRef = useRef<HTMLFormElement>(null);
   const showPreview = useRef(false);
 
@@ -109,9 +113,7 @@ export default function Upload() {
 
           const file = e.dataTransfer.files?.[0];
 
-          if (!file) {
-            return;
-          }
+          if (!file) return;
 
           const formData = new FormData();
           formData.set("avatar", file);

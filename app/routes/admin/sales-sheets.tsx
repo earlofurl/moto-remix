@@ -1,6 +1,6 @@
 import { json, LoaderFunction } from "@remix-run/node";
-import { requireAuthSession } from "~/core/auth/guards";
-import { AuthSession } from "~/core/auth/session.server";
+import { requireAuthSession } from "~/modules/auth/guards";
+import { AuthSession } from "~/modules/auth/session.server";
 
 type LoaderData = {
   authSession: AuthSession;
