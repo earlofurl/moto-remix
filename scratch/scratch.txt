@@ -1,0 +1,2 @@
+# This line is for separating the migration and primary database connection URLs to work around the issues with prisma and pgbouncer.
+"setup:migrate-deploy": "DATABASE_URL=${MIGRATION_DATABASE_URL} prisma migrate deploy",
