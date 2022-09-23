@@ -17,7 +17,8 @@
     "format": "prettier --write .",
     "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint .",
     "setup": "run-s setup:db",
-    "setup:db": "prisma generate && prisma migrate deploy",
+    "setup:db": "prisma generate && run-s setup:migrate-deploy",
+    "setup:migrate-deploy": "DATABASE_URL=\"$MIGRATION_DATABASE_URL\" prisma migrate deploy",
     "start": "remix-serve build",
     "start:ci": "dotenv -- remix-serve build",
     "seed": "prisma db seed",
@@ -92,7 +93,7 @@
     "node": ">=14"
   },
   "prisma": {
-    "schema": "app/core/database/schema.prisma",
+    "schema": "app/database/schema.prisma",
     "seed": "ts-node --require tsconfig-paths/register app/database/seed.server.ts"
   }
 }
