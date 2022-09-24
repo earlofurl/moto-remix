@@ -31,7 +31,7 @@ WORKDIR /myapp
 
 COPY --from=deps /myapp/node_modules /myapp/node_modules
 
-ADD /app/database/schema.prisma .
+ADD app/database/schema.prisma .
 RUN npx prisma generate
 
 ADD . .
@@ -39,9 +39,6 @@ RUN npm run build
 
 # Finally, build the production image with minimal footprint
 FROM base
-
-ENV PORT="8080"
-ENV NODE_ENV="production"
 
 WORKDIR /myapp
 
