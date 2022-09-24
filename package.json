@@ -92,7 +92,7 @@
     "node": ">=14"
   },
   "prisma": {
-    "schema": "app/database/schema.prisma",
+    "schema": "/app/database/schema.prisma",
     "seed": "ts-node --require tsconfig-paths/register app/database/seed.server.ts"
   }
 }
