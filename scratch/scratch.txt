@@ -1,2 +1,7 @@
 # This line is for separating the migration and primary database connection URLs to work around the issues with prisma and pgbouncer.
 "setup:migrate-deploy": "DATABASE_URL=${MIGRATION_DATABASE_URL} prisma migrate deploy",
+
+https://github.com/prisma/prisma/issues/6485
+https://github.com/prisma/prisma/issues/6157
+https://www.prisma.io/docs/data-platform/data-proxy#providing-the-connection-string-to-prisma-migrate
+https://github.com/prisma/prisma/discussions/15477
