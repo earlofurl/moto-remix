@@ -15,7 +15,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 export default function Locations(): JSX.Element {
   return (
-    <div className="space-y-6 bg-brand-primary">
+    <div className="space-y-6 bg-gray-100">
       <Outlet />
     </div>
   );

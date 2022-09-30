@@ -33,7 +33,7 @@ const actions = [
   },
   {
     title: "Retailer Locations",
-    href: "retailer-locations",
+    href: "locations",
     icon: DatabaseIcon,
     iconForeground: "text-teal-700",
     iconBackground: "bg-teal-50",
@@ -49,10 +49,10 @@ export default function AdminDashboard(): JSX.Element {
       <div className="mx-auto px-4 sm:px-6 lg:px-8">
         <h1 className="text-2xl font-semibold text-gray-900">Dashboard</h1>
       </div>
-      <div>
-        {/* Display authSession object */}
+      {/* <div>
+        DEBUG: Display authSession object
         <p>{JSON.stringify(data)}</p>
-      </div>
+      </div> */}
       <div className="p-8">
         <ActionGrid actions={actions} />
       </div>

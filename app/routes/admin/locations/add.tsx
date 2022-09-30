@@ -83,8 +83,7 @@ export default function AddLocation(): JSX.Element {
   const { userId } = authSession;
 
   return (
-    <div className="space-y-6 bg-brand-primary">
-      <Navbar />
+    <div className="space-y-6 bg-gray-100">
       <Form method="post">
         <div className="bg-white px-4 py-5 shadow sm:rounded-lg sm:p-6">
           <div className="md:grid md:grid-cols-3 md:gap-6">

@@ -15,8 +15,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 export default function LocationsIndex(): JSX.Element {
   return (
-    <div className="space-y-6 bg-brand-primary">
-      <Navbar />
+    <div className="space-y-6 bg-gray-100">
       <h2>List of Locations</h2>
       <Link to="/admin/locations/add">Create a new location</Link>
     </div>
