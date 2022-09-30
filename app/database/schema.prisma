@@ -5,7 +5,6 @@ generator client {
 datasource db {
   provider          = "postgresql"
   url               = env("DATABASE_URL")
-  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
 enum Availability {
@@ -14,11 +13,38 @@ enum Availability {
   SOLD_OUT
 }
 
+enum QuantityType {
+  CountBased
+  WeightBased
+}
+
+enum PackageType {
+  Product
+  ImmaturePlant
+  VegetativePlant
+  PlantWaste
+  HarvestWaste
+}
+
+enum LabTestingState {
+  NotSubmitted
+  SubmittedForTesting
+  TestPassed
+  TestFailed
+}
+
 model User {
   id        String   @id @default(cuid())
   email     String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model ProductCategory {
+  // Expand this category later on to match metrc API
+  id        String     @id @default(uuid())
+  name      String     @unique
+  itemTypes ItemType[]
 }
 
 model Strain {
@@ -44,6 +70,7 @@ model Strain {
   light_dep_2022            Availability @default(FALSE)
   fall_harvest_2022         Availability @default(FALSE)
   quantity_available        Decimal      @default(0)
+  items                     Item[]
 }
 
 model Location {
@@ -63,4 +90,135 @@ model Location {
   prerolls     Boolean  @default(false)
   pressed_hash Boolean  @default(false)
   created_by   String   @default("")
+}
+
+model Item {
+  id          String    @id @default(uuid())
+  createdAt   DateTime? @default(now())
+  updatedAt   DateTime? @updatedAt
+  description String?
+  isUsed      Boolean?  @default(false)
+  packages    Package[]
+  itemType    ItemType? @relation(fields: [itemTypeId], references: [id])
+  itemTypeId  String? // relation pk (used in the @relation attribute above.)
+  strain      Strain?   @relation(fields: [strainId], references: [id])
+  strainId    String? // relation pk (used in the @relation attribute above.)
+}
+
+model ItemType {
+  id                String           @id @default(uuid())
+  createdAt         DateTime?        @default(now())
+  updatedAt         DateTime?        @updatedAt
+  productForm       String?
+  productModifier   String?
+  items             Item[]
+  uomDefault        Uom?             @relation(fields: [uomDefaultId], references: [id])
+  uomDefaultId      String? // relation pk (used in the @relation attribute above.)
+  productCategory   ProductCategory? @relation(fields: [productCategoryId], references: [id])
+  productCategoryId String?
+}
+
+model PackageTag {
+  id            String    @id @default(uuid())
+  createdAt     DateTime? @default(now())
+  updatedAt     DateTime? @updatedAt
+  tagNumber     String
+  isAssigned    Boolean?  @default(false)
+  isProvisional Boolean?  @default(true)
+  isActive      Boolean?  @default(false)
+  packages      Package[]
+}
+
+model Package {
+  id                                String               @id @default(uuid())
+  createdAt                         DateTime?            @default(now())
+  updatedAt                         DateTime?            @updatedAt
+  tag                               PackageTag?          @relation(fields: [tagId], references: [id])
+  tagId                             String? // relation pk (used in the @relation attribute above.)
+  packageType                       PackageType          @default(Product)
+  quantity                          Decimal?             @db.Decimal(precision: 12, scale: 5)
+  notes                             String?
+  packagedDateTime                  DateTime?            @default(now())
+  harvestDateTime                   DateTime?
+  labTestingState                   LabTestingState?     @default(NotSubmitted)
+  labTestingStateDate               DateTime?
+  isTradeSample                     Boolean?             @default(false)
+  isTestingSample                   Boolean?             @default(false)
+  productRequiresRemediation        Boolean?             @default(false)
+  containsRemediatedProduct         Boolean?             @default(false)
+  remediationDate                   DateTime?
+  receivedDateTime                  DateTime?
+  receivedFromManifestNumber        String?
+  receivedFromFacilityLicenseNumber String?
+  receivedFromFacilityName          String?
+  isOnHold                          Boolean?             @default(false)
+  archivedDate                      DateTime?
+  finishedDate                      DateTime?
+  item                              Item?                @relation(fields: [itemId], references: [id])
+  itemId                            String? // relation pk (used in the @relation attribute above.)
+  labTests                          LabTestsOnPackages[]
+  successorPackages                 Package[]            @relation("SourcePackagesToSuccessor")
+  sourcePackages                    Package[]            @relation("SourcePackagesToSuccessor")
+  provisionalLabel                  String?
+  isProvisional                     Boolean?             @default(false)
+  isSold                            Boolean?             @default(false)
+  ppuDefault                        Decimal?             @default(0) @db.Money
+  ppuOnOrder                        Decimal?             @default(0) @db.Money
+  totalPackagePriceOnOrder          Decimal?             @default(0) @db.Money
+  ppuSoldPrice                      Decimal?             @default(0) @db.Money
+  totalSoldPrice                    Decimal?             @default(0) @db.Money
+  packagingSuppliesConsumed         Boolean?             @default(false)
+  isLineItem                        Boolean?             @default(false)
+  uom                               Uom?                 @relation(fields: [uomId], references: [id])
+  uomId                             String? // relation pk (used in the @relation attribute above.)
+}
+
+model LabTest {
+  // TODO: This model will need refactoring to match metrc API. Uses multiple entries per package. One for each test type.
+  id                       String               @id @default(uuid())
+  createdAt                DateTime?            @default(now())
+  updatedAt                DateTime?            @updatedAt
+  batchCode                String?
+  testIdCode               String?
+  labFacilityName          String?
+  testPerformedDate        DateTime?
+  overallPassed            Boolean?
+  testTypeName             String? // TODO: refactor to a lookup table after pulling all possible types from METRC API
+  testPassed               Boolean?             @default(false)
+  testComment              String?
+  thcTotalPercent          Decimal?             @db.Decimal(precision: 9, scale: 5)
+  cbdPercent               Decimal?             @db.Decimal(precision: 9, scale: 5)
+  terpenePercent           Decimal?             @db.Decimal(precision: 9, scale: 5)
+  thcAPercent              Decimal?             @db.Decimal(precision: 9, scale: 5)
+  delta9ThcPercent         Decimal?             @db.Decimal(precision: 9, scale: 5)
+  delta8ThcPercent         Decimal?             @db.Decimal(precision: 9, scale: 5)
+  thcVPercent              Decimal?             @db.Decimal(precision: 9, scale: 5)
+  cbdAPercent              Decimal?             @db.Decimal(precision: 9, scale: 5)
+  cbnPercent               Decimal?             @db.Decimal(precision: 9, scale: 5)
+  cbgAPercent              Decimal?             @db.Decimal(precision: 9, scale: 5)
+  cbgPercent               Decimal?             @db.Decimal(precision: 9, scale: 5)
+  cbcPercent               Decimal?             @db.Decimal(precision: 9, scale: 5)
+  totalCannabinoidsPercent Decimal?             @db.Decimal(precision: 9, scale: 5)
+  packages                 LabTestsOnPackages[]
+}
+
+model LabTestsOnPackages {
+  labTest    LabTest  @relation(fields: [labTestId], references: [id])
+  labTestId  String // relation pk (used in the @relation attribute above.)
+  package    Package  @relation(fields: [packageId], references: [id])
+  packageId  String // relation pk (used in the @relation attribute above.)
+  assignedAt DateTime @default(now())
+  assignedBy String?
+
+  @@id([labTestId, packageId])
+}
+
+model Uom {
+  id           String       @id @default(uuid())
+  createdAt    DateTime?    @default(now())
+  quantityType QuantityType @default(WeightBased)
+  name         String?
+  abbreviation String?
+  itemTypes    ItemType[]
+  packages     Package[]
 }
