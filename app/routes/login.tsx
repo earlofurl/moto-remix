@@ -107,7 +107,7 @@ export default function LoginPage() {
               htmlFor="email"
               className="block text-sm font-medium text-gray-700"
             >
-              email
+              Email
             </label>
 
             <div className="mt-1">
@@ -141,7 +141,7 @@ export default function LoginPage() {
               htmlFor="password"
               className="block text-sm font-medium text-gray-700"
             >
-              password
+              Password
             </label>
             <div className="mt-1">
               <input
@@ -178,11 +178,11 @@ export default function LoginPage() {
             className="w-full rounded bg-blue-500  py-2 px-4 text-white hover:bg-blue-600 focus:bg-blue-400"
             disabled={disabled}
           >
-            login action
+            Login with Email
           </button>
           <div className="flex items-center justify-center">
             <div className="text-center text-sm text-gray-500">
-              login noaccount{" "}
+              No Account?{" "}
               <Link
                 className="text-blue-500 underline"
                 to={{
@@ -190,7 +190,7 @@ export default function LoginPage() {
                   search: searchParams.toString(),
                 }}
               >
-                sign up
+                Sign Up
               </Link>
             </div>
           </div>
@@ -202,7 +202,7 @@ export default function LoginPage() {
             </div>
             <div className="relative flex justify-center text-sm">
               <span className="bg-white px-2 text-gray-500">
-                login orcontinuewith
+                Login using Magic Link
               </span>
             </div>
           </div>
