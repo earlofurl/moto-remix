@@ -39,6 +39,14 @@ const actions = [
     iconBackground: "bg-teal-50",
     description: "Add and edit retailer locations for the map",
   },
+  {
+    title: "Product Inventory",
+    href: "inventory",
+    icon: DatabaseIcon,
+    iconForeground: "text-teal-700",
+    iconBackground: "bg-teal-50",
+    description: "View and edit product inventory",
+  },
 ];
 
 export default function AdminDashboard(): JSX.Element {

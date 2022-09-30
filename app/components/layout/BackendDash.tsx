@@ -26,6 +26,12 @@ const navigation = [
     icon: InboxIcon,
     current: false,
   },
+  {
+    name: "Inventory",
+    href: "/admin/inventory",
+    icon: InboxIcon,
+    current: false,
+  },
 ];
 
 function classNames(...classes) {
