@@ -1,7 +1,5 @@
 import React from "react";
 
-import { useTranslation } from "react-i18next";
-
 import { useTypedFetcher } from "~/hooks/use-fetcher";
 import type { action } from "~/routes/send-magic-link";
 
@@ -11,10 +9,7 @@ export function ContinueWithEmailForm() {
   const { data, state, type } = sendMagicLink;
   const isSuccessFull = type === "done" && !data?.error;
   const isLoading = state === "submitting" || state === "loading";
-  const { t } = useTranslation("auth");
-  const buttonLabel = isLoading
-    ? t("register.sendingLink")
-    : t("register.continueWithEmail");
+  const buttonLabel = isLoading ? "Sending Magic Link" : "Continue With Email";
 
   React.useEffect(() => {
     if (isSuccessFull) {
@@ -41,7 +36,7 @@ export function ContinueWithEmailForm() {
           isSuccessFull ? "text-green-600" : ""
         }`}
       >
-        {!isSuccessFull ? data?.error : t("register.checkEmail")}
+        {!isSuccessFull ? data?.error : "Check Email"}
       </div>
       <button
         type="submit"

@@ -180,7 +180,7 @@ export default function LoginPage() {
           >
             Login with Email
           </button>
-          <div className="flex items-center justify-center">
+          {/* <div className="flex items-center justify-center">
             <div className="text-center text-sm text-gray-500">
               No Account?{" "}
               <Link
@@ -193,7 +193,7 @@ export default function LoginPage() {
                 Sign Up
               </Link>
             </div>
-          </div>
+          </div> */}
         </Form>
         <div className="mt-6">
           <div className="relative">
