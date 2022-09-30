@@ -6,24 +6,12 @@ import {
   unstable_composeUploadHandlers as composeUploadHandlers,
   unstable_createMemoryUploadHandler as createMemoryUploadHandler,
   unstable_parseMultipartFormData as parseMultipartFormData,
+  unstable_createFileUploadHandler as createFileUploadHandler,
 } from "@remix-run/node";
-import { writeAsyncIterableToWritable } from "@remix-run/node";
 import { requireAuthSession } from "~/modules/auth/guards";
 import { AuthSession } from "~/modules/auth/session.server";
-import { getSupabaseAdmin } from "~/integrations/supabase"; // TODO: downgrade to client after prototype
+import { getSupabase } from "~/integrations/supabase";
 import { Link, Form, useLoaderData, useActionData } from "@remix-run/react";
-import { createFileUploadHandler } from "@remix-run/node/dist/upload/fileUploadHandler";
-
-async function uploadPdfToSupabase(fileSrc: string): Promise<void> {
-  const supabase = getSupabaseAdmin();
-  const { data, error } = await supabase.storage
-    .from("moto-public")
-    .upload(`sales-sheets/test-file.pdf`, fileSrc, {
-      cacheControl: "3600",
-      upsert: false,
-    });
-  console.log(data, error);
-}
 
 type LoaderData = {
   authSession: AuthSession;
@@ -32,12 +20,23 @@ type LoaderData = {
 
 type ActionData = {
   errorMsg?: string;
-  fileSrc?: string;
+  fileName?: string;
+};
+
+const asyncIterableToStream = (asyncIterable: AsyncIterable<Uint8Array>) => {
+  return new ReadableStream({
+    async pull(controller) {
+      for await (const entry of asyncIterable) {
+        controller.enqueue(entry);
+      }
+      controller.close();
+    },
+  });
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
   const authSession = await requireAuthSession(request);
-  const supabase = getSupabaseAdmin();
+  const supabase = getSupabase(authSession.accessToken);
   const { data, error } = await supabase.storage
     .from("moto-public")
     .list("sales-sheets", {
@@ -47,24 +46,48 @@ export const loader: LoaderFunction = async ({ request }) => {
     });
   console.log(data, error);
 
-  return json({ authSession, data, error }, { status: error ? 500 : 200 });
+  return json(
+    { authSession, data, error, supabase },
+    { status: error ? 500 : 200 }
+  );
 };
 
 export const action: ActionFunction = async ({ request }) => {
-  const uploadHandler = composeUploadHandlers(
-    createFileUploadHandler({
-      maxPartSize: 5_000_000,
-      file: ({ filename }) => filename,
-    }),
-    createMemoryUploadHandler()
-  );
+  const authSession = await requireAuthSession(request);
+  const supabase = getSupabase(authSession.accessToken);
+
+  const uploadHandler = composeUploadHandlers(async (file) => {
+    if (file.name !== "fileSrc") {
+      return undefined;
+    }
+
+    const stream = asyncIterableToStream(file.data);
+
+    const { data, error } = await supabase.storage
+      .from("moto-public")
+      .upload(`sales-sheets/${file.filename}`, stream, {
+        contentType: file.contentType,
+        upsert: false,
+      });
+
+    if (error) {
+      throw error;
+    }
+
+    return JSON.stringify({ data });
+  }, createMemoryUploadHandler());
 
   const formData = await parseMultipartFormData(request, uploadHandler);
-  //   const fileSrc = formData.get("file-field");
+  const fileSrc = formData.get("fileSrc");
+  // if (!fileSrc || typeof fileSrc === "string") {
+  //   return json({
+  //     error: "something wrong",
+  //   });
+  // }
 
-  const uploadedFile = await uploadPdfToSupabase("fileSrc");
+  // // const uploadedFile = await uploadPdfToSupabase(fileSrc);
 
-  return null;
+  return json({ fileName: fileSrc }, { status: 200 });
 };
 
 export default function SalesSheetsIndex(): JSX.Element {
@@ -104,10 +127,10 @@ export default function SalesSheetsIndex(): JSX.Element {
           <button type="submit">Upload</button>
         </Form>
         {actionData?.errorMsg && <h2>{actionData?.errorMsg}</h2>}
-        {actionData?.fileSrc && (
+        {actionData?.fileName && (
           <>
             <h2>uploaded file</h2>
-            <p>{actionData.fileSrc}</p>
+            <p>{actionData?.fileName}</p>
           </>
         )}
       </div>
