@@ -33,9 +33,9 @@ export default function LabTestsPage(): JSX.Element {
       accessorKey: "id",
     },
     {
-      id: "comment",
-      header: "Comment",
-      accessorKey: "testComment",
+      id: "testName",
+      header: "Test Name",
+      accessorKey: "testName",
     },
     {
       id: "batch",

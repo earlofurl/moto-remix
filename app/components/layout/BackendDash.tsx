@@ -116,9 +116,9 @@ export default function BackendDash() {
                   <div className="h-0 flex-1 overflow-y-auto pt-5 pb-4">
                     <div className="flex flex-shrink-0 items-center px-4">
                       <img
-                        className="h-8 w-auto"
-                        src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                        alt="Your Company"
+                        className="h-10 w-auto"
+                        src="https://res.cloudinary.com/ursine-design/image/upload/q_auto:good,f_auto,h_100,w_100/v1654565806/Moto_Logo_Badge_Dark_x2xjut.png"
+                        alt="Moto Perpetuo Farm"
                       />
                     </div>
                     <nav className="mt-5 space-y-1 px-2">
@@ -153,16 +153,16 @@ export default function BackendDash() {
                       className="group block flex-shrink-0"
                     >
                       <div className="flex items-center">
-                        <div>
+                        {/* <div>
                           <img
                             className="inline-block h-10 w-10 rounded-full"
                             src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                             alt=""
                           />
-                        </div>
+                        </div> */}
                         <div className="ml-3">
                           <p className="text-base font-medium text-white">
-                            Tom Cook
+                            Your Name
                           </p>
                           <p className="text-sm font-medium text-gray-400 group-hover:text-gray-300">
                             View profile
@@ -187,9 +187,9 @@ export default function BackendDash() {
             <div className="flex flex-1 flex-col overflow-y-auto pt-5 pb-4">
               <div className="flex flex-shrink-0 items-center px-4">
                 <img
-                  className="h-8 w-auto"
-                  src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                  alt="Your Company"
+                  className="h-10 w-auto"
+                  src="https://res.cloudinary.com/ursine-design/image/upload/q_auto:good,f_auto,h_100,w_100/v1654565806/Moto_Logo_Badge_Dark_x2xjut.png"
+                  alt="Moto Perpetuo Farm"
                 />
               </div>
               <nav className="mt-5 flex-1 space-y-1 px-2">

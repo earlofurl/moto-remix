@@ -32,11 +32,18 @@ export const links: LinksFunction = () => [
   },
 ];
 
-export const meta: MetaFunction = () => ({
-  charset: "utf-8",
-  title: "Moto Perpetuo Farm",
-  viewport: "width=device-width,initial-scale=1",
-});
+export const meta: MetaFunction = () => {
+  const description =
+    "Oregon's best family owned and operated cannabis producers. Award winning proprietary strains with record-setting extraction results.";
+  return {
+    charset: "utf-8",
+    description,
+    title: "Moto Perpetuo Farm",
+    keywords:
+      "cannabis, farm, grower, producer, oregon, recreational, weed, pot, wholesaler, terpenes, fresh frozen",
+    viewport: "width=device-width,initial-scale=1",
+  };
+};
 
 export const loader: LoaderFunction = async ({ request }) => {
   const proto = request.headers.get("X-Forwarded-Proto");
