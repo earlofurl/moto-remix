@@ -47,6 +47,14 @@ const actions = [
     iconBackground: "bg-teal-50",
     description: "View and edit product inventory",
   },
+  {
+    title: "Lab Tests",
+    href: "lab-tests",
+    icon: DatabaseIcon,
+    iconForeground: "text-teal-700",
+    iconBackground: "bg-teal-50",
+    description: "View lab test results",
+  },
 ];
 
 export default function AdminDashboard(): JSX.Element {

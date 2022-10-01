@@ -32,6 +32,12 @@ const navigation = [
     icon: InboxIcon,
     current: false,
   },
+  {
+    name: "Labs",
+    href: "/admin/lab-tests",
+    icon: InboxIcon,
+    current: false,
+  },
 ];
 
 function classNames(...classes) {

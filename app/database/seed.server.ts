@@ -4,6 +4,7 @@
 import type { PackageTag } from "@prisma/client";
 import { PrismaClient } from "@prisma/client";
 import { createClient } from "@supabase/supabase-js";
+import { v4 as uuidv4 } from "uuid";
 
 import { SUPABASE_SERVICE_ROLE, SUPABASE_URL } from "~/utils/env";
 
@@ -22,24 +23,59 @@ const supabaseAdmin = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE, {
 
 const prisma = new PrismaClient();
 
-const generatedTags: Array<PackageTag> = [];
-for (let i = 10; i < 100; i++) {
-  generatedTags.push({
-    id: `0fb460bf-974c-4e44-a7b3-efd41ca8bd27-${i}`,
-    tagNumber: `1A4010300016BAD0000145${i}`,
-    isAssigned: false,
-    isActive: false,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    isProvisional: false,
-  });
-}
+// Package Tag Seeding
+
+// async function seed() {
+//   console.log("Seeding package tags...");
+//   const generatedTags: Array<PackageTag> = [];
+//   for (let i = 1; i < 14000; i++) {
+//     const tagPrefix = "1A4010300016BAD0000";
+//     const tagSuffix = i.toString().padStart(5, "0");
+//     generatedTags.push({
+//       id: uuidv4(),
+//       tagNumber: `${tagPrefix}${tagSuffix}`,
+//       isAssigned: false,
+//       isActive: false,
+//       createdAt: new Date(),
+//       updatedAt: new Date(),
+//       isProvisional: false,
+//     });
+//   }
+
+//   // Insert tags
+//   await prisma.packageTag.createMany({
+//     data: generatedTags,
+//   });
+
+//   console.log("DB has been seeded with package tags.");
+// }
+
+// End Package Tag Seeding
 
 async function seed() {
   // Create tags
+  console.log("Seeding package tags...");
+  const generatedTags: Array<PackageTag> = [];
+  for (let i = 1; i < 20000; i++) {
+    const tagPrefix = "1A4010300016BAD0000";
+    const tagSuffix = i.toString().padStart(5, "0");
+    generatedTags.push({
+      id: uuidv4(),
+      tagNumber: `${tagPrefix}${tagSuffix}`,
+      isAssigned: false,
+      isActive: false,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      isProvisional: false,
+    });
+  }
+
+  // Insert tags
   await prisma.packageTag.createMany({
     data: generatedTags,
   });
+
+  console.log("DB has been seeded with package tags.");
 
   // Create uom entries
   const uomPounds = await prisma.uom.create({
@@ -383,9 +419,9 @@ async function seed() {
   // Create Packages entries
   const phkFlowerPackage = await prisma.package.create({
     data: {
-      tag: {
-        connect: { id: "0fb460bf-974c-4e44-a7b3-efd41ca8bd27-10" },
-      },
+      // tag: {
+      //   connect: { id: "0fb460bf-974c-4e44-a7b3-efd41ca8bd27-10" },
+      // },
       quantity: 15,
       notes: "This is a note about Flower",
       labTestingState: "TestPassed",
@@ -469,9 +505,9 @@ async function seed() {
 
   const wappaFlowerPackage = await prisma.package.create({
     data: {
-      tag: {
-        connect: { id: "0fb460bf-974c-4e44-a7b3-efd41ca8bd27-11" },
-      },
+      // tag: {
+      //   connect: { id: "0fb460bf-974c-4e44-a7b3-efd41ca8bd27-11" },
+      // },
       quantity: 15,
       notes: "This is a note about Wappa Flower",
       labTestingState: "TestPassed",
@@ -497,9 +533,9 @@ async function seed() {
 
   const gmoFlowerPackage = await prisma.package.create({
     data: {
-      tag: {
-        connect: { id: "0fb460bf-974c-4e44-a7b3-efd41ca8bd27-12" },
-      },
+      // tag: {
+      //   connect: { id: "0fb460bf-974c-4e44-a7b3-efd41ca8bd27-12" },
+      // },
       quantity: 15,
       notes: "This is a note about GMO Flower",
       labTestingState: "TestPassed",
