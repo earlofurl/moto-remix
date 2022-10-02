@@ -14,6 +14,8 @@ import { getSupabase } from "~/integrations/supabase";
 import { Link, Form, useLoaderData, useActionData } from "@remix-run/react";
 import { ChevronRightIcon, NewspaperIcon } from "@heroicons/react/outline";
 import dayjs from "dayjs";
+import slugify from "slugify";
+import invariant from "tiny-invariant";
 
 type LoaderData = {
   authSession: AuthSession;
@@ -46,7 +48,7 @@ export const loader: LoaderFunction = async ({ request }) => {
       offset: 0,
       sortBy: { column: "created_at", order: "desc" },
     });
-  console.log(data, error);
+  // console.log(data, error);
 
   return json(
     { authSession, data, error, supabase },
@@ -56,18 +58,22 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 export const action: ActionFunction = async ({ request }) => {
   const authSession = await requireAuthSession(request);
-  const supabase = getSupabase(authSession.accessToken);
 
   const uploadHandler = composeUploadHandlers(async (file) => {
+    invariant(file, "There is no file to upload.");
+
     if (file.name !== "fileSrc") {
-      return undefined;
+      return;
     }
 
     const stream = asyncIterableToStream(file.data);
+    const urlSafeFilename = slugify(file.filename as string, {
+      remove: /"<>#%{}\|\\\^~\[]`;\?:@=&/g,
+    });
 
-    const { data, error } = await supabase.storage
-      .from("moto-public")
-      .upload(`sales-sheets/${file.filename}`, stream, {
+    const { data, error } = await getSupabase(authSession.accessToken)
+      .storage.from("moto-public")
+      .upload(`sales-sheets/${urlSafeFilename}`, stream, {
         contentType: file.contentType,
         upsert: false,
       });
@@ -81,20 +87,12 @@ export const action: ActionFunction = async ({ request }) => {
 
   const formData = await parseMultipartFormData(request, uploadHandler);
   const fileSrc = formData.get("fileSrc");
-  // if (!fileSrc || typeof fileSrc === "string") {
-  //   return json({
-  //     error: "something wrong",
-  //   });
-  // }
-
-  // // const uploadedFile = await uploadPdfToSupabase(fileSrc);
 
   return json({ fileName: fileSrc }, { status: 200 });
 };
 
 export default function SalesSheetsIndex(): JSX.Element {
-  const data = useLoaderData<LoaderData>();
-  const { authSession, data: files } = data;
+  const { authSession, data: files } = useLoaderData<LoaderData>();
   const actionData = useActionData<ActionData>();
 
   return (

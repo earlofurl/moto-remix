@@ -6,19 +6,25 @@ import type { ColumnDef } from "@tanstack/react-table";
 import dayjs from "dayjs";
 import BasicTable from "~/components/BasicTable";
 import { getAllPackages } from "~/modules/package/queries/get-packages.server";
+import { requireAuthSession } from "~/modules/auth/guards";
+import { AuthSession } from "~/modules/auth/session.server";
 
-type LoaderData = Awaited<ReturnType<typeof getAllPackages>>;
+type LoaderData = {
+  authSession: AuthSession;
+  data: Awaited<ReturnType<typeof getAllPackages>>;
+};
 
 const tableTitle = "Packages";
 const tableDescription = "List of all product inventory";
 
-export const loader: LoaderFunction = async () => {
-  const packages = await getAllPackages();
-  return json<LoaderData>(packages);
+export const loader: LoaderFunction = async ({ request }) => {
+  const authSession = await requireAuthSession(request);
+  const data = await getAllPackages();
+  return json<LoaderData>({ authSession, data });
 };
 
 export default function PackagesPage(): JSX.Element {
-  const data = useLoaderData();
+  const { authSession, data } = useLoaderData();
   const navigate = useNavigate();
 
   function handleAddButtonClick() {

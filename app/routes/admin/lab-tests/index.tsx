@@ -6,19 +6,26 @@ import type { ColumnDef } from "@tanstack/react-table";
 import dayjs from "dayjs";
 import BasicTable from "~/components/BasicTable";
 import { getAllLabTests } from "~/modules/labTest/queries/get-lab-tests.server";
+import { requireAuthSession } from "~/modules/auth/guards";
+import { AuthSession } from "~/modules/auth/session.server";
 
-type LoaderData = Awaited<ReturnType<typeof getAllLabTests>>;
+// type LoaderData = Awaited<ReturnType<typeof getAllLabTests>>;
+type LoaderData = {
+  authSession: AuthSession;
+  data: Awaited<ReturnType<typeof getAllLabTests>>;
+};
 
 const tableTitle = "Lab Tests";
 const tableDescription = "Test Results";
 
-export const loader: LoaderFunction = async () => {
-  const labTests = await getAllLabTests();
-  return json<LoaderData>(labTests);
+export const loader: LoaderFunction = async ({ request }) => {
+  const authSession = await requireAuthSession(request);
+  const data = await getAllLabTests();
+  return json<LoaderData>({ authSession, data });
 };
 
 export default function LabTestsPage(): JSX.Element {
-  const data = useLoaderData();
+  const { authSession, data } = useLoaderData();
   const navigate = useNavigate();
 
   function handleAddButtonClick() {

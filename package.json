@@ -59,6 +59,7 @@
     "remix-i18next": "^4.1.1",
     "remix-params-helper": "^0.4.10",
     "remix-utils": "^3.3.0",
+    "slugify": "^1.6.5",
     "tiny-invariant": "^1.2.0",
     "zod": "^3.19.1"
   },
