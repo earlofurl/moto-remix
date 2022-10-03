@@ -4,7 +4,7 @@ import { json } from "@remix-run/node";
 import { Outlet, useCatch, useLoaderData, useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import dayjs from "dayjs";
-import BasicTable from "~/components/BasicTable";
+import BasicGroupingTable from "~/components/BasicGroupingTable";
 import { getAllPackages } from "~/modules/package/queries/get-packages.server";
 import { requireAuthSession } from "~/modules/auth/guards";
 import { AuthSession } from "~/modules/auth/session.server";
@@ -37,6 +37,7 @@ export default function PackagesPage(): JSX.Element {
       id: "id",
       header: "ID",
       accessorKey: "id",
+      enableGrouping: false,
     },
     {
       id: "tag",
@@ -54,6 +55,7 @@ export default function PackagesPage(): JSX.Element {
           </>
         );
       },
+      enableGrouping: false,
     },
     // {
     //   id: "item",
@@ -65,57 +67,68 @@ export default function PackagesPage(): JSX.Element {
       id: "form",
       header: "Form",
       accessorFn: (row: any) => `${row.item.itemType?.productForm}`,
+      enableGrouping: true,
     },
     {
       id: "mod",
       header: "Mod",
       accessorFn: (row: any) => `${row.item.itemType?.productModifier}`,
+      enableGrouping: true,
     },
     {
       id: "strain",
       header: "Strain",
       accessorFn: (row: any) => `${row.item.strain?.name}`,
+      enableGrouping: true,
     },
     {
       id: "testBatch",
       header: "Batch",
       accessorFn: (row: any) => `${row.labTests[0]?.labTest.batchCode}`,
+      enableGrouping: true,
     },
     {
       id: "type",
       header: "Type",
       accessorFn: (row: any) => `${row.item.strain?.type}`,
+      enableGrouping: true,
     },
     {
       id: "thc",
       header: "THC",
       accessorFn: (row: any) => `${row.labTests[0]?.labTest.thcTotalPercent}`,
+      enableGrouping: false,
     },
     {
       id: "cbd",
       header: "CBD",
       accessorFn: (row: any) => `${row.labTests[0]?.labTest.cbdPercent}`,
+      enableGrouping: false,
     },
     {
       id: "terpenes",
       header: "Terps",
       accessorFn: (row: any) => `${row.labTests[0]?.labTest.terpenePercent}`,
+      enableGrouping: false,
     },
     {
       id: "totalCannabinoids",
       header: "Total Cannabinoids",
       accessorFn: (row: any) =>
         `${row.labTests[0]?.labTest.totalCannabinoidsPercent}`,
+      enableGrouping: false,
     },
     {
       id: "quantity",
       header: "Quantity",
       accessorKey: "quantity",
+      enableGrouping: false,
     },
     {
       id: "uom",
       header: "UoM",
       accessorFn: (row: any) => row.uom?.name,
+      enableGrouping: false,
     },
   ];
 
@@ -157,7 +170,7 @@ export default function PackagesPage(): JSX.Element {
       </div>
       <Outlet />
       <div>
-        <BasicTable
+        <BasicGroupingTable
           tableTitle={tableTitle}
           tableDescription={tableDescription}
           columnData={columnData}

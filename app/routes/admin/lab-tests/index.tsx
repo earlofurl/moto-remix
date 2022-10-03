@@ -4,7 +4,7 @@ import { json } from "@remix-run/node";
 import { Outlet, useCatch, useLoaderData, useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import dayjs from "dayjs";
-import BasicTable from "~/components/BasicTable";
+import BasicGroupingTable from "~/components/BasicGroupingTable";
 import { getAllLabTests } from "~/modules/labTest/queries/get-lab-tests.server";
 import { requireAuthSession } from "~/modules/auth/guards";
 import { AuthSession } from "~/modules/auth/session.server";
@@ -38,71 +38,85 @@ export default function LabTestsPage(): JSX.Element {
       id: "id",
       header: "ID",
       accessorKey: "id",
+      enableGrouping: false,
     },
     {
       id: "testName",
       header: "Test Name",
       accessorKey: "testName",
+      enableGrouping: false,
     },
     {
       id: "batch",
       header: "Batch",
       accessorKey: "batchCode",
+      enableGrouping: false,
     },
     {
       id: "thc",
       header: "THC",
       accessorKey: "thcTotalPercent",
+      enableGrouping: false,
     },
     {
       id: "cbd",
       header: "CBD",
       accessorKey: "cbdPercent",
+      enableGrouping: false,
     },
     {
       id: "delta9ThcPercent",
       header: "delta9ThcPercent",
       accessorKey: "delta9ThcPercent",
+      enableGrouping: false,
     },
     {
       id: "delta8ThcPercent",
       header: "delta8ThcPercent",
       accessorKey: "delta8ThcPercent",
+      enableGrouping: false,
     },
     {
       id: "thcVPercent",
       header: "thcVPercent",
       accessorKey: "thcVPercent",
+      enableGrouping: false,
     },
     {
       id: "cbdAPercent",
       header: "cbdAPercent",
       accessorKey: "cbdAPercent",
+      enableGrouping: false,
     },
     {
       id: "cbnPercent",
       header: "cbnPercent",
       accessorKey: "cbnPercent",
+      enableGrouping: false,
     },
     {
       id: "cbgAPercent",
       header: "cbgAPercent",
       accessorKey: "cbgAPercent",
+      enableGrouping: false,
     },
     {
       id: "cbgPercent",
       header: "cbgPercent",
       accessorKey: "cbgPercent",
+      enableGrouping: false,
     },
     {
       id: "cbcPercent",
       header: "cbcPercent",
       accessorKey: "cbcPercent",
+      enableGrouping: false,
     },
     {
       id: "totalCannabinoidsPercent",
       header: "totalCannabinoidsPercent",
       accessorKey: "totalCannabinoidsPercent",
+      enableGrouping: false,
     },
   ];
 
@@ -144,7 +158,7 @@ export default function LabTestsPage(): JSX.Element {
       </div>
       <Outlet />
       <div>
-        <BasicTable
+        <BasicGroupingTable
           tableTitle={tableTitle}
           tableDescription={tableDescription}
           columnData={columnData}
