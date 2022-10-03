@@ -82,6 +82,11 @@ export default function PackagesPage(): JSX.Element {
       accessorFn: (row: any) => `${row.labTests[0]?.labTest.batchCode}`,
     },
     {
+      id: "type",
+      header: "Type",
+      accessorFn: (row: any) => `${row.item.strain?.type}`,
+    },
+    {
       id: "thc",
       header: "THC",
       accessorFn: (row: any) => `${row.labTests[0]?.labTest.thcTotalPercent}`,

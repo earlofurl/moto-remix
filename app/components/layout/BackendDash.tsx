@@ -1,3 +1,5 @@
+// TODO: Fix which dash links get end prop
+
 import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import {
@@ -10,33 +12,29 @@ import {
   UsersIcon,
   XIcon,
 } from "@heroicons/react/outline";
-import { Outlet } from "@remix-run/react";
+import { Outlet, NavLink } from "@remix-run/react";
 
 const navigation = [
-  { name: "Dashboard", href: "/admin", icon: HomeIcon, current: true },
+  { name: "Dashboard", to: "/admin", icon: HomeIcon },
   {
     name: "Sales Sheets",
-    href: "/admin/sales-sheets",
+    to: "/admin/sales-sheets",
     icon: FolderIcon,
-    current: false,
   },
   {
     name: "Locations",
-    href: "/admin/locations",
+    to: "/admin/locations",
     icon: InboxIcon,
-    current: false,
   },
   {
     name: "Inventory",
-    href: "/admin/inventory",
+    to: "/admin/inventory",
     icon: InboxIcon,
-    current: false,
   },
   {
     name: "Labs",
-    href: "/admin/lab-tests",
+    to: "/admin/lab-tests",
     icon: InboxIcon,
-    current: false,
   },
 ];
 
@@ -123,30 +121,29 @@ export default function BackendDash() {
                     </div>
                     <nav className="mt-5 space-y-1 px-2">
                       {navigation.map((item) => (
-                        <a
+                        <NavLink
                           key={item.name}
-                          href={item.href}
-                          className={classNames(
-                            item.current
-                              ? "bg-gray-900 text-white"
-                              : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                            "group flex items-center rounded-md px-2 py-2 text-base font-medium"
-                          )}
+                          to={item.to}
+                          className={({ isActive }) =>
+                            classNames(
+                              isActive
+                                ? "bg-gray-900 text-white"
+                                : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                              "group flex items-center rounded-md px-2 py-2 text-base font-medium"
+                            )
+                          }
+                          end
                         >
                           <item.icon
-                            className={classNames(
-                              item.current
-                                ? "text-gray-300"
-                                : "text-gray-400 group-hover:text-gray-300",
-                              "mr-4 h-6 w-6 flex-shrink-0"
-                            )}
+                            className="mr-4 h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-300"
                             aria-hidden="true"
                           />
                           {item.name}
-                        </a>
+                        </NavLink>
                       ))}
                     </nav>
                   </div>
+
                   <div className="flex flex-shrink-0 bg-gray-700 p-4">
                     <a
                       href="#"
@@ -194,27 +191,25 @@ export default function BackendDash() {
               </div>
               <nav className="mt-5 flex-1 space-y-1 px-2">
                 {navigation.map((item) => (
-                  <a
+                  <NavLink
                     key={item.name}
-                    href={item.href}
-                    className={classNames(
-                      item.current
-                        ? "bg-gray-900 text-white"
-                        : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                      "group flex items-center rounded-md px-2 py-2 text-sm font-medium"
-                    )}
+                    to={item.to}
+                    className={({ isActive }) =>
+                      classNames(
+                        isActive
+                          ? "bg-gray-900 text-white"
+                          : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                        "group flex items-center rounded-md px-2 py-2 text-base font-medium"
+                      )
+                    }
+                    end
                   >
                     <item.icon
-                      className={classNames(
-                        item.current
-                          ? "text-gray-300"
-                          : "text-gray-400 group-hover:text-gray-300",
-                        "mr-3 h-6 w-6 flex-shrink-0"
-                      )}
+                      className="mr-4 h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-300"
                       aria-hidden="true"
                     />
                     {item.name}
-                  </a>
+                  </NavLink>
                 ))}
               </nav>
             </div>
