@@ -1,10 +1,11 @@
 // No longer necessary to seed user because all auth is handled by Supabase
 // Keep this file around in case we need to seed other data in the future
 
-import type { PackageTag } from "@prisma/client";
+import type { PackageTag, Strain, ItemType, Item } from "@prisma/client";
 import { PrismaClient } from "@prisma/client";
 import { createClient } from "@supabase/supabase-js";
 import { v4 as uuidv4 } from "uuid";
+import { getAllStrains } from "~/modules/strain/queries";
 
 import { SUPABASE_SERVICE_ROLE, SUPABASE_URL } from "~/utils/env";
 
@@ -22,6 +23,19 @@ const supabaseAdmin = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE, {
 });
 
 const prisma = new PrismaClient();
+
+// itemType seeding
+let strainList: string[] = [];
+let itemList: Item[] = [];
+let itemTypeList: ItemType[] = [];
+const allStrains = getAllStrains();
+allStrains.then((strains) => {
+  strains.forEach((strain) => {
+    strainList.push(strain.name);
+  });
+}
+
+// end itemType seeding
 
 // Package Tag Seeding
 
