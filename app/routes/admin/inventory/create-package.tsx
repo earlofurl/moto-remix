@@ -65,6 +65,18 @@ type ActionData = {
   };
 };
 
+// for now, hard code usable product weights for calculating new parent quantity
+const usableProductWeights = {
+  Preroll: {
+    Single: 0.5,
+    TwoPack: 1,
+    "10-Pack": 5,
+  },
+  Hash: {
+    Packaged: 1,
+  },
+};
+
 export const loader: LoaderFunction = async ({ request }) => {
   const authSession = await requireAuthSession(request);
   const itemTypes = await getAllItemTypes();
@@ -195,6 +207,24 @@ export default function AddPackageSlideIn(): JSX.Element {
             )
         );
       } else if (
+        selectedUom.name === "Each" &&
+        selectedParentPackage?.uom.name !== "Each" &&
+        selectedItem &&
+        quantityRef.current?.value !== ""
+      ) {
+        // first, get form and mod of the itemType of the selected new item
+        const usableProductWeightConsumed =
+          usableProductWeights[selectedItem?.itemType.productForm][
+            selectedItem?.itemType.productModifier
+          ];
+        // then, calculate new parent quantity
+        setNewParentQuantity(
+          selectedParentPackage?.quantity -
+            convert(quantity * usableProductWeightConsumed, "grams").to(
+              selectedParentPackage?.uom.name.toLowerCase()
+            )
+        );
+      } else if (
         selectedParentPackage?.quantity &&
         selectedUom &&
         quantityRef.current?.value !== ""
@@ -206,7 +236,7 @@ export default function AddPackageSlideIn(): JSX.Element {
         setNewParentQuantity(0);
       }
     }
-  }, [quantity, selectedParentPackage, selectedUom, convert]);
+  }, [quantity, selectedParentPackage, selectedItem, selectedUom, convert]);
 
   // when selectedParentPackage updates, change selectedUom to the uom of the selectedParentPackage
   React.useEffect(() => {
