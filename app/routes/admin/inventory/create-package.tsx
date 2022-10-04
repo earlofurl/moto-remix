@@ -1,3 +1,7 @@
+// TODO: There are a lot of things to refactor and improve here. This is just a first pass.
+// autofill as much of the create form as possible to reduce clicks and time spent creating packages
+// streamline state management and database requests to make sure we're only using the required data
+
 import { Combobox, Dialog, Listbox, Transition } from "@headlessui/react";
 import {
   CheckIcon,
@@ -65,7 +69,7 @@ type ActionData = {
   };
 };
 
-// for now, hard code usable product weights for calculating new parent quantity
+// TODO: for now, hard code usable product weights for calculating new parent quantity. Change later.
 const usableProductWeights = {
   Preroll: {
     Single: 0.5,

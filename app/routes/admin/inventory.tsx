@@ -1,13 +1,21 @@
-import type { Package } from "@prisma/client";
+import type { Item, LabTest, Package, PackageTag } from "@prisma/client";
 import type { LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Outlet, useCatch, useLoaderData, useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
+import { createColumnHelper } from "@tanstack/react-table";
 import dayjs from "dayjs";
 import BasicGroupingTable from "~/components/BasicGroupingTable";
 import { getAllPackages } from "~/modules/package/queries/get-packages.server";
 import { requireAuthSession } from "~/modules/auth/guards";
 import { AuthSession } from "~/modules/auth/session.server";
+import TableRowActions from "../../components/table/RowActions";
+
+type PackageWithNesting = Package & {
+  tag: PackageTag;
+  labTests: LabTest[];
+  item: Item;
+};
 
 type LoaderData = {
   authSession: AuthSession;
@@ -16,6 +24,7 @@ type LoaderData = {
 
 const tableTitle = "Packages";
 const tableDescription = "List of all product inventory";
+const columnHelper = createColumnHelper<PackageWithNesting>();
 
 export const loader: LoaderFunction = async ({ request }) => {
   const authSession = await requireAuthSession(request);
@@ -32,143 +41,182 @@ export default function InventoryPage(): JSX.Element {
   }
 
   // Column structure for table
-  const columnData: readonly ColumnDef<Package>[] = [
-    {
-      id: "id",
-      header: "ID",
-      accessorKey: "id",
+  const columnData: ColumnDef<PackageWithNesting>[] = [
+    columnHelper.display({
+      id: "actions",
+      cell: (props) => <TableRowActions />,
       enableGrouping: false,
       enableColumnFilter: false,
       enableGlobalFilter: false,
       enableSorting: false,
-    },
-    {
-      id: "tag",
-      header: "Tag",
-      accessorFn: (row: any) => (row.tag ? row.tag.tagNumber : "No Tag"),
-      cell: (info) => {
-        const value = info.getValue() as string;
-        if (value === "") {
-          return <span>-</span>;
-        }
-        return (
-          <>
-            <span>{value.slice(0, 19)}</span>
-            <span className="fonts font-bold">{value.slice(19, 24)}</span>
-          </>
-        );
-      },
+    }),
+    columnHelper.group({
+      id: "main",
       enableGrouping: false,
-      enableColumnFilter: true,
+      enableColumnFilter: false,
       enableGlobalFilter: false,
       enableSorting: false,
-    },
-    // {
-    //   id: "item",
-    //   header: "Item",
-    //   accessorFn: (row: any) =>
-    //     `${row.item.itemType?.productForm} - ${row.item.itemType?.productModifier} - ${row.item.strain?.name}`,
-    // },
-    {
-      id: "form",
-      header: "Form",
-      accessorFn: (row: any) => `${row.item.itemType?.productForm}`,
-      enableGrouping: true,
-      enableColumnFilter: true,
-      enableGlobalFilter: true,
-      enableSorting: true,
-    },
-    {
-      id: "mod",
-      header: "Mod",
-      accessorFn: (row: any) => `${row.item.itemType?.productModifier}`,
-      enableGrouping: true,
-      enableColumnFilter: true,
-      enableGlobalFilter: true,
-      enableSorting: true,
-    },
-    {
-      id: "strain",
-      header: "Strain",
-      accessorFn: (row: any) => `${row.item.strain?.name}`,
-      enableGrouping: true,
-      enableColumnFilter: true,
-      enableGlobalFilter: true,
-      enableSorting: true,
-    },
-    {
-      id: "testBatch",
-      header: "Batch",
-      accessorFn: (row: any) => `${row.labTests[0]?.labTest.batchCode}`,
-      enableGrouping: true,
-      enableColumnFilter: true,
-      enableGlobalFilter: true,
-      enableSorting: true,
-    },
-    {
-      id: "type",
-      header: "Type",
-      accessorFn: (row: any) => `${row.item.strain?.type}`,
-      enableGrouping: true,
-      enableColumnFilter: true,
-      enableGlobalFilter: true,
-      enableSorting: true,
-    },
-    {
-      id: "thc",
-      header: "THC",
-      accessorFn: (row: any) => `${row.labTests[0]?.labTest.thcTotalPercent}`,
+      columns: [
+        columnHelper.accessor("id", {
+          id: "id",
+          header: () => <span>ID</span>,
+          enableGrouping: false,
+          enableColumnFilter: false,
+          enableGlobalFilter: false,
+          enableSorting: false,
+        }),
+        columnHelper.accessor(
+          (row: any) => (row.tag ? row.tag.tagNumber : "No Tag"),
+          {
+            id: "tagNumber",
+            header: () => <span>Tag Number</span>,
+            cell: (info) => {
+              const value = info.getValue() as string;
+              if (value === "") {
+                return <span>-</span>;
+              }
+              return (
+                <>
+                  <span>{value.slice(0, 19)}</span>
+                  <span className="fonts font-bold">{value.slice(19, 24)}</span>
+                </>
+              );
+            },
+            enableGrouping: false,
+            enableColumnFilter: true,
+            enableGlobalFilter: false,
+            enableSorting: true,
+          }
+        ),
+        columnHelper.accessor(
+          (row: any) => `${row.item.itemType?.productForm}`,
+          {
+            id: "productForm",
+            header: () => <span>Form</span>,
+            enableGrouping: true,
+            enableColumnFilter: true,
+            enableGlobalFilter: true,
+            enableSorting: true,
+          }
+        ),
+        columnHelper.accessor(
+          (row: any) => `${row.item.itemType?.productModifier}`,
+          {
+            id: "productModifier",
+            header: () => <span>Modifier</span>,
+            enableGrouping: true,
+            enableColumnFilter: true,
+            enableGlobalFilter: true,
+            enableSorting: true,
+          }
+        ),
+        columnHelper.accessor((row: any) => `${row.item.strain?.name}`, {
+          id: "strain",
+          header: () => <span>Strain</span>,
+          enableGrouping: true,
+          enableColumnFilter: true,
+          enableGlobalFilter: true,
+          enableSorting: true,
+        }),
+        columnHelper.accessor(
+          (row: any) => `${row.labTests[0]?.labTest.batchCode}`,
+          {
+            id: "testBatch",
+            header: () => <span>Batch</span>,
+            enableGrouping: true,
+            enableColumnFilter: true,
+            enableGlobalFilter: true,
+            enableSorting: true,
+          }
+        ),
+        columnHelper.accessor((row: any) => `${row.item.strain?.type}`, {
+          id: "type",
+          header: () => <span>Type</span>,
+          enableGrouping: true,
+          enableColumnFilter: true,
+          enableGlobalFilter: true,
+          enableSorting: true,
+        }),
+      ],
+    }),
+    columnHelper.group({
+      id: "stats",
       enableGrouping: false,
       enableColumnFilter: false,
       enableGlobalFilter: false,
-      enableSorting: true,
-    },
-    {
-      id: "cbd",
-      header: "CBD",
-      accessorFn: (row: any) => `${row.labTests[0]?.labTest.cbdPercent}`,
+      enableSorting: false,
+      columns: [
+        columnHelper.accessor(
+          (row: any) => `${row.labTests[0]?.labTest.thcTotalPercent}`,
+          {
+            id: "thc",
+            header: () => <span>THC</span>,
+            enableGrouping: false,
+            enableColumnFilter: false,
+            enableGlobalFilter: false,
+            enableSorting: true,
+          }
+        ),
+        columnHelper.accessor(
+          (row: any) => `${row.labTests[0]?.labTest.cbdPercent}`,
+          {
+            id: "cbd",
+            header: () => <span>CBD</span>,
+            enableGrouping: false,
+            enableColumnFilter: false,
+            enableGlobalFilter: false,
+            enableSorting: true,
+          }
+        ),
+        columnHelper.accessor(
+          (row: any) => `${row.labTests[0]?.labTest.terpenePercent}`,
+          {
+            id: "terpenes",
+            header: () => <span>Terps</span>,
+            enableGrouping: false,
+            enableColumnFilter: false,
+            enableGlobalFilter: false,
+            enableSorting: true,
+          }
+        ),
+        columnHelper.accessor(
+          (row: any) => `${row.labTests[0]?.labTest.totalCannabinoidsPercent}`,
+          {
+            id: "totalCannabinoids",
+            header: () => <span>Total Cannabinoids</span>,
+            enableGrouping: false,
+            enableColumnFilter: false,
+            enableGlobalFilter: false,
+            enableSorting: true,
+          }
+        ),
+      ],
+    }),
+    columnHelper.group({
+      id: "stock",
       enableGrouping: false,
       enableColumnFilter: false,
       enableGlobalFilter: false,
-      enableSorting: true,
-    },
-    {
-      id: "terpenes",
-      header: "Terps",
-      accessorFn: (row: any) => `${row.labTests[0]?.labTest.terpenePercent}`,
-      enableGrouping: false,
-      enableColumnFilter: false,
-      enableGlobalFilter: false,
-      enableSorting: true,
-    },
-    {
-      id: "totalCannabinoids",
-      header: "Total Cannabinoids",
-      accessorFn: (row: any) =>
-        `${row.labTests[0]?.labTest.totalCannabinoidsPercent}`,
-      enableGrouping: false,
-      enableColumnFilter: false,
-      enableGlobalFilter: false,
-      enableSorting: true,
-    },
-    {
-      id: "quantity",
-      header: "Quantity",
-      accessorKey: "quantity",
-      enableGrouping: false,
-      enableColumnFilter: false,
-      enableGlobalFilter: false,
-      enableSorting: true,
-    },
-    {
-      id: "uom",
-      header: "UoM",
-      accessorFn: (row: any) => row.uom?.name,
-      enableGrouping: false,
-      enableColumnFilter: false,
-      enableGlobalFilter: false,
-      enableSorting: true,
-    },
+      enableSorting: false,
+      columns: [
+        columnHelper.accessor("quantity", {
+          id: "quantity",
+          header: () => <span>Quantity</span>,
+          enableGrouping: false,
+          enableColumnFilter: false,
+          enableGlobalFilter: false,
+          enableSorting: true,
+        }),
+        columnHelper.accessor((row: any) => row.uom?.name, {
+          id: "uom",
+          header: () => <span>UoM</span>,
+          enableGrouping: false,
+          enableColumnFilter: false,
+          enableGlobalFilter: false,
+          enableSorting: true,
+        }),
+      ],
+    }),
   ];
 
   return (
