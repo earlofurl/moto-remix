@@ -10,6 +10,9 @@ export function getUnassignedPackageTagsLimit20(): Promise<PackageTag[]> {
     where: {
       isAssigned: false,
     },
+    orderBy: {
+      tagNumber: "asc",
+    },
     take: 20,
   });
 }

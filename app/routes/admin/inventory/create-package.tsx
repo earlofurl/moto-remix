@@ -1,5 +1,3 @@
-/** @format */
-
 import { Combobox, Dialog, Listbox, Transition } from "@headlessui/react";
 import {
   CheckIcon,
@@ -34,6 +32,8 @@ import { getUnassignedPackageTagsLimit20 } from "~/modules/packageTag/queries/ge
 import { getAllUoms } from "~/modules/uom/queries/get-uoms.server";
 import { getAllPackages } from "~/modules/package/queries/get-packages.server";
 import { createPackage } from "~/modules/package/mutations/mutate-package.server";
+import { requireAuthSession } from "~/modules/auth/guards";
+import { AuthSession } from "~/modules/auth/session.server";
 // import type { ItemWithNesting, PackageWithNesting } from "~/types/types";
 
 type PackageWithNesting = Package & {
@@ -50,6 +50,7 @@ type ItemWithNesting = Item & {
 };
 
 type LoaderData = {
+  authSession: AuthSession;
   itemTypes: ItemType[];
   items: Awaited<ReturnType<typeof getAllItems>>;
   packages: Awaited<ReturnType<typeof getAllPackages>>;
@@ -64,13 +65,21 @@ type ActionData = {
   };
 };
 
-export const loader: LoaderFunction = async () => {
+export const loader: LoaderFunction = async ({ request }) => {
+  const authSession = await requireAuthSession(request);
   const itemTypes = await getAllItemTypes();
   const packages = await getAllPackages();
   const items = await getAllItems();
   const uoms = await getAllUoms();
   const packageTags = await getUnassignedPackageTagsLimit20();
-  return json<LoaderData>({ itemTypes, packages, items, uoms, packageTags });
+  return json<LoaderData>({
+    authSession,
+    itemTypes,
+    packages,
+    items,
+    uoms,
+    packageTags,
+  });
 };
 
 // hidden input forms fields are:
@@ -356,10 +365,12 @@ export default function AddPackageSlideIn(): JSX.Element {
                                     setParentQuery(event.target.value);
                                   }}
                                   displayValue={(
-                                    parentPackage: PackageWithNesting
+                                    selectedParentPackage: PackageWithNesting
                                   ) =>
-                                    parentPackage?.tag?.tagNumber
-                                      ? parentPackage?.tag?.tagNumber
+                                    selectedParentPackage?.tag?.tagNumber
+                                      ? selectedParentPackage?.tag?.tagNumber
+                                      : selectedParentPackage?.tagId === null
+                                      ? "Selected Pckg Has No Tag"
                                       : "No package selected"
                                   }
                                 />
@@ -610,7 +621,7 @@ export default function AddPackageSlideIn(): JSX.Element {
                               Available:{" "}
                             </span>
                             <span className="text-sm text-gray-700">
-                              {newParentQuantity}
+                              {newParentQuantity}{" "}
                             </span>
                             <span className="text-sm text-gray-700">
                               {selectedParentPackage?.uom.name}
