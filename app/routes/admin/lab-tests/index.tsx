@@ -160,6 +160,19 @@ export default function LabTestsPage(): JSX.Element {
       enableGlobalFilter: false,
       enableSorting: true,
     },
+    {
+      id: "testPerformedDate",
+      header: "testPerformedDate",
+      accessorKey: "testPerformedDate",
+      cell: (info) => {
+        const value = info.getValue() as Date;
+        return dayjs(value).format("MMM DD YYYY");
+      },
+      enableGrouping: false,
+      enableColumnFilter: false,
+      enableGlobalFilter: false,
+      enableSorting: true,
+    },
   ];
 
   return (

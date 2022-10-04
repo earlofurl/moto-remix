@@ -15,7 +15,7 @@ export function getAllPackages(): Promise<Package[]> {
               uomDefault: {},
             },
           },
-          strain: {},
+          strain: true,
         },
       },
       labTests: {
@@ -29,6 +29,40 @@ export function getAllPackages(): Promise<Package[]> {
               totalCannabinoidsPercent: true,
               batchCode: true,
               testIdCode: true,
+            },
+          },
+        },
+      },
+    },
+  });
+}
+
+export function getSinglePackageDetails(id: string) {
+  return db.package.findUnique({
+    where: { id },
+    include: {
+      tag: {},
+      uom: {},
+      item: {
+        include: {
+          itemType: {
+            include: {
+              uomDefault: {},
+            },
+          },
+          strain: {},
+        },
+      },
+      labTests: {
+        include: {
+          labTest: {
+            select: {
+              thcTotalPercent: true,
+              cbdPercent: true,
+              terpenePercent: true,
+              overallPassed: true,
+              totalCannabinoidsPercent: true,
+              batchCode: true,
             },
           },
         },
