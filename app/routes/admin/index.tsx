@@ -1,14 +1,8 @@
-import React from "react";
 import type { LoaderFunction } from "@remix-run/node";
-import { redirect, json } from "@remix-run/node";
-import { Form, Link, useLoaderData } from "@remix-run/react";
-
+import { json } from "@remix-run/node";
 import { requireAuthSession } from "~/modules/auth/guards";
 import { AuthSession } from "~/modules/auth/session.server";
-import BackendDash from "~/components/layout/BackendDash";
 import ActionGrid from "~/components/ActionGrid";
-import { LogoutButton } from "~/components";
-import { authSession } from "mocks/handlers";
 
 import { DatabaseIcon } from "@heroicons/react/solid";
 
@@ -17,9 +11,11 @@ type LoaderData = {
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
-  await requireAuthSession(request, { onFailRedirectTo: "/login" });
+  const authSession = await requireAuthSession(request, {
+    onFailRedirectTo: "/login",
+  });
 
-  return authSession;
+  return json<LoaderData>({ authSession });
 };
 
 const actions = [
@@ -58,8 +54,6 @@ const actions = [
 ];
 
 export default function AdminDashboard(): JSX.Element {
-  const data = useLoaderData();
-
   return (
     <div className="bg-gray-100">
       <div className="mx-auto px-4 sm:px-6 lg:px-8">

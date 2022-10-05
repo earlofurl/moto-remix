@@ -26,23 +26,20 @@ import {
 import React, { Fragment, useState } from "react";
 import convert from "convert";
 import { getAllItems } from "~/modules/item/queries/get-items.server";
-import { getAllItemTypes } from "~/modules/itemType/queries/get-item-types.server";
 import { getUnassignedPackageTagsLimit20 } from "~/modules/packageTag/queries/get-package-tags.server";
-import { getAllUoms } from "~/modules/uom/queries/get-uoms.server";
-import { getAllPackages } from "~/modules/package/queries/get-packages.server";
 import { createPackage } from "~/modules/package/mutations/mutate-package.server";
 import { requireAuthSession } from "~/modules/auth/guards";
 import { AuthSession } from "~/modules/auth/session.server";
+import { usePackages } from "~/hooks/matches/use-packages";
 import type { ItemWithNesting, PackageWithNesting } from "~/types/types";
+import { useUoms } from "~/hooks/matches/use-uoms";
+import { useItemTypes } from "~/hooks/matches/use-item-types";
 
 // Could speed this up by loading a lot of this from existing state vs a new db call
 type LoaderData = {
   authSession: AuthSession;
-  itemTypes: ItemType[];
   items: Awaited<ReturnType<typeof getAllItems>>;
-  packages: Awaited<ReturnType<typeof getAllPackages>>;
   packageTags: PackageTag[];
-  uoms: Uom[];
 };
 
 type ActionData = {
@@ -65,18 +62,14 @@ const usableProductWeights = {
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const authSession = await requireAuthSession(request);
-  const itemTypes = await getAllItemTypes();
-  const packages = await getAllPackages();
+  const authSession = await requireAuthSession(request, {
+    onFailRedirectTo: "/login",
+  });
   const items = await getAllItems();
-  const uoms = await getAllUoms();
   const packageTags = await getUnassignedPackageTagsLimit20();
   return json<LoaderData>({
     authSession,
-    itemTypes,
-    packages,
     items,
-    uoms,
     packageTags,
   });
 };
@@ -153,10 +146,14 @@ export default function AddPackageSlideIn(): JSX.Element {
   const transition = useTransition();
   const actionData = useActionData();
   const data = useLoaderData();
-  const itemTypes = data.itemTypes;
-  const packages = data.packages;
+
+  // loaded from route matches
+  const packages = usePackages();
+  const uoms = useUoms();
+  const itemTypes = useItemTypes();
+  //
   const items = data.items;
-  const uoms = data.uoms;
+
   // filter package tags to avoid adding a provisional tag to a new package
   const packageTags = data.packageTags;
 
