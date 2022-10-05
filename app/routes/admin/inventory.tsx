@@ -1,4 +1,4 @@
-import type { Item, LabTest, Package, PackageTag } from "@prisma/client";
+import type { ItemWithNesting, PackageWithNesting } from "~/types/types";
 import type { LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Outlet, useCatch, useLoaderData, useNavigate } from "@remix-run/react";
@@ -9,13 +9,7 @@ import BasicGroupingTable from "~/components/BasicGroupingTable";
 import { getAllPackages } from "~/modules/package/queries/get-packages.server";
 import { requireAuthSession } from "~/modules/auth/guards";
 import { AuthSession } from "~/modules/auth/session.server";
-import TableRowActions from "../../components/table/RowActions";
-
-type PackageWithNesting = Package & {
-  tag: PackageTag;
-  labTests: LabTest[];
-  item: Item;
-};
+import PackageTableRowActions from "../../components/table/PackageTableRowActions";
 
 type LoaderData = {
   authSession: AuthSession;
@@ -44,7 +38,7 @@ export default function InventoryPage(): JSX.Element {
   const columnData: ColumnDef<PackageWithNesting>[] = [
     columnHelper.display({
       id: "actions",
-      cell: (props) => <TableRowActions />,
+      cell: (props) => <PackageTableRowActions row={props.row} />,
       enableGrouping: false,
       enableColumnFilter: false,
       enableGlobalFilter: false,

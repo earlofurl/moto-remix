@@ -2,6 +2,8 @@
 // autofill as much of the create form as possible to reduce clicks and time spent creating packages
 // streamline state management and database requests to make sure we're only using the required data
 
+// TODO: Pass row data to create package component when creation is initiated from row click to pre-fill fields
+
 import { Combobox, Dialog, Listbox, Transition } from "@headlessui/react";
 import {
   CheckIcon,
@@ -9,15 +11,7 @@ import {
   SelectorIcon,
   XIcon,
 } from "@heroicons/react/outline";
-import type {
-  Item,
-  ItemType,
-  Package,
-  PackageTag,
-  Uom,
-  LabTestsOnPackages,
-  Strain,
-} from "@prisma/client";
+import type { Item, ItemType, PackageTag, Uom } from "@prisma/client";
 import { json, redirect } from "@remix-run/node";
 import type { ActionFunction, LoaderFunction } from "@remix-run/node";
 import {
@@ -27,6 +21,7 @@ import {
   useLoaderData,
   useNavigate,
   useTransition,
+  useLocation,
 } from "@remix-run/react";
 import React, { Fragment, useState } from "react";
 import convert from "convert";
@@ -38,21 +33,9 @@ import { getAllPackages } from "~/modules/package/queries/get-packages.server";
 import { createPackage } from "~/modules/package/mutations/mutate-package.server";
 import { requireAuthSession } from "~/modules/auth/guards";
 import { AuthSession } from "~/modules/auth/session.server";
-// import type { ItemWithNesting, PackageWithNesting } from "~/types/types";
+import type { ItemWithNesting, PackageWithNesting } from "~/types/types";
 
-type PackageWithNesting = Package & {
-  tag: PackageTag;
-  item: ItemWithNesting;
-  labTests: LabTestsOnPackages[];
-  uom: Uom;
-  sourcePackages: PackageWithNesting[];
-};
-
-type ItemWithNesting = Item & {
-  itemType: ItemType;
-  strain: Strain;
-};
-
+// Could speed this up by loading a lot of this from existing state vs a new db call
 type LoaderData = {
   authSession: AuthSession;
   itemTypes: ItemType[];
@@ -159,6 +142,7 @@ function classNames(...classes: (string | boolean)[]) {
 }
 
 export default function AddPackageSlideIn(): JSX.Element {
+  const locationState = useLocation();
   // refs
   const formRef = React.useRef<HTMLFormElement>(null);
   const nameRef = React.useRef<HTMLInputElement>(null);
@@ -176,8 +160,24 @@ export default function AddPackageSlideIn(): JSX.Element {
   // filter package tags to avoid adding a provisional tag to a new package
   const packageTags = data.packageTags;
 
+  // selectedParentPackageId is passed by navigate on PackageTableRowActions
+  const [selectedParentPackageId, setSelectedParentPackageId] = useState<
+    string | null
+  >(locationState.state.selectedParentPackageId);
+
+  // If selectedParentPackageId is passed then set selectedParentPackage to match that ID.
   const [selectedParentPackage, setSelectedParentPackage] =
-    useState<PackageWithNesting | null>(null);
+    useState<PackageWithNesting | null>(
+      selectedParentPackageId
+        ? packages.find((invPackage: PackageWithNesting) => {
+            return invPackage.id.match(selectedParentPackageId);
+          })
+        : null
+    );
+
+  // const [selectedParentPackage, setSelectedParentPackage] =
+  // useState<PackageWithNesting | null>(row ? row : null);
+
   const [parentQuery, setParentQuery] = useState<string>("");
 
   const [selectedItem, setSelectedItem] = useState<ItemWithNesting | null>(
