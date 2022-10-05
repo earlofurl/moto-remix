@@ -191,6 +191,8 @@ export default function AddPackageSlideIn(): JSX.Element {
 
   const [newParentQuantity, setNewParentQuantity] = useState<number>(0);
 
+  // TODO: This is ugly af which means it should probably be reworked
+  // TODO: Add solution for parent(eachBased) -> child(wtBased)
   // when quantity input updates, update newParentQuantity
   React.useEffect(() => {
     if (selectedParentPackage) {
@@ -691,6 +693,7 @@ export default function AddPackageSlideIn(): JSX.Element {
                                   className="block w-full rounded-none rounded-l-md border-gray-300 pl-10 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                   placeholder="0.00"
                                   min={0}
+                                  step="0.0001"
                                 />
                               </div>
                             </div>
