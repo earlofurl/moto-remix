@@ -163,7 +163,7 @@ export default function AddPackageSlideIn(): JSX.Element {
   // selectedParentPackageId is passed by navigate on PackageTableRowActions
   const [selectedParentPackageId, setSelectedParentPackageId] = useState<
     string | null
-  >(locationState.state.selectedParentPackageId);
+  >(locationState.state ? locationState.state.selectedParentPackageId : null);
 
   // If selectedParentPackageId is passed then set selectedParentPackage to match that ID.
   const [selectedParentPackage, setSelectedParentPackage] =
