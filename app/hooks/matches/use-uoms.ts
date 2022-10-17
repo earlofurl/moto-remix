@@ -29,6 +29,6 @@ export function useUoms(): Uom[] {
       `No UoMs found in ${routeIdString} loader, but UoMs are required by useUoMs. If UoMs are optional, try useOptionalUoMs instead.`
     );
   }
-  console.log(JSON.stringify(maybeUoms));
+  // console.log(JSON.stringify(maybeUoms));
   return maybeUoms;
 }

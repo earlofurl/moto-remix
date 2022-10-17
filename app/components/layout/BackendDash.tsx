@@ -36,6 +36,11 @@ const navigation = [
     to: "/admin/lab-tests",
     icon: InboxIcon,
   },
+  {
+    name: "Orders",
+    to: "/admin/orders",
+    icon: InboxIcon,
+  },
 ];
 
 function classNames(...classes) {

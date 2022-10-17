@@ -29,6 +29,6 @@ export function useItemTypes(): ItemType[] {
       `No ItemTypes found in ${routeIdString} loader, but ItemTypes are required by useItemTypes. If ItemTypes are optional, try useOptionalItemTypes instead.`
     );
   }
-  console.log(JSON.stringify(maybeItemTypes));
+  // console.log(JSON.stringify(maybeItemTypes));
   return maybeItemTypes;
 }

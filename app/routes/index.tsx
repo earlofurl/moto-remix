@@ -2,21 +2,21 @@ import type { Request } from "@remix-run/node";
 import {
   Form,
   Link,
-  useTransition,
-  useCatch,
-  Meta,
   Links,
+  Meta,
   Scripts,
+  useCatch,
+  useTransition,
 } from "@remix-run/react";
-import React, { useRef, useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import Navbar from "~/components/navbar";
 import { sendMail, trapSpam } from "~/integrations/mail/sendgrid.server";
 import {
-  TruckIcon,
-  NewspaperIcon,
   DatabaseIcon,
   GlobeIcon,
   HandIcon,
+  NewspaperIcon,
+  TruckIcon,
 } from "@heroicons/react/solid";
 import TW404page from "~/components/TW404page";
 
@@ -280,7 +280,7 @@ export default function Index(): JSX.Element {
                   className="absolute inset-x-0 top-0 h-1/2 bg-gray-100 lg:hidden"
                 />
                 <div className="mx-auto max-w-md px-4 sm:max-w-3xl sm:px-6 lg:h-full lg:p-0">
-                  <div className="aspect-w-10 aspect-h-6 sm:aspect-w-16 sm:aspect-h-7 lg:aspect-none overflow-hidden rounded-xl shadow-xl lg:h-full">
+                  <div className="aspect-w-10 aspect-h-6 overflow-hidden rounded-xl shadow-xl sm:aspect-w-16 sm:aspect-h-7 lg:aspect-none lg:h-full">
                     {/*<img*/}
                     {/*  className="object-cover lg:h-full lg:w-full"*/}
                     {/*  src="https://images.unsplash.com/photo-1520333789090-1afc82db536a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2102&q=80"*/}

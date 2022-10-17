@@ -3,8 +3,8 @@ generator client {
 }
 
 datasource db {
-  provider          = "postgresql"
-  url               = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 enum Availability {
@@ -31,6 +31,16 @@ enum LabTestingState {
   SubmittedForTesting
   TestPassed
   TestFailed
+}
+
+enum OrderStatus {
+  Open
+  Packed
+  Shipped
+  Delivered
+  Cancelled
+  Paid
+  Finished
 }
 
 model User {
@@ -169,6 +179,8 @@ model Package {
   totalSoldPrice                    Decimal?             @default(0) @db.Money
   packagingSuppliesConsumed         Boolean?             @default(false)
   isLineItem                        Boolean?             @default(false)
+  order                             Order?               @relation(fields: [orderId], references: [id])
+  orderId                           String? // relation pk (used in the @relation attribute above.)
   uom                               Uom?                 @relation(fields: [uomId], references: [id])
   uomId                             String? // relation pk (used in the @relation attribute above.)
 }
@@ -222,4 +234,21 @@ model Uom {
   abbreviation String?
   itemTypes    ItemType[]
   packages     Package[]
+}
+
+model Order {
+  id                        String      @id @default(uuid())
+  createdAt                 DateTime?   @default(now())
+  updatedAt                 DateTime?   @updatedAt
+  scheduledPackDateTime     DateTime?
+  scheduledShipDateTime     DateTime?
+  scheduledDeliveryDateTime DateTime?
+  actualPackDateTime        DateTime?
+  actualShipDateTime        DateTime?
+  actualDeliveryDateTime    DateTime?
+  orderTotal                Decimal?    @db.Money // Will be calculated from the lineItems on order when created, and then updated with final price after invoicing.
+  notes                     String?
+  status                    OrderStatus @default(Open)
+  customerName              String?
+  lineItemPackages          Package[]
 }

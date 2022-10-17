@@ -29,6 +29,6 @@ export function usePackages(): PackageWithNesting[] {
       `No packages found in ${routeIdString} loader, but packages are required by usePackages. If packages are optional, try useOptionalPackages instead.`
     );
   }
-  console.log(JSON.stringify(maybePackages));
+  // console.log(JSON.stringify(maybePackages));
   return maybePackages;
 }
