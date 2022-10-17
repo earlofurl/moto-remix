@@ -26,6 +26,7 @@ import React from "react";
 import { toCommonCase } from "~/utils/mytools";
 import { getAllStrains } from "~/modules/strain/queries/get-strains.server";
 import Navbar from "~/components/navbar";
+import { CSVLink } from "react-csv";
 import {
   CheckCircleIcon,
   ChevronDownIcon,
@@ -467,6 +468,15 @@ export default function StrainAndProcessingData(): JSX.Element {
                         className="my-1 mx-8 block w-auto rounded-md border-gray-300 py-2 pl-2 shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm"
                         placeholder="Search all columns..."
                       />
+                      {/*TODO: Currently just exports the entire original data obj. Alter to export just what the table displays */}
+                      <CSVLink
+                        filename={"MotoStrainData.csv"}
+                        data={data}
+                        target="_blank"
+                        className="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                      >
+                        Export to CSV
+                      </CSVLink>
                     </div>
                   </div>
                 </div>

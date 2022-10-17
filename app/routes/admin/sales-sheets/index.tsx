@@ -173,7 +173,7 @@ export default function SalesSheetsIndex(): JSX.Element {
         >
           <label
             htmlFor="file-field"
-            className="relative rounded-md bg-white font-medium text-gray-800"
+            className="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-300"
           >
             File to upload:
           </label>
@@ -184,7 +184,7 @@ export default function SalesSheetsIndex(): JSX.Element {
                 id="file-field"
                 type="file"
                 name="fileSrc"
-                className="block w-full rounded-none rounded-l-md border-gray-300 px-10 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                className="block w-full cursor-pointer rounded-lg border border-gray-300 bg-gray-50 text-sm text-gray-900 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400 dark:placeholder-gray-400"
                 accept=".pdf"
               />
             </div>
