@@ -1,3 +1,4 @@
+import type { Order } from "@prisma/client";
 import type { LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import {
@@ -22,10 +23,10 @@ import dayjs from "dayjs";
 import React from "react";
 import Calendar from "react-calendar";
 
-type LoaderData = {
+interface LoaderData {
   authSession: AuthSession;
   data: Awaited<ReturnType<typeof getAllOrders>>;
-};
+}
 
 function classNames(
   ...classes: readonly (string | undefined)[]
@@ -69,12 +70,12 @@ export default function OrderPage(): JSX.Element {
               </div>
             </div>
             <div className="mt-6 flex space-x-3 md:mt-0 md:ml-4">
-              <button
-                type="button"
-                className="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2"
-              >
-                Add many
-              </button>
+              {/*<button*/}
+              {/*  type="button"*/}
+              {/*  className="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2"*/}
+              {/*>*/}
+              {/*  Add many*/}
+              {/*</button>*/}
               <button
                 type="button"
                 onClick={handleAddButtonClick}
@@ -88,9 +89,9 @@ export default function OrderPage(): JSX.Element {
       </div>
       {/* Page Content */}
       <div className="bg-white px-2 sm:px-3 lg:px-4">
-        <h2 className="px-8 text-lg font-semibold text-gray-900">
-          Upcoming Orders
-        </h2>
+        {/*<h2 className="px-8 text-lg font-semibold text-gray-900">*/}
+        {/*  Upcoming Orders*/}
+        {/*</h2>*/}
         <div className="min-h-screen lg:grid lg:grid-cols-12 lg:gap-x-16">
           <div className="mt-10 text-center lg:col-start-8 lg:col-end-13 lg:row-start-1 lg:mt-9 xl:col-start-8">
             <div className="flex flex-col">
@@ -126,7 +127,7 @@ export default function OrderPage(): JSX.Element {
           </div>
           <ul className="mt-4 divide-y divide-gray-200 text-sm leading-6 lg:col-span-7 xl:col-span-7">
             {}
-            {orders.map((order: Readonly<OrderWithNesting>) => (
+            {orders.map((order: Order) => (
               <li
                 key={order.id}
                 className="py-4"
@@ -142,7 +143,7 @@ export default function OrderPage(): JSX.Element {
                   </div> */}
                       <div className="min-w-0 flex-1 px-4 md:grid md:grid-cols-2 md:gap-4">
                         <div>
-                          <p className="truncate text-sm font-medium text-indigo-600">
+                          <p className="truncate text-xl font-semibold text-gray-700">
                             {order.customerName ? order.customerName : "-"}
                           </p>
                           {/*<p className="mt-2 flex items-center text-sm text-gray-500">*/}
@@ -168,12 +169,13 @@ export default function OrderPage(): JSX.Element {
                             <p className="text-sm text-gray-900">
                               Scheduled for{" "}
                               <time
+                                className="text-md font-semibold text-gray-700"
                                 dateTime={dayjs(
                                   order.scheduledDeliveryDateTime
-                                ).format("MM-DD-YY")}
+                                ).format("MMM DD YYYY")}
                               >
                                 {dayjs(order.scheduledDeliveryDateTime).format(
-                                  "MM-DD-YY"
+                                  "MMM DD YYYY"
                                 )}
                               </time>
                             </p>

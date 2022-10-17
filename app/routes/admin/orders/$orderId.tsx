@@ -181,43 +181,10 @@ export default function SingleOrderPage() {
             enableSorting: true,
           }
         ),
-        columnHelper.accessor(
-          (row: any) => `${row.labTests[0]?.labTest.cbdPercent}`,
-          {
-            id: "cbd",
-            header: () => <span>CBD</span>,
-            enableGrouping: false,
-            enableColumnFilter: false,
-            enableGlobalFilter: false,
-            enableSorting: true,
-          }
-        ),
-        columnHelper.accessor(
-          (row: any) => `${row.labTests[0]?.labTest.terpenePercent}`,
-          {
-            id: "terpenes",
-            header: () => <span>Terps</span>,
-            enableGrouping: false,
-            enableColumnFilter: false,
-            enableGlobalFilter: false,
-            enableSorting: true,
-          }
-        ),
-        columnHelper.accessor(
-          (row: any) => `${row.labTests[0]?.labTest.totalCannabinoidsPercent}`,
-          {
-            id: "totalCannabinoids",
-            header: () => <span>Total Cannabinoids</span>,
-            enableGrouping: false,
-            enableColumnFilter: false,
-            enableGlobalFilter: false,
-            enableSorting: true,
-          }
-        ),
       ],
     }),
     columnHelper.group({
-      id: "stock",
+      id: "count",
       enableGrouping: false,
       enableColumnFilter: false,
       enableGlobalFilter: false,
@@ -239,6 +206,59 @@ export default function SingleOrderPage() {
           enableGlobalFilter: false,
           enableSorting: true,
         }),
+        columnHelper.accessor("ppuOnOrder", {
+          id: "ppuOnOrder",
+          header: () => <span>PPU</span>,
+          cell: (info) => {
+            const value = info.getValue();
+            if (value === "") {
+              return <span>-</span>;
+            }
+            return (
+              <>
+                <span>
+                  {new Intl.NumberFormat("en-US", {
+                    style: "currency",
+                    currency: "USD",
+                  }).format(value)}
+                </span>
+              </>
+            );
+          },
+          enableGrouping: false,
+          enableColumnFilter: false,
+          enableGlobalFilter: false,
+          enableSorting: true,
+        }),
+        columnHelper.accessor(
+          (row: any) => {
+            return row.ppuOnOrder * row.quantity;
+          },
+          {
+            id: "lineSubTotal",
+            header: () => <span>SubTotal</span>,
+            cell: (info) => {
+              const value = info.getValue();
+              if (value === "") {
+                return <span>-</span>;
+              }
+              return (
+                <>
+                  <span>
+                    {new Intl.NumberFormat("en-US", {
+                      style: "currency",
+                      currency: "USD",
+                    }).format(value)}
+                  </span>
+                </>
+              );
+            },
+            enableGrouping: false,
+            enableColumnFilter: false,
+            enableGlobalFilter: false,
+            enableSorting: true,
+          }
+        ),
       ],
     }),
   ];
@@ -292,7 +312,7 @@ export default function SingleOrderPage() {
             <div className="grid grid-cols-1 flex-col gap-6 lg:grid-cols-3 lg:grid-rows-3">
               {/* Description list*/}
               <section
-                aria-labelledby="applicant-information-title"
+                aria-labelledby="customer-information-title"
                 className="lg:col-span-2 lg:col-start-1 lg:row-span-1 lg:row-start-1"
               >
                 <div className="bg-white shadow sm:rounded-lg">

@@ -7,7 +7,7 @@
   "overrides": [
     {
       "files": [
-        "**/*.?(ts|js)?(x)"
+        "**/?($*|*).?(ts|js)?(x)"
       ],
       "parser": "@babel/eslint-parser",
       "parserOptions": {
@@ -44,7 +44,7 @@
         },
         "import/ignore": [
           "node_modules",
-          "\\.(css|md|svg|json)$"
+          "\\.(css|md|svg|json)"
         ],
         "import/parsers": {
           "@typescript-eslint/parser": [
@@ -70,7 +70,7 @@
       "overrides": [
         {
           "files": [
-            "app/**/*.?(t|j)s?(x)"
+            "app/**/?($*|*).?(t|j)s?(x)"
           ],
           "rules": {
             "import/no-default-export": "off"
@@ -78,8 +78,8 @@
           "overrides": [
             {
               "files": [
-                "**/routes/**/*.js?(x)",
-                "**/routes/**/*.tsx"
+                "**/routes/**/?($*|*).js?(x)",
+                "**/routes/**/?($*|*).tsx"
               ],
               "rules": {
                 "react/display-name": "off"

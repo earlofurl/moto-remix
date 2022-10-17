@@ -193,10 +193,10 @@ export default function BasicGroupingTable({
                       {headerGroup.headers.map((header) => (
                         <th
                           key={header.id}
-                          className="py-1 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
+                          className="px-2 py-2 text-left text-sm font-semibold text-gray-900"
                           colSpan={header.colSpan}
                         >
-                          <div className="px-3 py-3 text-left text-sm font-semibold text-gray-900">
+                          <div className="px-2 py-2 text-left text-sm font-semibold text-gray-900">
                             {header.column.getCanGroup() ? (
                               // If the header can be grouped, let's add a toggle
                               <button
@@ -250,7 +250,7 @@ export default function BasicGroupingTable({
                       {/* Actions Header */}
                       <th
                         scope="col"
-                        className="relative py-3.5 pl-3 pr-4 sm:pr-6"
+                        className="relative px-2 py-2"
                       >
                         <span className="sr-only">Actions</span>
                       </th>
@@ -258,17 +258,17 @@ export default function BasicGroupingTable({
                   ))}
                 </thead>
                 {/* Table body */}
-                <tbody className="bg-white">
+                <tbody className="divide-y divide-gray-50 bg-white">
                   {table.getRowModel().rows.map((row) => (
                     <tr
                       // className={row.id % 2 === 0 ? undefined : "bg-gray-50"}
-                      className="whitespace-nowrap py-4 pl-4 pr-3 text-right text-sm font-medium text-gray-900 sm:pl-6"
+                      className="whitespace-nowrap px-2 py-2 text-right text-sm font-medium text-gray-900"
                       key={row.id}
                     >
                       {row.getVisibleCells().map((cell) => (
                         <td
                           key={cell.id}
-                          className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"
+                          className="whitespace-nowrap px-2 py-2 text-sm font-medium text-gray-900"
                         >
                           {cell.getIsGrouped() ? (
                             // If it's a grouped cell, add an expander and row count
@@ -388,7 +388,7 @@ function Filter({
               ? `(${column.getFacetedMinMaxValues()?.[0]})`
               : ""
           }`}
-          className="w-24 rounded border shadow"
+          className="relative block w-full rounded-none rounded-bl-md border-gray-300 bg-transparent focus:z-10 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
         />
         <DebouncedInput
           type="number"
@@ -403,7 +403,7 @@ function Filter({
               ? `(${column.getFacetedMinMaxValues()?.[1]})`
               : ""
           }`}
-          className="w-24 rounded border shadow"
+          className="relative block w-full rounded-none rounded-bl-md border-gray-300 bg-white focus:z-10 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
         />
       </div>
       <div className="h-1" />
@@ -423,7 +423,7 @@ function Filter({
         value={(columnFilterValue ?? "") as string}
         onChange={(value) => column.setFilterValue(value)}
         placeholder={`Search... (${column.getFacetedUniqueValues().size})`}
-        className="w-36 rounded border shadow"
+        className="relative block w-full rounded-none rounded-bl-md border-gray-300 bg-white focus:z-10 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
         list={column.id + "list"}
       />
       <div className="h-1" />
