@@ -1,10 +1,9 @@
-import type { ItemWithNesting, PackageWithNesting } from "~/types/types";
+import type { PackageWithNesting } from "~/types/types";
 import type { LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Outlet, useCatch, useLoaderData, useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { createColumnHelper } from "@tanstack/react-table";
-import dayjs from "dayjs";
 import BasicGroupingTable from "~/components/BasicGroupingTable";
 import { getAllPackages } from "~/modules/package/queries/get-packages.server";
 import { requireAuthSession } from "~/modules/auth/guards";

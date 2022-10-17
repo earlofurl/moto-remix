@@ -1,6 +1,6 @@
 import type { LoaderFunction } from "@remix-run/node";
-import type { Uom, ItemType } from "@prisma/client";
 import { json } from "@remix-run/node";
+import type { ItemType, Uom } from "@prisma/client";
 import { getAllUoms } from "~/modules/uom/queries/get-uoms.server";
 import { getAllItemTypes } from "~/modules/itemType/queries/get-item-types.server";
 import { requireAuthSession } from "~/modules/auth/guards";

@@ -8,8 +8,6 @@ import { ChevronDownIcon } from "@heroicons/react/solid";
 import { useCatch } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import {
-  Column,
-  Table,
   flexRender,
   getCoreRowModel,
   useReactTable,

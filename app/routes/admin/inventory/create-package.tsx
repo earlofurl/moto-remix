@@ -11,17 +11,17 @@ import {
   SelectorIcon,
   XIcon,
 } from "@heroicons/react/outline";
-import type { Item, ItemType, PackageTag, Uom } from "@prisma/client";
-import { json, redirect } from "@remix-run/node";
+import type { Item, PackageTag, Uom } from "@prisma/client";
 import type { ActionFunction, LoaderFunction } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
 import {
   Form,
   useActionData,
   useCatch,
   useLoaderData,
+  useLocation,
   useNavigate,
   useTransition,
-  useLocation,
 } from "@remix-run/react";
 import React, { Fragment, useState } from "react";
 import convert from "convert";

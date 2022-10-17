@@ -1,26 +1,26 @@
 import type { Strain } from "@prisma/client";
 import { Link, useLoaderData } from "@remix-run/react";
-import type { RowData, SortingState } from "@tanstack/react-table";
+import type { SortingState } from "@tanstack/react-table";
 import {
   Column,
-  Table,
-  ColumnFiltersState,
-  getFilteredRowModel,
-  getFacetedRowModel,
-  getFacetedMinMaxValues,
-  getFacetedUniqueValues,
-  getPaginationRowModel,
-  sortingFns,
-  FilterFn,
-  SortingFn,
   ColumnDef,
+  ColumnFiltersState,
+  FilterFn,
   flexRender,
   getCoreRowModel,
+  getFacetedMinMaxValues,
+  getFacetedRowModel,
+  getFacetedUniqueValues,
+  getFilteredRowModel,
+  getPaginationRowModel,
   getSortedRowModel,
-  useReactTable,
   PaginationState,
+  SortingFn,
+  sortingFns,
+  Table,
+  useReactTable,
 } from "@tanstack/react-table";
-import { rankItem, compareItems } from "@tanstack/match-sorter-utils";
+import { compareItems, rankItem } from "@tanstack/match-sorter-utils";
 import { suffix } from "froebel/string";
 import React from "react";
 import { toCommonCase } from "~/utils/mytools";

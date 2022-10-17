@@ -1,18 +1,17 @@
-import type { ActionFunction, UploadHandler } from "@remix-run/node";
-import type { FileObject } from "@supabase/storage-js";
+import type { ActionFunction } from "@remix-run/node";
 import {
   json,
   LoaderFunction,
   unstable_composeUploadHandlers as composeUploadHandlers,
   unstable_createMemoryUploadHandler as createMemoryUploadHandler,
   unstable_parseMultipartFormData as parseMultipartFormData,
-  unstable_createFileUploadHandler as createFileUploadHandler,
 } from "@remix-run/node";
+import type { FileObject } from "@supabase/storage-js";
 import { requireAuthSession } from "~/modules/auth/guards";
 import { AuthSession } from "~/modules/auth/session.server";
 import { getSupabase } from "~/integrations/supabase";
-import { Link, Form, useLoaderData, useActionData } from "@remix-run/react";
-import { ChevronRightIcon, NewspaperIcon } from "@heroicons/react/outline";
+import { Form, Link, useActionData, useLoaderData } from "@remix-run/react";
+import { ChevronRightIcon } from "@heroicons/react/outline";
 import dayjs from "dayjs";
 import slugify from "slugify";
 import invariant from "tiny-invariant";
