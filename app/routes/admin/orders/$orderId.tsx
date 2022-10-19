@@ -15,7 +15,6 @@ import type { ColumnDef } from "@tanstack/react-table";
 import { createColumnHelper } from "@tanstack/react-table";
 import BasicGroupingTable from "~/components/BasicGroupingTable";
 import type { PackageWithNesting } from "~/types/types";
-import PackageTableRowActions from "~/components/table/PackageTableRowActions";
 import { getAllPackagesOnOrder } from "~/modules/package/queries";
 
 interface LoaderData {

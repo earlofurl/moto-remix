@@ -78,8 +78,8 @@
           "overrides": [
             {
               "files": [
-                "**/routes/**/?($*|*).js?(x)",
-                "**/routes/**/?($*|*).tsx"
+                "**/routes/**/*.js?(x)",
+                "**/routes/**/*.tsx"
               ],
               "rules": {
                 "react/display-name": "off"
