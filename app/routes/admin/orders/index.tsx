@@ -1,7 +1,7 @@
+import { Outlet } from "@remix-run/react";
 import { json, LoaderFunction } from "@remix-run/node";
 import { requireAuthSession } from "~/modules/auth/guards";
 import { AuthSession } from "~/modules/auth/session.server";
-import { Outlet } from "@remix-run/react";
 
 type LoaderData = {
   authSession: AuthSession;
@@ -12,9 +12,9 @@ export const loader: LoaderFunction = async ({ request }) => {
   return json<LoaderData>({ authSession });
 };
 
-export default function OrderIndex(): JSX.Element {
+export default function OrdersIndex(): JSX.Element {
   return (
-    <div className="space-y-6 bg-gray-100">
+    <div>
       <Outlet />
     </div>
   );
