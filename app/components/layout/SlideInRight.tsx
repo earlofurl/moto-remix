@@ -1,7 +1,6 @@
 import { Dialog, Transition } from "@headlessui/react";
-import { Outlet, useCatch, useNavigate } from "@remix-run/react";
+import { useCatch, useNavigate } from "@remix-run/react";
 import React, { Fragment } from "react";
-import { XMarkIcon } from "@heroicons/react/24/outline";
 
 function classNames(...classes: (string | boolean)[]) {
   return classes.filter(Boolean).join(" ");
@@ -10,7 +9,6 @@ function classNames(...classes: (string | boolean)[]) {
 export default function SlideInRight(props): JSX.Element {
   const open = true;
   const navigate = useNavigate();
-  // const transition = useTransition();
 
   function onDismiss() {
     navigate("../");
@@ -42,8 +40,8 @@ export default function SlideInRight(props): JSX.Element {
               <div className="pointer-events-auto w-screen max-w-md">
                 <div className="flex h-full flex-col divide-y divide-gray-200 bg-white shadow-xl">
                   <div className="h-0 flex-1 overflow-y-auto">
-                    {props.children}
                     {/* SlideIn Content */}
+                    {props.children}
                   </div>
                 </div>
               </div>

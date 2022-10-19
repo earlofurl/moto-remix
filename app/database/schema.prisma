@@ -129,14 +129,14 @@ model ItemType {
 }
 
 model PackageTag {
-  id            String    @id @default(uuid())
-  createdAt     DateTime? @default(now())
-  updatedAt     DateTime? @updatedAt
-  tagNumber     String
-  isAssigned    Boolean?  @default(false)
-  isProvisional Boolean?  @default(true)
-  isActive      Boolean?  @default(false)
-  packages      Package[]
+  id              String    @id @default(uuid())
+  createdAt       DateTime? @default(now())
+  updatedAt       DateTime? @updatedAt
+  tagNumber       String
+  isAssigned      Boolean?  @default(false)
+  isProvisional   Boolean?  @default(true)
+  isActive        Boolean?  @default(false)
+  assignedPackage Package?
 }
 
 model Package {
@@ -144,7 +144,7 @@ model Package {
   createdAt                         DateTime?            @default(now())
   updatedAt                         DateTime?            @updatedAt
   tag                               PackageTag?          @relation(fields: [tagId], references: [id])
-  tagId                             String? // relation pk (used in the @relation attribute above.)
+  tagId                             String?              @unique // relation pk (used in the @relation attribute above.)
   packageType                       PackageType          @default(Product)
   quantity                          Decimal?             @db.Decimal(precision: 12, scale: 5)
   notes                             String?
