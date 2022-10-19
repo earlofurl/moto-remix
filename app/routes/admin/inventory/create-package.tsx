@@ -8,9 +8,9 @@ import { Combobox, Dialog, Listbox, Transition } from "@headlessui/react";
 import {
   CheckIcon,
   CubeIcon,
-  SelectorIcon,
-  XIcon,
-} from "@heroicons/react/outline";
+  ChevronUpDownIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
 import type { Item, PackageTag, Uom } from "@prisma/client";
 import type { ActionFunction, LoaderFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
@@ -36,18 +36,18 @@ import { useUoms } from "~/hooks/matches/use-uoms";
 import { useItemTypes } from "~/hooks/matches/use-item-types";
 
 // Could speed this up by loading a lot of this from existing state vs a new db call
-type LoaderData = {
+interface LoaderData {
   authSession: AuthSession;
   items: Awaited<ReturnType<typeof getAllItems>>;
   packageTags: PackageTag[];
-};
+}
 
-type ActionData = {
+interface ActionData {
   errors?: {
     quantity?: string;
     newParentQuantity?: string;
   };
-};
+}
 
 // TODO: for now, hard code usable product weights for calculating new parent quantity. Change later.
 const usableProductWeights = {
@@ -345,7 +345,7 @@ export default function AddPackageSlideIn(): JSX.Element {
                 <Form
                   ref={formRef}
                   method="post"
-                  replace={true}
+                  replace
                   className="flex h-full flex-col divide-y divide-gray-200 bg-white shadow-xl"
                 >
                   {/* Slide Out Header */}
@@ -363,7 +363,7 @@ export default function AddPackageSlideIn(): JSX.Element {
                             onClick={onDismiss}
                           >
                             <span className="sr-only">Close panel</span>
-                            <XIcon
+                            <XMarkIcon
                               className="h-6 w-6"
                               aria-hidden="true"
                             />
@@ -415,7 +415,7 @@ export default function AddPackageSlideIn(): JSX.Element {
                                 />
                                 {/*  */}
                                 <Combobox.Button className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none">
-                                  <SelectorIcon
+                                  <ChevronUpDownIcon
                                     className="h-5 w-5 text-gray-400"
                                     aria-hidden="true"
                                   />
@@ -579,7 +579,7 @@ export default function AddPackageSlideIn(): JSX.Element {
                                 />
                                 {/*  */}
                                 <Combobox.Button className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none">
-                                  <SelectorIcon
+                                  <ChevronUpDownIcon
                                     className="h-5 w-5 text-gray-400"
                                     aria-hidden="true"
                                   />
@@ -715,7 +715,7 @@ export default function AddPackageSlideIn(): JSX.Element {
                                         {selectedUom.name}
                                       </span>
                                       <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                                        <SelectorIcon
+                                        <ChevronUpDownIcon
                                           className="h-5 w-5 text-gray-400"
                                           aria-hidden="true"
                                         />
@@ -819,7 +819,7 @@ export default function AddPackageSlideIn(): JSX.Element {
                               />
                               {/*  */}
                               <Combobox.Button className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none">
-                                <SelectorIcon
+                                <ChevronUpDownIcon
                                   className="h-5 w-5 text-gray-400"
                                   aria-hidden="true"
                                 />

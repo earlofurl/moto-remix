@@ -1,8 +1,8 @@
 import type { Order } from "@prisma/client";
 import invariant from "tiny-invariant";
 import dayjs from "dayjs";
-import { CheckCircleIcon } from "@heroicons/react/solid";
-import { ArrowCircleDownIcon } from "@heroicons/react/outline";
+import { CheckCircleIcon } from "@heroicons/react/24/solid";
+import { ArrowDownCircleIcon } from "@heroicons/react/24/outline";
 import { useLoaderData, useParams } from "@remix-run/react";
 import type { LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
@@ -433,7 +433,7 @@ export default function SingleOrderPage() {
                             <div>
                               <span className="flex h-8 w-8 items-center justify-center rounded-full ring-8 ring-white">
                                 {order?.status === "Open" ? (
-                                  <ArrowCircleDownIcon />
+                                  <ArrowDownCircleIcon />
                                 ) : (
                                   <CheckCircleIcon className="text-green-400" />
                                 )}
@@ -466,7 +466,7 @@ export default function SingleOrderPage() {
                               <span className="flex h-8 w-8 items-center justify-center rounded-full ring-8 ring-white">
                                 {order?.status === "Open" ||
                                 order?.status === "Packed" ? (
-                                  <ArrowCircleDownIcon />
+                                  <ArrowDownCircleIcon />
                                 ) : (
                                   <CheckCircleIcon className="text-green-400" />
                                 )}
@@ -495,7 +495,7 @@ export default function SingleOrderPage() {
                                 {order?.status === "Open" ||
                                 order?.status === "Packed" ||
                                 order?.status === "Shipped" ? (
-                                  <ArrowCircleDownIcon />
+                                  <ArrowDownCircleIcon />
                                 ) : (
                                   <CheckCircleIcon className="text-green-400" />
                                 )}

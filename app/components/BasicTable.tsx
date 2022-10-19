@@ -1,10 +1,5 @@
 import { Popover, Transition } from "@headlessui/react";
-// import {
-//   ClipboardListIcon,
-//   PencilAltIcon,
-//   TrashIcon,
-// } from "@heroicons/react/outline";
-import { ChevronDownIcon } from "@heroicons/react/solid";
+import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import { useCatch } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import {

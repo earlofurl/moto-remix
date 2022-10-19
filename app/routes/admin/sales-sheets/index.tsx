@@ -1,20 +1,20 @@
-import type { ActionFunction } from "@remix-run/node";
+import { ChevronRightIcon } from "@heroicons/react/24/outline";
+import type { ActionFunction, LoaderFunction } from "@remix-run/node";
 import {
   json,
-  LoaderFunction,
   unstable_composeUploadHandlers as composeUploadHandlers,
   unstable_createMemoryUploadHandler as createMemoryUploadHandler,
   unstable_parseMultipartFormData as parseMultipartFormData,
 } from "@remix-run/node";
-import type { FileObject } from "@supabase/storage-js";
-import { requireAuthSession } from "~/modules/auth/guards";
-import { AuthSession } from "~/modules/auth/session.server";
-import { getSupabase } from "~/integrations/supabase";
 import { Form, Link, useActionData, useLoaderData } from "@remix-run/react";
-import { ChevronRightIcon } from "@heroicons/react/outline";
+import type { FileObject } from "@supabase/storage-js";
 import dayjs from "dayjs";
 import slugify from "slugify";
 import invariant from "tiny-invariant";
+
+import { getSupabase } from "~/integrations/supabase";
+import { requireAuthSession } from "~/modules/auth/guards";
+import type { AuthSession } from "~/modules/auth/session.server";
 
 type LoaderData = {
   authSession: AuthSession;
@@ -178,7 +178,7 @@ export default function SalesSheetsIndex(): JSX.Element {
           </label>
           <div className="mx-auto mt-1 flex rounded-md shadow-sm">
             <div className="relative flex flex-grow items-stretch focus-within:z-10">
-              <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"></div>
+              <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3" />
               <input
                 id="file-field"
                 type="file"

@@ -15,7 +15,7 @@ const routeIdString = "routes/admin";
 
 export function useOptionalItemTypes(): ItemType[] | undefined {
   const data = useMatchesData(routeIdString);
-  console.log(JSON.stringify(data));
+  // console.log(JSON.stringify(data));
   if (!data) {
     return undefined;
   }

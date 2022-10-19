@@ -31,7 +31,7 @@ import {
   CheckCircleIcon,
   ChevronDownIcon,
   ChevronUpIcon,
-} from "@heroicons/react/solid";
+} from "@heroicons/react/24/solid";
 
 enum Availability {
   True = "TRUE",

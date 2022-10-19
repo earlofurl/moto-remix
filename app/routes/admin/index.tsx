@@ -1,10 +1,10 @@
+import { CircleStackIcon } from "@heroicons/react/24/outline";
 import type { LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { requireAuthSession } from "~/modules/auth/guards";
-import { AuthSession } from "~/modules/auth/session.server";
-import ActionGrid from "~/components/ActionGrid";
 
-import { DatabaseIcon } from "@heroicons/react/solid";
+import ActionGrid from "~/components/ActionGrid";
+import { requireAuthSession } from "~/modules/auth/guards";
+import type { AuthSession } from "~/modules/auth/session.server";
 
 type LoaderData = {
   authSession: AuthSession;
@@ -22,7 +22,7 @@ const actions = [
   {
     title: "Sales Sheets",
     href: "sales-sheets",
-    icon: DatabaseIcon,
+    icon: CircleStackIcon,
     iconForeground: "text-teal-700",
     iconBackground: "bg-teal-50",
     description: "Upload sales sheets and get links",
@@ -30,7 +30,7 @@ const actions = [
   {
     title: "Retailer Locations",
     href: "locations",
-    icon: DatabaseIcon,
+    icon: CircleStackIcon,
     iconForeground: "text-teal-700",
     iconBackground: "bg-teal-50",
     description: "Add and edit retailer locations for the map",
@@ -38,7 +38,7 @@ const actions = [
   {
     title: "Product Inventory",
     href: "inventory",
-    icon: DatabaseIcon,
+    icon: CircleStackIcon,
     iconForeground: "text-teal-700",
     iconBackground: "bg-teal-50",
     description: "View and edit product inventory",
@@ -46,7 +46,7 @@ const actions = [
   {
     title: "Lab Tests",
     href: "lab-tests",
-    icon: DatabaseIcon,
+    icon: CircleStackIcon,
     iconForeground: "text-teal-700",
     iconBackground: "bg-teal-50",
     description: "View lab test results",
@@ -54,7 +54,7 @@ const actions = [
   {
     title: "Orders",
     href: "orders",
-    icon: DatabaseIcon,
+    icon: CircleStackIcon,
     iconForeground: "text-teal-700",
     iconBackground: "bg-teal-50",
     description: "View and edit orders",

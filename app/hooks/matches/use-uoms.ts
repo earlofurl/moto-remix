@@ -15,7 +15,7 @@ const routeIdString = "routes/admin";
 
 export function useOptionalUoms(): Uom[] | undefined {
   const data = useMatchesData(routeIdString);
-  console.log(JSON.stringify(data));
+  // console.log(JSON.stringify(data));
   if (!data) {
     return undefined;
   }

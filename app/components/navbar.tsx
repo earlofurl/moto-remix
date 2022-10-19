@@ -1,10 +1,15 @@
-import { Form, Link, useLoaderData } from "@remix-run/react";
-/* This example requires Tailwind CSS v2.0+ */
-import { Fragment } from "react";
 import { Popover, Transition } from "@headlessui/react";
-import { ChartBarIcon, MenuIcon, XIcon } from "@heroicons/react/outline";
-import { ChevronDownIcon } from "@heroicons/react/solid";
-import { json, LoaderFunction } from "@remix-run/node";
+import {
+  Bars3Icon,
+  ChartBarIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
+import { ChevronDownIcon } from "@heroicons/react/24/solid";
+import type { LoaderFunction } from "@remix-run/node";
+import { json } from "@remix-run/node";
+import { Link } from "@remix-run/react";
+import { Fragment } from "react";
+
 import { getAuthSession } from "~/modules/auth/session.server";
 
 type LoaderData = {
@@ -47,7 +52,7 @@ export default function Navbar(): JSX.Element {
         <div className="-my-2 -mr-2 md:hidden">
           <Popover.Button className="inline-flex items-center justify-center rounded-md bg-brand-primary p-2 text-gray-800 hover:bg-brand-accent-light/70 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-black">
             <span className="sr-only">Open menu</span>
-            <MenuIcon
+            <Bars3Icon
               className="h-6 w-6"
               aria-hidden="true"
             />
@@ -111,7 +116,7 @@ export default function Navbar(): JSX.Element {
                           </Link>
                         ))}
                       </div>
-                      {/*<div className="bg-gray-50 p-5 sm:p-8">*/}
+                      {/* <div className="bg-gray-50 p-5 sm:p-8">*/}
                       {/*  <a*/}
                       {/*    href="#"*/}
                       {/*    className="-m-3 flow-root rounded-md p-3 hover:bg-gray-100"*/}
@@ -129,7 +134,7 @@ export default function Navbar(): JSX.Element {
                       {/*      tools.*/}
                       {/*    </p>*/}
                       {/*  </a>*/}
-                      {/*</div>*/}
+                      {/* </div>*/}
                     </div>
                   </Popover.Panel>
                 </Transition>
@@ -156,7 +161,7 @@ export default function Navbar(): JSX.Element {
             Contact Us
           </Link>
 
-          {/*<Popover className="relative">*/}
+          {/* <Popover className="relative">*/}
           {/*  {({ open }) => (*/}
           {/*    <>*/}
           {/*      <Popover.Button*/}
@@ -207,10 +212,10 @@ export default function Navbar(): JSX.Element {
           {/*      </Transition>*/}
           {/*    </>*/}
           {/*  )}*/}
-          {/*</Popover>*/}
+          {/* </Popover>*/}
         </Popover.Group>
         <div className="hidden items-center justify-end md:flex md:flex-1 lg:w-0">
-          {/*{email ? (*/}
+          {/* {email ? (*/}
           {/*  <Form*/}
           {/*    method="post"*/}
           {/*    action="/logout"*/}
@@ -222,9 +227,9 @@ export default function Navbar(): JSX.Element {
           {/*      Logout*/}
           {/*    </button>*/}
           {/*  </Form>*/}
-          {/*) : (*/}
+          {/* ) : (*/}
           {/*  <p>Auth Not Found</p>*/}
-          {/*)}*/}
+          {/* )}*/}
         </div>
       </div>
 
@@ -254,7 +259,7 @@ export default function Navbar(): JSX.Element {
                 <div className="-mr-2">
                   <Popover.Button className="inline-flex items-center justify-center rounded-md bg-brand-accent-light/80 p-2 text-gray-100 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
                     <span className="sr-only">Close menu</span>
-                    <XIcon
+                    <XMarkIcon
                       className="h-6 w-6"
                       aria-hidden="true"
                     />
@@ -314,7 +319,7 @@ export default function Navbar(): JSX.Element {
                 </Link>
               </div>
               <div className="mt-6">
-                {/*{email ? (*/}
+                {/* {email ? (*/}
                 {/*  <Form*/}
                 {/*    method="post"*/}
                 {/*    action="/logout"*/}
@@ -326,7 +331,7 @@ export default function Navbar(): JSX.Element {
                 {/*      Logout*/}
                 {/*    </button>*/}
                 {/*  </Form>*/}
-                {/*) : null}*/}
+                {/* ) : null}*/}
               </div>
             </div>
           </div>

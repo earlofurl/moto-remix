@@ -1,37 +1,31 @@
 import { Popover, Transition } from "@headlessui/react";
-// import {
-//   ClipboardListIcon,
-//   PencilAltIcon,
-//   TrashIcon,
-// } from "@heroicons/react/outline";
-import { ChevronDownIcon, ChevronRightIcon } from "@heroicons/react/solid";
+import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import { useCatch } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import {
-  GroupingState,
   Column,
-  Table,
+  ColumnFiltersState,
+  FilterFn,
   flexRender,
   getCoreRowModel,
-  getGroupedRowModel,
   getExpandedRowModel,
-  useReactTable,
-  ColumnFiltersState,
-  getFilteredRowModel,
+  getFacetedMinMaxValues,
   getFacetedRowModel,
   getFacetedUniqueValues,
-  getFacetedMinMaxValues,
-  sortingFns,
+  getFilteredRowModel,
+  getGroupedRowModel,
   getSortedRowModel,
-  FilterFn,
+  GroupingState,
   SortingFn,
-  FilterFns,
+  sortingFns,
   SortingState,
+  Table,
+  useReactTable,
 } from "@tanstack/react-table";
 import {
+  compareItems,
   RankingInfo,
   rankItem,
-  compareItems,
 } from "@tanstack/match-sorter-utils";
 import React, { Fragment } from "react";
 
@@ -39,6 +33,7 @@ declare module "@tanstack/table-core" {
   interface FilterFns {
     fuzzy: FilterFn<unknown>;
   }
+
   interface FilterMeta {
     itemRank: RankingInfo;
   }

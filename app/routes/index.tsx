@@ -1,3 +1,10 @@
+import {
+  CircleStackIcon,
+  GlobeAsiaAustraliaIcon,
+  HandRaisedIcon,
+  NewspaperIcon,
+  TruckIcon,
+} from "@heroicons/react/24/solid";
 import type { Request } from "@remix-run/node";
 import {
   Form,
@@ -9,16 +16,10 @@ import {
   useTransition,
 } from "@remix-run/react";
 import React, { useEffect, useRef } from "react";
+
+import TW404page from "~/components/TW404page";
 import Navbar from "~/components/navbar";
 import { sendMail, trapSpam } from "~/integrations/mail/sendgrid.server";
-import {
-  DatabaseIcon,
-  GlobeIcon,
-  HandIcon,
-  NewspaperIcon,
-  TruckIcon,
-} from "@heroicons/react/solid";
-import TW404page from "~/components/TW404page";
 
 const features = [
   {
@@ -37,7 +38,7 @@ const features = [
     name: "Strain Information",
     description:
       "Take the guesswork out of your extraction projections. We have a database of strains that you can use to help you plan.",
-    icon: DatabaseIcon,
+    icon: CircleStackIcon,
   },
 ];
 
@@ -281,11 +282,11 @@ export default function Index(): JSX.Element {
                 />
                 <div className="mx-auto max-w-md px-4 sm:max-w-3xl sm:px-6 lg:h-full lg:p-0">
                   <div className="aspect-w-10 aspect-h-6 overflow-hidden rounded-xl shadow-xl sm:aspect-w-16 sm:aspect-h-7 lg:aspect-none lg:h-full">
-                    {/*<img*/}
+                    {/* <img*/}
                     {/*  className="object-cover lg:h-full lg:w-full"*/}
                     {/*  src="https://images.unsplash.com/photo-1520333789090-1afc82db536a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2102&q=80"*/}
                     {/*  alt=""*/}
-                    {/*/>*/}
+                    {/* />*/}
                     <img
                       className="object-cover lg:h-full lg:w-full"
                       src="https://res.cloudinary.com/ursine-design/image/upload/q_auto:good,f_auto/v1655925824/IG_B6_8U9KKN8u.png"
@@ -396,7 +397,7 @@ export default function Index(): JSX.Element {
                 <div>
                   <div>
                     <span className="flex h-12 w-12 items-center justify-center rounded-md bg-gradient-to-br from-green-800 to-brand-accent-light">
-                      <GlobeIcon
+                      <GlobeAsiaAustraliaIcon
                         className="h-8 w-8 text-green-100"
                         aria-hidden="true"
                       />
@@ -433,7 +434,7 @@ export default function Index(): JSX.Element {
                     </div>
                   </div>
                 </div>
-                {/*<div className="mt-8 border-t border-gray-200 pt-6">*/}
+                {/* <div className="mt-8 border-t border-gray-200 pt-6">*/}
                 {/*  <blockquote>*/}
                 {/*    <div>*/}
                 {/*      <p className="text-base font-bold text-gray-800">*/}
@@ -456,7 +457,7 @@ export default function Index(): JSX.Element {
                 {/*      </div>*/}
                 {/*    </footer>*/}
                 {/*  </blockquote>*/}
-                {/*</div>*/}
+                {/* </div>*/}
               </div>
               <div className="mt-12 sm:mt-16 lg:mt-0">
                 <div className="-mr-48 pl-4 sm:pl-6 md:-mr-16 lg:relative lg:m-0 lg:h-full lg:px-0">
@@ -475,7 +476,7 @@ export default function Index(): JSX.Element {
                 <div>
                   <div>
                     <span className="flex h-12 w-12 items-center justify-center rounded-md bg-lime-600">
-                      <HandIcon
+                      <HandRaisedIcon
                         className="h-8 w-8 text-green-100"
                         aria-hidden="true"
                       />
@@ -613,7 +614,7 @@ export default function Index(): JSX.Element {
                     </dd>
                   </div>
                 </dl>
-                {/*<p className="mt-6 text-base text-gray-500">*/}
+                {/* <p className="mt-6 text-base text-gray-500">*/}
                 {/*  Looking for careers?{" "}*/}
                 {/*  <a*/}
                 {/*    href="#"*/}
@@ -622,7 +623,7 @@ export default function Index(): JSX.Element {
                 {/*    View all job openings*/}
                 {/*  </a>*/}
                 {/*  .*/}
-                {/*</p>*/}
+                {/* </p>*/}
               </div>
             </div>
             <div className="bg-white py-16 px-4 sm:px-6 lg:col-span-3 lg:py-24 lg:px-8 xl:pl-12">

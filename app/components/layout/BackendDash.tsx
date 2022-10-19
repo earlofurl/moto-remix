@@ -3,16 +3,13 @@
 import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import {
-  MenuIcon,
-  CalendarIcon,
-  ChartBarIcon,
+  Bars3Icon,
   FolderIcon,
   HomeIcon,
   InboxIcon,
-  UsersIcon,
-  XIcon,
-} from "@heroicons/react/outline";
-import { Outlet, NavLink } from "@remix-run/react";
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
+import { NavLink, Outlet } from "@remix-run/react";
 
 const navigation = [
   { name: "Dashboard", to: "/admin", icon: HomeIcon },
@@ -109,7 +106,7 @@ export default function BackendDash() {
                         onClick={() => setSidebarOpen(false)}
                       >
                         <span className="sr-only">Close sidebar</span>
-                        <XIcon
+                        <XMarkIcon
                           className="h-6 w-6 text-white"
                           aria-hidden="true"
                         />
@@ -250,7 +247,7 @@ export default function BackendDash() {
               onClick={() => setSidebarOpen(true)}
             >
               <span className="sr-only">Open sidebar</span>
-              <MenuIcon
+              <Bars3Icon
                 className="h-6 w-6"
                 aria-hidden="true"
               />
