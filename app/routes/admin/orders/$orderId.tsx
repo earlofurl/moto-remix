@@ -17,10 +17,10 @@ import BasicGroupingTable from "~/components/BasicGroupingTable";
 import type { PackageWithNesting } from "~/types/types";
 import { getAllPackagesOnOrder } from "~/modules/package/queries";
 
-interface LoaderData {
+type LoaderData = {
   authSession: AuthSession;
   orderPackages: Awaited<ReturnType<typeof getAllPackagesOnOrder>>;
-}
+};
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const authSession = await requireAuthSession(request, {

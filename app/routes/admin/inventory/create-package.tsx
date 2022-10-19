@@ -36,18 +36,18 @@ import { useUoms } from "~/hooks/matches/use-uoms";
 import { useItemTypes } from "~/hooks/matches/use-item-types";
 
 // Could speed this up by loading a lot of this from existing state vs a new db call
-interface LoaderData {
+type LoaderData = {
   authSession: AuthSession;
   items: Awaited<ReturnType<typeof getAllItems>>;
   packageTags: PackageTag[];
-}
+};
 
-interface ActionData {
+type ActionData = {
   errors?: {
     quantity?: string;
     newParentQuantity?: string;
   };
-}
+};
 
 // TODO: for now, hard code usable product weights for calculating new parent quantity. Change later.
 const usableProductWeights = {

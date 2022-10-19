@@ -6,10 +6,10 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export interface SimpleDropdownProps {
+export type SimpleDropdownProps = {
   title: string;
   options: JSX.Element[];
-}
+};
 
 export default function SimpleDropdown({
   title,

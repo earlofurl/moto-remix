@@ -10,10 +10,10 @@ import { requireAuthSession } from "~/modules/auth/guards";
 import { AuthSession } from "~/modules/auth/session.server";
 import PackageTableRowActions from "../../components/table/PackageTableRowActions";
 
-interface LoaderData {
+type LoaderData = {
   authSession: AuthSession;
   data: Awaited<ReturnType<typeof getAllPackagesAvailable>>;
-}
+};
 
 const tableTitle = "Packages";
 const tableDescription = "List of all product inventory";

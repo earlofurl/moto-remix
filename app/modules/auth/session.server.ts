@@ -4,7 +4,7 @@ import { NODE_ENV, SESSION_SECRET } from "../../utils/env";
 import { safeRedirect } from "../../utils/http.server";
 import { SESSION_ERROR_KEY, SESSION_KEY, SESSION_MAX_AGE } from "./const";
 
-export interface AuthSession {
+export type AuthSession = {
   accessToken: string;
   refreshToken: string;
   userId: string;
@@ -12,7 +12,7 @@ export interface AuthSession {
   expiresIn: number;
   expiresAt: number;
   providerToken?: string | null;
-}
+};
 
 export type RealtimeAuthSession = Pick<
   AuthSession,

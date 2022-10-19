@@ -22,10 +22,10 @@ import dayjs from "dayjs";
 import React from "react";
 import Calendar from "react-calendar";
 
-interface LoaderData {
+type LoaderData = {
   authSession: AuthSession;
   data: Awaited<ReturnType<typeof getAllOrders>>;
-}
+};
 
 function classNames(
   ...classes: readonly (string | undefined)[]

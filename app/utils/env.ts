@@ -1,19 +1,19 @@
 import { isBrowser } from "./is-browser";
 
 declare global {
-  interface Window {
+  type Window = {
     env: {
       SUPABASE_URL: string;
       SUPABASE_ANON_PUBLIC: string;
       REACT_APP_MAPBOX_ACCESS_TOKEN: string;
       SENDGRID_API_KEY: string;
     };
-  }
+  };
 }
 
 declare global {
   namespace NodeJS {
-    interface ProcessEnv {
+    type ProcessEnv = {
       SUPABASE_URL: string;
       SUPABASE_SERVICE_ROLE: string;
       SERVER_URL: string;
@@ -21,7 +21,7 @@ declare global {
       SESSION_SECRET: string;
       REACT_APP_MAPBOX_ACCESS_TOKEN: string;
       SENDGRID_API_KEY: string;
-    }
+    };
   }
 }
 
