@@ -27,7 +27,7 @@ import React, { Fragment, useState } from "react";
 import convert from "convert";
 import { getAllItems } from "~/modules/item/queries/get-items.server";
 import { getUnassignedPackageTagsLimit20 } from "~/modules/packageTag/queries/get-package-tags.server";
-import { createPackage } from "~/modules/package/mutations/mutate-package.server";
+import { createPackage } from "~/modules/package/mutations/create-package.server";
 import { requireAuthSession } from "~/modules/auth/guards";
 import { AuthSession } from "~/modules/auth/session.server";
 import { usePackages } from "~/hooks/matches/use-packages";

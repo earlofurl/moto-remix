@@ -49,14 +49,6 @@ export default function BackendDash() {
 
   return (
     <>
-      {/*
-        This example requires updating your template:
-
-        ```
-        <html class="h-full bg-gray-100">
-        <body class="h-full">
-        ```
-      */}
       <div>
         <Transition.Root
           show={sidebarOpen}
@@ -126,6 +118,7 @@ export default function BackendDash() {
                         <NavLink
                           key={item.name}
                           to={item.to}
+                          onClick={() => setSidebarOpen(false)}
                           className={({ isActive }) =>
                             classNames(
                               isActive
@@ -196,6 +189,7 @@ export default function BackendDash() {
                   <NavLink
                     key={item.name}
                     to={item.to}
+                    onClick={() => setSidebarOpen(false)}
                     className={({ isActive }) =>
                       classNames(
                         isActive

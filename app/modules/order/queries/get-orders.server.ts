@@ -81,3 +81,11 @@ export function getOrderById(id: string): Promise<Order> {
     },
   });
 }
+
+export function getAllOpenOrders(): Promise<Order[]> {
+  return db.order.findMany({
+    where: {
+      status: "Open",
+    },
+  });
+}

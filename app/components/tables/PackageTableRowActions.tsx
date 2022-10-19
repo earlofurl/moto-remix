@@ -102,9 +102,9 @@ export default function PackageTableRowActions({
             </Menu.Item>
             <Menu.Item>
               {({ active }) => (
-                <button
-                  type="button"
-                  // onClick={handleCreateFromButtonClick}
+                <Link
+                  to="add-pckg-to-order"
+                  state={{ selectedPackage: row.original }}
                   className={classNames(
                     active ? "bg-gray-100 text-gray-900" : "text-gray-700",
                     "group flex items-center px-4 py-2 text-sm"
@@ -115,7 +115,7 @@ export default function PackageTableRowActions({
                     aria-hidden="true"
                   />
                   Add to Order
-                </button>
+                </Link>
               )}
             </Menu.Item>
             <Menu.Item>

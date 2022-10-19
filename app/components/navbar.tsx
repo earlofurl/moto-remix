@@ -291,7 +291,7 @@ export default function Navbar(): JSX.Element {
             <div className="py-6 px-5">
               <div className="grid grid-cols-2 gap-4">
                 <Link
-                  to="/strain-and-processing-data"
+                  to="/db/strain-and-processing-data"
                   className="text-base font-semibold text-gray-900 hover:text-gray-700"
                 >
                   Info for Processors
