@@ -62,7 +62,9 @@ export default function OrderPage(): JSX.Element {
               <span className="sm:hidden">Orders</span>
               <span className="hidden sm:inline">Orders</span>
             </h1>
-            <p className="mt-1 text-sm text-gray-500">__ Open Orders</p>
+            <p className="mt-1 text-sm text-gray-500">
+              {orders?.length} Open Orders
+            </p>
           </div>
           <div className="flex items-center">
             <div className="flex items-center rounded-md shadow-sm md:items-stretch">
@@ -402,7 +404,7 @@ export default function OrderPage(): JSX.Element {
                   }}
                 >
                   {/* Events */}
-                  <ol className="col-start-1 col-end-2 row-start-1 grid grid-cols-1 divide-y divide-gray-200">
+                  <ul className="col-start-1 col-end-2 row-start-1 grid grid-cols-1 divide-y divide-gray-200">
                     {}
                     {orders.map((order: Order) => (
                       <li
@@ -497,7 +499,7 @@ export default function OrderPage(): JSX.Element {
                         </Link>
                       </li>
                     ))}
-                  </ol>
+                  </ul>
                   {/*  End Events*/}
                 </div>
               </div>

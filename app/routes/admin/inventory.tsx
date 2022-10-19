@@ -9,6 +9,15 @@ import { getAllPackagesAvailable } from "~/modules/package/queries/get-packages.
 import { requireAuthSession } from "~/modules/auth/guards";
 import { AuthSession } from "~/modules/auth/session.server";
 import PackageTableRowActions from "../../components/tables/PackageTableRowActions";
+import {
+  ChevronDownIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  EllipsisHorizontalIcon,
+  PlusIcon,
+} from "@heroicons/react/20/solid";
+import { Menu, Transition } from "@headlessui/react";
+import React, { Fragment } from "react";
 
 type LoaderData = {
   authSession: AuthSession;
@@ -213,51 +222,45 @@ export default function InventoryPage(): JSX.Element {
   ];
 
   return (
-    <>
+    <div className="flex h-screen flex-col">
       {/* Page header */}
-      <div className="bg-white shadow">
-        <div className="lg:max-w-9xl px-4 sm:px-6 lg:mx-auto lg:px-8">
-          <div className="py-5 md:flex md:items-center md:justify-between lg:border-t lg:border-gray-200">
-            <div className="min-w-0 flex-1">
-              {/* Profile */}
-              <div className="flex items-center">
-                <div>
-                  <div className="flex items-center">
-                    <h1 className="ml-3 text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:leading-9">
-                      View, add, edit, and delete Packages.
-                    </h1>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="mt-6 flex space-x-3 md:mt-0 md:ml-4">
-              {/* <button
-                type="button"
-                className="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2"
-              >
-                Add many
-              </button> */}
-              <button
-                type="button"
-                onClick={handleAddButtonClick}
-                className="inline-flex items-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2"
-              >
-                Add Package
-              </button>
-            </div>
+      <header className="flex flex-none items-center justify-between border-b border-gray-200 py-4 px-6">
+        <div>
+          <h1 className="text-lg font-semibold leading-6 text-gray-900">
+            <span className="sm:hidden">Inventory</span>
+            <span className="hidden sm:inline">Inventory</span>
+          </h1>
+        </div>
+        <div className="flex items-center">
+          <div className="hidden md:ml-4 md:flex md:items-center">
+            <div className="ml-6 h-6 w-px bg-gray-300" />
+            <button
+              type="button"
+              onClick={handleAddButtonClick}
+              className="ml-6 inline-flex items-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+            >
+              <PlusIcon
+                className="-ml-0.5 mr-2 h-4 w-4"
+                aria-hidden="true"
+              />
+              Create Package
+            </button>
           </div>
         </div>
-      </div>
+      </header>
+      {/* End Page Header */}
       <Outlet />
-      <div>
-        <BasicGroupingTable
-          tableTitle={tableTitle}
-          tableDescription={tableDescription}
-          columnData={columnData}
-          tableData={data}
-        />
+      <div className="space-y-2">
+        <div className="m-2 bg-white shadow sm:overflow-hidden sm:rounded-lg">
+          <BasicGroupingTable
+            tableTitle={tableTitle}
+            tableDescription={tableDescription}
+            columnData={columnData}
+            tableData={data}
+          />
+        </div>
       </div>
-    </>
+    </div>
   );
 }
 

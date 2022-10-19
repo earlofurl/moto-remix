@@ -172,7 +172,7 @@ export default function OrderLineItemTable({
         </Popover>
       </div>
       {/* Table */}
-      <div className="mt-4 flex flex-col">
+      <div className="my-4 flex flex-col">
         <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
             <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
@@ -263,13 +263,13 @@ export default function OrderLineItemTable({
                   {table.getRowModel().rows.map((row) => (
                     <tr
                       // className={row.id % 2 === 0 ? undefined : "bg-gray-50"}
-                      className="whitespace-nowrap px-2 py-2 text-right text-sm font-medium text-gray-900"
+                      className="whitespace-nowrap px-2 py-3.5 text-right text-sm font-medium text-gray-900"
                       key={row.id}
                     >
                       {row.getVisibleCells().map((cell) => (
                         <td
                           key={cell.id}
-                          className="whitespace-nowrap px-2 py-2 text-sm font-medium text-gray-900"
+                          className="whitespace-nowrap px-2 py-3.5 text-sm font-medium text-gray-900"
                         >
                           {cell.getIsGrouped() ? (
                             // If it's a grouped cell, add an expander and row count
@@ -312,36 +312,6 @@ export default function OrderLineItemTable({
                       ))}
                     </tr>
                   ))}
-
-                  {/* Edit Button */}
-                  {/* <td className="relative inline-flex content-evenly py-3 pl-3 pr-3 sm:pr-6">*/}
-                  {/*  <span className="px-1">*/}
-                  {/*    <Link*/}
-                  {/*      to={`${row.values.id}/edit`}*/}
-                  {/*      // className='text-indigo-600 hover:text-indigo-900'*/}
-                  {/*    >*/}
-                  {/*      <PencilAltIcon className="h-6 w-6 text-blue-500" />*/}
-                  {/*    </Link>*/}
-                  {/*  </span>*/}
-                  {/*  <span className="px-1">*/}
-                  {/*    <Link*/}
-                  {/*      to={`${row.values.id}/delete`}*/}
-                  {/*      // className='text-indigo-600 hover:text-indigo-900'*/}
-                  {/*    >*/}
-                  {/*      <TrashIcon className="h-6 w-6 text-red-500" />*/}
-                  {/*    </Link>*/}
-                  {/*  </span>*/}
-                  {/*  <span className="px-1">*/}
-                  {/*    <Link*/}
-                  {/*      to={`${row.values.id}`}*/}
-                  {/*      // className='text-indigo-600 hover:text-indigo-900'*/}
-                  {/*    >*/}
-                  {/*      <ClipboardListIcon className="h-6 w-6 text-green-500" />*/}
-                  {/*    </Link>*/}
-                  {/*  </span>*/}
-                  {/* </td>*/}
-                  {/*  </tr>*/}
-                  {/* ))}*/}
                 </tbody>
               </table>
             </div>

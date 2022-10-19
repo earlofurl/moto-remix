@@ -1,17 +1,13 @@
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import {
-  ArchiveBoxIcon,
   ArrowRightCircleIcon,
   EllipsisVerticalIcon,
-  DocumentDuplicateIcon,
-  HeartIcon,
   PencilSquareIcon,
   TrashIcon,
-  UserPlusIcon,
 } from "@heroicons/react/20/solid";
 import { Row } from "@tanstack/react-table";
-import { PackageWithNesting } from "~/types/types";
+import type { PackageWithNesting } from "~/types/types";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -25,10 +21,10 @@ export default function OrderLineItemTableRowActions({
   return (
     <Menu
       as="div"
-      className="absolute z-50 inline-block text-left"
+      className="absolute items-center"
     >
       <div>
-        <Menu.Button className="flex items-center rounded-full text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100">
+        <Menu.Button className="relative flex items-center rounded-full text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100">
           <span className="sr-only">Open options</span>
           <EllipsisVerticalIcon
             className="h-5 w-5"

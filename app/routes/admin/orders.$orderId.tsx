@@ -7,6 +7,7 @@ import {
   XMarkIcon,
 } from "@heroicons/react/24/solid";
 import { ArrowDownCircleIcon } from "@heroicons/react/24/outline";
+import { PlusIcon } from "@heroicons/react/20/solid";
 import { useLoaderData, useParams } from "@remix-run/react";
 import type { LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
@@ -295,15 +296,16 @@ export default function SingleOrderPage() {
                   </h1>
                 </div>
 
-                {/* Add card button */}
-                <button className="btn bg-indigo-500 text-white hover:bg-indigo-600">
-                  <svg
-                    className="h-4 w-4 shrink-0 fill-current opacity-50"
-                    viewBox="0 0 16 16"
-                  >
-                    <path d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
-                  </svg>
-                  <span className="xs:block ml-2 hidden">Add Item</span>
+                {/* Add Item button */}
+                <button
+                  type="button"
+                  className="inline-flex items-center rounded-md border border-transparent bg-indigo-500 px-3 py-2 text-sm font-medium leading-4 text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                >
+                  <PlusIcon
+                    className="-ml-0.5 mr-2 h-4 w-4"
+                    aria-hidden="true"
+                  />
+                  Add Item
                 </button>
               </div>
 
@@ -330,7 +332,7 @@ export default function SingleOrderPage() {
 
               {/* Line Items */}
               <div className="space-y-2">
-                <div className="bg-white shadow sm:overflow-hidden sm:rounded-lg">
+                <div className="m-2 bg-white shadow sm:overflow-hidden sm:rounded-lg">
                   <OrderLineItemTable
                     tableTitle={tableTitle}
                     tableDescription={tableDescription}
