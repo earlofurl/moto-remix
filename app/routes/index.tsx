@@ -17,7 +17,7 @@ import {
   HandIcon,
   NewspaperIcon,
   TruckIcon,
-} from "@heroicons/react/solid";
+} from "@heroicons/react/24/solid";
 import TW404page from "~/components/TW404page";
 
 const features = [

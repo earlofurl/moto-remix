@@ -16,9 +16,8 @@ import {
   ChevronDoubleRightIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
-  LocationMarkerIcon,
   QuestionMarkCircleIcon,
-} from "@heroicons/react/outline";
+} from "@heroicons/react/24/outline";
 import dayjs from "dayjs";
 import React from "react";
 import Calendar from "react-calendar";

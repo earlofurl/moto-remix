@@ -11,20 +11,20 @@ import { requireAuthSession } from "~/modules/auth/guards";
 import { AuthSession } from "~/modules/auth/session.server";
 import { getSupabase } from "~/integrations/supabase";
 import { Form, Link, useActionData, useLoaderData } from "@remix-run/react";
-import { ChevronRightIcon } from "@heroicons/react/outline";
+import { ChevronRightIcon } from "@heroicons/react/24/outline";
 import dayjs from "dayjs";
 import slugify from "slugify";
 import invariant from "tiny-invariant";
 
-type LoaderData = {
+interface LoaderData {
   authSession: AuthSession;
   data: FileObject[];
-};
+}
 
-type ActionData = {
+interface ActionData {
   errorMsg?: string;
   fileName?: string;
-};
+}
 
 const asyncIterableToStream = (asyncIterable: AsyncIterable<Uint8Array>) => {
   return new ReadableStream({

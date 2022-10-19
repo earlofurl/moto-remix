@@ -4,11 +4,11 @@ import { requireAuthSession } from "~/modules/auth/guards";
 import { AuthSession } from "~/modules/auth/session.server";
 import ActionGrid from "~/components/ActionGrid";
 
-import { DatabaseIcon } from "@heroicons/react/solid";
+import { DatabaseIcon } from "@heroicons/react/24/solid";
 
-type LoaderData = {
+interface LoaderData {
   authSession: AuthSession;
-};
+}
 
 export const loader: LoaderFunction = async ({ request }) => {
   const authSession = await requireAuthSession(request, {
