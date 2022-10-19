@@ -34,6 +34,7 @@ import { usePackages } from "~/hooks/matches/use-packages";
 import type { ItemWithNesting, PackageWithNesting } from "~/types/types";
 import { useUoms } from "~/hooks/matches/use-uoms";
 import { useItemTypes } from "~/hooks/matches/use-item-types";
+import SlideInRight from "~/components/layout/SlideInRight";
 
 // Could speed this up by loading a lot of this from existing state vs a new db call
 type LoaderData = {
@@ -318,566 +319,534 @@ export default function AddPackageSlideIn(): JSX.Element {
   // }, [actionData])
 
   return (
-    <Transition.Root
-      show={open}
-      as={Fragment}
-    >
-      <Dialog
-        as="div"
-        className="fixed inset-0 z-10 overflow-hidden"
-        onClose={onDismiss}
-      >
-        <div className="absolute inset-0 overflow-hidden">
-          <Dialog.Overlay className="absolute inset-0" />
+    <>
+      <SlideInRight>
+        {/* Form */}
+        <Form
+          ref={formRef}
+          method="post"
+          replace
+          className="flex h-full flex-col divide-y divide-gray-200 bg-white shadow-xl"
+        >
+          <div className="h-0 flex-1 overflow-y-auto">
+            {/* SlideIn Header */}
+            <div className="bg-indigo-700 py-6 px-4 sm:px-6">
+              <div className="flex items-center justify-between">
+                <Dialog.Title className="text-lg font-medium text-white">
+                  {" "}
+                  New Package{" "}
+                </Dialog.Title>
+                <div className="ml-3 flex h-7 items-center">
+                  <button
+                    type="button"
+                    className="rounded-md bg-indigo-700 text-indigo-200 hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
+                    onClick={onDismiss}
+                  >
+                    <span className="sr-only">Close panel</span>
+                    <XMarkIcon
+                      className="h-6 w-6"
+                      aria-hidden="true"
+                    />
+                  </button>
+                </div>
+              </div>
+              <div className="mt-1">
+                <p className="text-sm text-indigo-300">
+                  Get started by filling in the information below to create your
+                  new package.
+                </p>
+              </div>
+            </div>
+            {/* End SlideIn Header */}
+            {/* Form Content */}
+            <div className="flex flex-1 flex-col justify-between">
+              <div className="divide-y divide-gray-200 px-4 sm:px-6">
+                <div className="space-y-6 pt-6 pb-5">
+                  <div>
+                    {/* Parent Package Select Combobox */}
+                    <Combobox
+                      as="div"
+                      value={selectedParentPackage}
+                      onChange={setSelectedParentPackage}
+                    >
+                      <Combobox.Label className="block text-sm font-medium text-gray-700">
+                        Select Parent Package
+                      </Combobox.Label>
+                      <div className="relative mt-1">
+                        <Combobox.Input
+                          className="w-full rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
+                          onChange={(event) => {
+                            setParentQuery(event.target.value);
+                          }}
+                          displayValue={(
+                            selectedParentPackage: PackageWithNesting
+                          ) =>
+                            selectedParentPackage?.tag?.tagNumber
+                              ? selectedParentPackage?.tag?.tagNumber
+                              : selectedParentPackage?.tagId === null
+                              ? "Selected Pckg Has No Tag"
+                              : "No package selected"
+                          }
+                        />
+                        {/* Actual input for ComboBox to avoid having to render selection as ID */}
+                        <input
+                          type="hidden"
+                          name="parent-package-object"
+                          value={JSON.stringify(selectedParentPackage)}
+                        />
+                        {/*  */}
+                        <Combobox.Button className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none">
+                          <ChevronUpDownIcon
+                            className="h-5 w-5 text-gray-400"
+                            aria-hidden="true"
+                          />
+                        </Combobox.Button>
 
-          <div className="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10 sm:pl-16">
-            <Transition.Child
-              as={Fragment}
-              enter="transform transition ease-in-out duration-300 sm:duration-700"
-              enterFrom="translate-x-full"
-              enterTo="translate-x-0"
-              leave="transform transition ease-in-out duration-300 sm:duration-700"
-              leaveFrom="translate-x-0"
-              leaveTo="translate-x-full"
-            >
-              <div className="pointer-events-auto w-screen max-w-md">
-                {/* Form */}
-                <Form
-                  ref={formRef}
-                  method="post"
-                  replace
-                  className="flex h-full flex-col divide-y divide-gray-200 bg-white shadow-xl"
-                >
-                  {/* Slide Out Header */}
-                  <div className="h-0 flex-1 overflow-y-auto">
-                    <div className="bg-indigo-700 py-6 px-4 sm:px-6">
-                      <div className="flex items-center justify-between">
-                        <Dialog.Title className="text-lg font-medium text-white">
-                          {" "}
-                          New Package{" "}
-                        </Dialog.Title>
-                        <div className="ml-3 flex h-7 items-center">
-                          <button
-                            type="button"
-                            className="rounded-md bg-indigo-700 text-indigo-200 hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
-                            onClick={onDismiss}
-                          >
-                            <span className="sr-only">Close panel</span>
-                            <XMarkIcon
-                              className="h-6 w-6"
-                              aria-hidden="true"
-                            />
-                          </button>
-                        </div>
+                        {filteredPackages.length > 0 && (
+                          <Combobox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                            {filteredPackages.map(
+                              (
+                                parentPackage: PackageWithNesting,
+                                parentPackageIdx: number
+                              ) => (
+                                <Combobox.Option
+                                  key={parentPackageIdx}
+                                  value={parentPackage}
+                                  className={({ active }) =>
+                                    classNames(
+                                      "relative cursor-default select-none py-2 pl-3 pr-9",
+                                      active
+                                        ? "bg-indigo-600 text-white"
+                                        : "text-gray-900"
+                                    )
+                                  }
+                                >
+                                  {({ active, selected }) => (
+                                    <>
+                                      <div className="flex">
+                                        <span
+                                          className={classNames(
+                                            "block truncate",
+                                            selected && "font-semibold"
+                                          )}
+                                        >
+                                          {parentPackage?.item?.strain?.name}
+                                        </span>
+                                        <span
+                                          className={classNames(
+                                            "ml-2 truncate text-gray-500",
+                                            active
+                                              ? "text-indigo-200"
+                                              : "text-gray-500"
+                                          )}
+                                        >
+                                          {`${parentPackage?.item?.itemType?.productForm} ${parentPackage?.item?.itemType?.productModifier}`}
+                                        </span>
+                                        <span
+                                          className={classNames(
+                                            "ml-2 truncate text-gray-500",
+                                            active
+                                              ? "text-indigo-200"
+                                              : "text-gray-500"
+                                          )}
+                                        >
+                                          {
+                                            parentPackage?.labTests[0].labTest
+                                              .batchCode
+                                          }
+                                        </span>
+                                      </div>
+                                      <div className="mt-1 flex">
+                                        <span
+                                          className={classNames(
+                                            "ml-2 truncate text-gray-500",
+                                            active
+                                              ? "text-indigo-200"
+                                              : "text-gray-500"
+                                          )}
+                                        >
+                                          {parentPackage?.tag?.tagNumber}
+                                        </span>
+                                        <span
+                                          className={classNames(
+                                            "ml-2 truncate text-gray-500",
+                                            active
+                                              ? "text-indigo-200"
+                                              : "text-gray-500"
+                                          )}
+                                        >
+                                          {`${parentPackage?.labTests[0].labTest.thcTotalPercent}%`}
+                                        </span>
+                                      </div>
+
+                                      {selected && (
+                                        <span
+                                          className={classNames(
+                                            "absolute inset-y-0 right-0 flex items-center pr-4",
+                                            active
+                                              ? "text-white"
+                                              : "text-indigo-600"
+                                          )}
+                                        >
+                                          <CheckIcon
+                                            className="h-5 w-5"
+                                            aria-hidden="true"
+                                          />
+                                        </span>
+                                      )}
+                                    </>
+                                  )}
+                                </Combobox.Option>
+                              )
+                            )}
+                          </Combobox.Options>
+                        )}
                       </div>
-                      <div className="mt-1">
-                        <p className="text-sm text-indigo-300">
-                          Get started by filling in the information below to
-                          create your new package.
-                        </p>
+                    </Combobox>
+                    {/* Selected Parent Package Info Box */}
+                    <div>
+                      <span>
+                        {selectedParentPackage?.item
+                          ? selectedParentPackage?.item.strain.name
+                          : "-"}
+                      </span>{" "}
+                      <span>
+                        {selectedParentPackage?.labTests != null
+                          ? selectedParentPackage?.labTests[0]?.labTest
+                              .batchCode
+                          : "-"}
+                      </span>{" "}
+                      <span>
+                        {selectedParentPackage?.labTests != null
+                          ? selectedParentPackage?.labTests[0]?.labTest
+                              .thcTotalPercent
+                          : "-"}
+                        %
+                      </span>
+                    </div>
+
+                    {/* Item Type Select Combobox */}
+                    <Combobox
+                      as="div"
+                      value={selectedItem}
+                      onChange={setSelectedItem}
+                    >
+                      <Combobox.Label className="block text-sm font-medium text-gray-700">
+                        Select Item to Create
+                      </Combobox.Label>
+                      <div className="relative mt-1">
+                        <Combobox.Input
+                          className="w-full rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
+                          onChange={(event) => {
+                            setItemQuery(event.target.value);
+                          }}
+                          displayValue={(item: Item) =>
+                            item?.strain.name
+                              ? `${item?.itemType.productForm} - ${item?.itemType.productModifier} - ${item?.strain.name}`
+                              : "No item selected"
+                          }
+                        />
+                        {/* Actual input for ComboBox to avoid having to render selection as ID */}
+                        <input
+                          type="hidden"
+                          name="item-object"
+                          value={JSON.stringify(selectedItem)}
+                        />
+                        {/*  */}
+                        <Combobox.Button className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none">
+                          <ChevronUpDownIcon
+                            className="h-5 w-5 text-gray-400"
+                            aria-hidden="true"
+                          />
+                        </Combobox.Button>
+
+                        {filteredItems.length > 0 && (
+                          <Combobox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                            {filteredItems.map(
+                              (item: Item, itemIdx: number) => (
+                                <Combobox.Option
+                                  key={itemIdx}
+                                  value={item}
+                                  className={({ active }) =>
+                                    classNames(
+                                      "relative cursor-default select-none py-2 pl-3 pr-9",
+                                      active
+                                        ? "bg-indigo-600 text-white"
+                                        : "text-gray-900"
+                                    )
+                                  }
+                                >
+                                  {({ active, selected }) => (
+                                    <>
+                                      <div className="flex">
+                                        <span
+                                          className={classNames(
+                                            "block truncate",
+                                            selected && "font-semibold"
+                                          )}
+                                        >
+                                          {item?.itemType?.productForm}
+                                          {" - "}
+                                          {item?.itemType?.productModifier}
+                                          {" - "}
+                                          {item?.strain?.name}
+                                        </span>
+                                      </div>
+
+                                      {selected && (
+                                        <span
+                                          className={classNames(
+                                            "absolute inset-y-0 right-0 flex items-center pr-4",
+                                            active
+                                              ? "text-white"
+                                              : "text-indigo-600"
+                                          )}
+                                        >
+                                          <CheckIcon
+                                            className="h-5 w-5"
+                                            aria-hidden="true"
+                                          />
+                                        </span>
+                                      )}
+                                    </>
+                                  )}
+                                </Combobox.Option>
+                              )
+                            )}
+                          </Combobox.Options>
+                        )}
+                      </div>
+                    </Combobox>
+                  </div>
+
+                  {/* Parent quantity remaining tracker */}
+                  <div className="flex flex-col items-center justify-center">
+                    <span className="text-sm text-gray-700"> Available: </span>
+                    <span className="text-sm text-gray-700">
+                      {newParentQuantity}{" "}
+                    </span>
+                    <span className="text-sm text-gray-700">
+                      {selectedParentPackage?.uom.name}
+                    </span>
+                    <input
+                      type="hidden"
+                      name="new-parent-quantity"
+                      value={newParentQuantity}
+                    />
+                  </div>
+
+                  {/* Quantity Input */}
+                  <div className="flex flex-col sm:flex-row">
+                    <label
+                      htmlFor="quantity"
+                      className="block text-sm font-medium text-gray-700"
+                    >
+                      Enter Quantity
+                    </label>
+                    <div className="mt-1 flex rounded-md shadow-sm">
+                      <div className="relative flex flex-grow items-stretch focus-within:z-10">
+                        <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                          <CubeIcon
+                            className="h-5 w-5 text-gray-400"
+                            aria-hidden="true"
+                          />
+                        </div>
+                        <input
+                          type="number"
+                          name="quantity"
+                          id="quantity"
+                          ref={quantityRef}
+                          onChange={(event) => {
+                            setQuantity(parseFloat(event.target.value));
+                          }}
+                          className="block w-full rounded-none rounded-l-md border-gray-300 pl-10 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                          placeholder="0.00"
+                          min={0}
+                          step="0.0001"
+                        />
                       </div>
                     </div>
-                    {/* Form Content */}
-                    <div className="flex flex-1 flex-col justify-between">
-                      <div className="divide-y divide-gray-200 px-4 sm:px-6">
-                        <div className="space-y-6 pt-6 pb-5">
-                          <div>
-                            {/* Parent Package Select Combobox */}
-                            <Combobox
-                              as="div"
-                              value={selectedParentPackage}
-                              onChange={setSelectedParentPackage}
-                            >
-                              <Combobox.Label className="block text-sm font-medium text-gray-700">
-                                Select Parent Package
-                              </Combobox.Label>
-                              <div className="relative mt-1">
-                                <Combobox.Input
-                                  className="w-full rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
-                                  onChange={(event) => {
-                                    setParentQuery(event.target.value);
-                                  }}
-                                  displayValue={(
-                                    selectedParentPackage: PackageWithNesting
-                                  ) =>
-                                    selectedParentPackage?.tag?.tagNumber
-                                      ? selectedParentPackage?.tag?.tagNumber
-                                      : selectedParentPackage?.tagId === null
-                                      ? "Selected Pckg Has No Tag"
-                                      : "No package selected"
-                                  }
-                                />
-                                {/* Actual input for ComboBox to avoid having to render selection as ID */}
-                                <input
-                                  type="hidden"
-                                  name="parent-package-object"
-                                  value={JSON.stringify(selectedParentPackage)}
-                                />
-                                {/*  */}
-                                <Combobox.Button className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none">
-                                  <ChevronUpDownIcon
-                                    className="h-5 w-5 text-gray-400"
-                                    aria-hidden="true"
-                                  />
-                                </Combobox.Button>
-
-                                {filteredPackages.length > 0 && (
-                                  <Combobox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                                    {filteredPackages.map(
-                                      (
-                                        parentPackage: PackageWithNesting,
-                                        parentPackageIdx: number
-                                      ) => (
-                                        <Combobox.Option
-                                          key={parentPackageIdx}
-                                          value={parentPackage}
-                                          className={({ active }) =>
-                                            classNames(
-                                              "relative cursor-default select-none py-2 pl-3 pr-9",
-                                              active
-                                                ? "bg-indigo-600 text-white"
-                                                : "text-gray-900"
-                                            )
-                                          }
-                                        >
-                                          {({ active, selected }) => (
-                                            <>
-                                              <div className="flex">
-                                                <span
-                                                  className={classNames(
-                                                    "block truncate",
-                                                    selected && "font-semibold"
-                                                  )}
-                                                >
-                                                  {
-                                                    parentPackage?.item?.strain
-                                                      ?.name
-                                                  }
-                                                </span>
-                                                <span
-                                                  className={classNames(
-                                                    "ml-2 truncate text-gray-500",
-                                                    active
-                                                      ? "text-indigo-200"
-                                                      : "text-gray-500"
-                                                  )}
-                                                >
-                                                  {`${parentPackage?.item?.itemType?.productForm} ${parentPackage?.item?.itemType?.productModifier}`}
-                                                </span>
-                                                <span
-                                                  className={classNames(
-                                                    "ml-2 truncate text-gray-500",
-                                                    active
-                                                      ? "text-indigo-200"
-                                                      : "text-gray-500"
-                                                  )}
-                                                >
-                                                  {
-                                                    parentPackage?.labTests[0]
-                                                      .labTest.batchCode
-                                                  }
-                                                </span>
-                                              </div>
-                                              <div className="mt-1 flex">
-                                                <span
-                                                  className={classNames(
-                                                    "ml-2 truncate text-gray-500",
-                                                    active
-                                                      ? "text-indigo-200"
-                                                      : "text-gray-500"
-                                                  )}
-                                                >
-                                                  {
-                                                    parentPackage?.tag
-                                                      ?.tagNumber
-                                                  }
-                                                </span>
-                                                <span
-                                                  className={classNames(
-                                                    "ml-2 truncate text-gray-500",
-                                                    active
-                                                      ? "text-indigo-200"
-                                                      : "text-gray-500"
-                                                  )}
-                                                >
-                                                  {`${parentPackage?.labTests[0].labTest.thcTotalPercent}%`}
-                                                </span>
-                                              </div>
-
-                                              {selected && (
-                                                <span
-                                                  className={classNames(
-                                                    "absolute inset-y-0 right-0 flex items-center pr-4",
-                                                    active
-                                                      ? "text-white"
-                                                      : "text-indigo-600"
-                                                  )}
-                                                >
-                                                  <CheckIcon
-                                                    className="h-5 w-5"
-                                                    aria-hidden="true"
-                                                  />
-                                                </span>
-                                              )}
-                                            </>
-                                          )}
-                                        </Combobox.Option>
-                                      )
-                                    )}
-                                  </Combobox.Options>
-                                )}
-                              </div>
-                            </Combobox>
-                            {/* Selected Parent Package Info Box */}
-                            <div>
-                              <span>
-                                {selectedParentPackage?.item
-                                  ? selectedParentPackage?.item.strain.name
-                                  : "-"}
-                              </span>{" "}
-                              <span>
-                                {selectedParentPackage?.labTests != null
-                                  ? selectedParentPackage?.labTests[0]?.labTest
-                                      .batchCode
-                                  : "-"}
-                              </span>{" "}
-                              <span>
-                                {selectedParentPackage?.labTests != null
-                                  ? selectedParentPackage?.labTests[0]?.labTest
-                                      .thcTotalPercent
-                                  : "-"}
-                                %
+                  </div>
+                  {/* Quantity Type Select */}
+                  <div className=" flex flex-col sm:flex-row">
+                    <Listbox
+                      value={selectedUom}
+                      onChange={setSelectedUom}
+                    >
+                      {({ open }) => (
+                        <>
+                          <Listbox.Label className="block text-sm font-medium text-gray-700">
+                            UoM
+                          </Listbox.Label>
+                          <div className="relative mt-1 w-full">
+                            <Listbox.Button className="relative w-full cursor-default rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 text-left shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm">
+                              <span className="block truncate">
+                                {selectedUom.name}
                               </span>
-                            </div>
-
-                            {/* Item Type Select Combobox */}
-                            <Combobox
-                              as="div"
-                              value={selectedItem}
-                              onChange={setSelectedItem}
-                            >
-                              <Combobox.Label className="block text-sm font-medium text-gray-700">
-                                Select Item to Create
-                              </Combobox.Label>
-                              <div className="relative mt-1">
-                                <Combobox.Input
-                                  className="w-full rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
-                                  onChange={(event) => {
-                                    setItemQuery(event.target.value);
-                                  }}
-                                  displayValue={(item: Item) =>
-                                    item?.strain.name
-                                      ? `${item?.itemType.productForm} - ${item?.itemType.productModifier} - ${item?.strain.name}`
-                                      : "No item selected"
-                                  }
-                                />
-                                {/* Actual input for ComboBox to avoid having to render selection as ID */}
-                                <input
-                                  type="hidden"
-                                  name="item-object"
-                                  value={JSON.stringify(selectedItem)}
-                                />
-                                {/*  */}
-                                <Combobox.Button className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none">
-                                  <ChevronUpDownIcon
-                                    className="h-5 w-5 text-gray-400"
-                                    aria-hidden="true"
-                                  />
-                                </Combobox.Button>
-
-                                {filteredItems.length > 0 && (
-                                  <Combobox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                                    {filteredItems.map(
-                                      (item: Item, itemIdx: number) => (
-                                        <Combobox.Option
-                                          key={itemIdx}
-                                          value={item}
-                                          className={({ active }) =>
-                                            classNames(
-                                              "relative cursor-default select-none py-2 pl-3 pr-9",
-                                              active
-                                                ? "bg-indigo-600 text-white"
-                                                : "text-gray-900"
-                                            )
-                                          }
-                                        >
-                                          {({ active, selected }) => (
-                                            <>
-                                              <div className="flex">
-                                                <span
-                                                  className={classNames(
-                                                    "block truncate",
-                                                    selected && "font-semibold"
-                                                  )}
-                                                >
-                                                  {item?.itemType?.productForm}
-                                                  {" - "}
-                                                  {
-                                                    item?.itemType
-                                                      ?.productModifier
-                                                  }
-                                                  {" - "}
-                                                  {item?.strain?.name}
-                                                </span>
-                                              </div>
-
-                                              {selected && (
-                                                <span
-                                                  className={classNames(
-                                                    "absolute inset-y-0 right-0 flex items-center pr-4",
-                                                    active
-                                                      ? "text-white"
-                                                      : "text-indigo-600"
-                                                  )}
-                                                >
-                                                  <CheckIcon
-                                                    className="h-5 w-5"
-                                                    aria-hidden="true"
-                                                  />
-                                                </span>
-                                              )}
-                                            </>
-                                          )}
-                                        </Combobox.Option>
-                                      )
-                                    )}
-                                  </Combobox.Options>
-                                )}
-                              </div>
-                            </Combobox>
-                          </div>
-
-                          {/* Parent quantity remaining tracker */}
-                          <div className="flex flex-col items-center justify-center">
-                            <span className="text-sm text-gray-700">
-                              {" "}
-                              Available:{" "}
-                            </span>
-                            <span className="text-sm text-gray-700">
-                              {newParentQuantity}{" "}
-                            </span>
-                            <span className="text-sm text-gray-700">
-                              {selectedParentPackage?.uom.name}
-                            </span>
-                            <input
-                              type="hidden"
-                              name="new-parent-quantity"
-                              value={newParentQuantity}
-                            />
-                          </div>
-
-                          {/* Quantity Input */}
-                          <div className="flex flex-col sm:flex-row">
-                            <label
-                              htmlFor="quantity"
-                              className="block text-sm font-medium text-gray-700"
-                            >
-                              Enter Quantity
-                            </label>
-                            <div className="mt-1 flex rounded-md shadow-sm">
-                              <div className="relative flex flex-grow items-stretch focus-within:z-10">
-                                <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                                  <CubeIcon
-                                    className="h-5 w-5 text-gray-400"
-                                    aria-hidden="true"
-                                  />
-                                </div>
-                                <input
-                                  type="number"
-                                  name="quantity"
-                                  id="quantity"
-                                  ref={quantityRef}
-                                  onChange={(event) => {
-                                    setQuantity(parseFloat(event.target.value));
-                                  }}
-                                  className="block w-full rounded-none rounded-l-md border-gray-300 pl-10 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                  placeholder="0.00"
-                                  min={0}
-                                  step="0.0001"
-                                />
-                              </div>
-                            </div>
-                          </div>
-                          {/* Quantity Type Select */}
-                          <div className=" flex flex-col sm:flex-row">
-                            <Listbox
-                              value={selectedUom}
-                              onChange={setSelectedUom}
-                            >
-                              {({ open }) => (
-                                <>
-                                  <Listbox.Label className="block text-sm font-medium text-gray-700">
-                                    UoM
-                                  </Listbox.Label>
-                                  <div className="relative mt-1 w-full">
-                                    <Listbox.Button className="relative w-full cursor-default rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 text-left shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm">
-                                      <span className="block truncate">
-                                        {selectedUom.name}
-                                      </span>
-                                      <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                                        <ChevronUpDownIcon
-                                          className="h-5 w-5 text-gray-400"
-                                          aria-hidden="true"
-                                        />
-                                      </span>
-                                    </Listbox.Button>
-                                    <input
-                                      type="hidden"
-                                      name="uom-object"
-                                      value={JSON.stringify(selectedUom)}
-                                    />
-
-                                    <Transition
-                                      show={open}
-                                      as={Fragment}
-                                      leave="transition ease-in duration-100"
-                                      leaveFrom="opacity-100"
-                                      leaveTo="opacity-0"
-                                    >
-                                      <div>
-                                        <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                                          {uoms.map((uom: Uom) => (
-                                            <Listbox.Option
-                                              key={uom.id}
-                                              className={({ active }) =>
-                                                classNames(
-                                                  active
-                                                    ? "bg-indigo-600 text-white"
-                                                    : "text-gray-900",
-                                                  "relative cursor-default select-none py-2 pl-3 pr-9"
-                                                )
-                                              }
-                                              value={uom}
-                                            >
-                                              {({ selected, active }) => (
-                                                <>
-                                                  <span
-                                                    className={classNames(
-                                                      selected
-                                                        ? "font-semibold"
-                                                        : "font-normal",
-                                                      "block truncate"
-                                                    )}
-                                                  >
-                                                    {uom.name}
-                                                  </span>
-
-                                                  {selected ? (
-                                                    <span
-                                                      className={classNames(
-                                                        active
-                                                          ? "text-white"
-                                                          : "text-indigo-600",
-                                                        "absolute inset-y-0 right-0 flex items-center pr-4"
-                                                      )}
-                                                    >
-                                                      <CheckIcon
-                                                        className="h-5 w-5"
-                                                        aria-hidden="true"
-                                                      />
-                                                    </span>
-                                                  ) : null}
-                                                </>
-                                              )}
-                                            </Listbox.Option>
-                                          ))}
-                                        </Listbox.Options>
-                                      </div>
-                                    </Transition>
-                                  </div>
-                                </>
-                              )}
-                            </Listbox>
-                          </div>
-                          {/* New Package Tag Select */}
-                          <Combobox
-                            as="div"
-                            value={selectedPackageTag}
-                            onChange={setSelectedPackageTag}
-                          >
-                            <Combobox.Label className="block text-sm font-medium text-gray-700">
-                              Select New Tag
-                            </Combobox.Label>
-                            <div className="relative mt-1">
-                              <Combobox.Input
-                                className="w-full rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 disabled:bg-gray-300 sm:text-sm"
-                                onChange={(event) => {
-                                  setPackageTagQuery(event.target.value);
-                                }}
-                                defaultValue={selectedPackageTag?.tagNumber}
-                                displayValue={(packageTag: PackageTag) =>
-                                  packageTag?.tagNumber
-                                    ? packageTag.tagNumber
-                                    : "No tag selected"
-                                }
-                              />
-                              {/* Actual input for ComboBox to avoid having to render selection as ID */}
-                              <input
-                                type="hidden"
-                                name="tag-object"
-                                value={JSON.stringify(selectedPackageTag)}
-                              />
-                              {/*  */}
-                              <Combobox.Button className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none">
+                              <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                                 <ChevronUpDownIcon
                                   className="h-5 w-5 text-gray-400"
                                   aria-hidden="true"
                                 />
-                              </Combobox.Button>
+                              </span>
+                            </Listbox.Button>
+                            <input
+                              type="hidden"
+                              name="uom-object"
+                              value={JSON.stringify(selectedUom)}
+                            />
 
-                              {filteredTags.length > 0 && (
-                                <Combobox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                                  {filteredTags.map(
-                                    (tag: PackageTag, tagIdx: number) => (
-                                      <Combobox.Option
-                                        key={tagIdx}
-                                        value={tag}
-                                        className={({ active }) =>
-                                          classNames(
-                                            "relative cursor-default select-none py-2 pl-3 pr-9",
-                                            active
-                                              ? "bg-indigo-600 text-white"
-                                              : "text-gray-900"
-                                          )
-                                        }
-                                      >
-                                        {({ active, selected }) => (
-                                          <>
+                            <Transition
+                              show={open}
+                              as={Fragment}
+                              leave="transition ease-in duration-100"
+                              leaveFrom="opacity-100"
+                              leaveTo="opacity-0"
+                            >
+                              <div>
+                                <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                                  {uoms.map((uom: Uom) => (
+                                    <Listbox.Option
+                                      key={uom.id}
+                                      className={({ active }) =>
+                                        classNames(
+                                          active
+                                            ? "bg-indigo-600 text-white"
+                                            : "text-gray-900",
+                                          "relative cursor-default select-none py-2 pl-3 pr-9"
+                                        )
+                                      }
+                                      value={uom}
+                                    >
+                                      {({ selected, active }) => (
+                                        <>
+                                          <span
+                                            className={classNames(
+                                              selected
+                                                ? "font-semibold"
+                                                : "font-normal",
+                                              "block truncate"
+                                            )}
+                                          >
+                                            {uom.name}
+                                          </span>
+
+                                          {selected ? (
                                             <span
                                               className={classNames(
-                                                "block truncate",
-                                                selected && "font-semibold"
+                                                active
+                                                  ? "text-white"
+                                                  : "text-indigo-600",
+                                                "absolute inset-y-0 right-0 flex items-center pr-4"
                                               )}
                                             >
-                                              {tag.tagNumber}
+                                              <CheckIcon
+                                                className="h-5 w-5"
+                                                aria-hidden="true"
+                                              />
                                             </span>
+                                          ) : null}
+                                        </>
+                                      )}
+                                    </Listbox.Option>
+                                  ))}
+                                </Listbox.Options>
+                              </div>
+                            </Transition>
+                          </div>
+                        </>
+                      )}
+                    </Listbox>
+                  </div>
+                  {/* New Package Tag Select */}
+                  <Combobox
+                    as="div"
+                    value={selectedPackageTag}
+                    onChange={setSelectedPackageTag}
+                  >
+                    <Combobox.Label className="block text-sm font-medium text-gray-700">
+                      Select New Tag
+                    </Combobox.Label>
+                    <div className="relative mt-1">
+                      <Combobox.Input
+                        className="w-full rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 disabled:bg-gray-300 sm:text-sm"
+                        onChange={(event) => {
+                          setPackageTagQuery(event.target.value);
+                        }}
+                        defaultValue={selectedPackageTag?.tagNumber}
+                        displayValue={(packageTag: PackageTag) =>
+                          packageTag?.tagNumber
+                            ? packageTag.tagNumber
+                            : "No tag selected"
+                        }
+                      />
+                      {/* Actual input for ComboBox to avoid having to render selection as ID */}
+                      <input
+                        type="hidden"
+                        name="tag-object"
+                        value={JSON.stringify(selectedPackageTag)}
+                      />
+                      {/*  */}
+                      <Combobox.Button className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none">
+                        <ChevronUpDownIcon
+                          className="h-5 w-5 text-gray-400"
+                          aria-hidden="true"
+                        />
+                      </Combobox.Button>
 
-                                            {selected && (
-                                              <span
-                                                className={classNames(
-                                                  "absolute inset-y-0 right-0 flex items-center pr-4",
-                                                  active
-                                                    ? "text-white"
-                                                    : "text-indigo-600"
-                                                )}
-                                              >
-                                                <CheckIcon
-                                                  className="h-5 w-5"
-                                                  aria-hidden="true"
-                                                />
-                                              </span>
-                                            )}
-                                          </>
+                      {filteredTags.length > 0 && (
+                        <Combobox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                          {filteredTags.map(
+                            (tag: PackageTag, tagIdx: number) => (
+                              <Combobox.Option
+                                key={tagIdx}
+                                value={tag}
+                                className={({ active }) =>
+                                  classNames(
+                                    "relative cursor-default select-none py-2 pl-3 pr-9",
+                                    active
+                                      ? "bg-indigo-600 text-white"
+                                      : "text-gray-900"
+                                  )
+                                }
+                              >
+                                {({ active, selected }) => (
+                                  <>
+                                    <span
+                                      className={classNames(
+                                        "block truncate",
+                                        selected && "font-semibold"
+                                      )}
+                                    >
+                                      {tag.tagNumber}
+                                    </span>
+
+                                    {selected && (
+                                      <span
+                                        className={classNames(
+                                          "absolute inset-y-0 right-0 flex items-center pr-4",
+                                          active
+                                            ? "text-white"
+                                            : "text-indigo-600"
                                         )}
-                                      </Combobox.Option>
-                                    )
-                                  )}
-                                </Combobox.Options>
-                              )}
-                            </div>
-                          </Combobox>
+                                      >
+                                        <CheckIcon
+                                          className="h-5 w-5"
+                                          aria-hidden="true"
+                                        />
+                                      </span>
+                                    )}
+                                  </>
+                                )}
+                              </Combobox.Option>
+                            )
+                          )}
+                        </Combobox.Options>
+                      )}
+                    </div>
+                  </Combobox>
 
-                          {/* <label className='font-medium text-gray-700'>
+                  {/* <label className='font-medium text-gray-700'>
                             Provisional?
                           </label>
                           <input
@@ -887,35 +856,31 @@ export default function AddPackageSlideIn(): JSX.Element {
                             defaultChecked={false}
                             className='h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 disabled:bg-gray-300'
                           ></input> */}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex flex-shrink-0 justify-end px-4 py-4">
-                    <button
-                      type="button"
-                      className="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                      onClick={onDismiss}
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      type="submit"
-                      disabled={isAdding}
-                      name="_action"
-                      value="create"
-                      className="ml-4 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                    >
-                      {isAdding ? <div>Saving...</div> : "Save"}
-                    </button>
-                  </div>
-                </Form>
+                </div>
               </div>
-            </Transition.Child>
+            </div>
           </div>
-        </div>
-      </Dialog>
-    </Transition.Root>
+          <div className="flex flex-shrink-0 justify-end px-4 py-4">
+            <button
+              type="button"
+              className="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              onClick={onDismiss}
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={isAdding}
+              name="_action"
+              value="create"
+              className="ml-4 inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+            >
+              {isAdding ? <div>Saving...</div> : "Save"}
+            </button>
+          </div>
+        </Form>
+      </SlideInRight>
+    </>
   );
 }
 
