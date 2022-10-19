@@ -40,3 +40,44 @@ export function getAllOrders(): Promise<Order[]> {
     },
   });
 }
+
+export function getOrderById(id: string): Promise<Order> {
+  return db.order.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      lineItemPackages: {
+        include: {
+          tag: true,
+          uom: true,
+          item: {
+            include: {
+              itemType: {
+                include: {
+                  uomDefault: {},
+                },
+              },
+              strain: true,
+            },
+          },
+          labTests: {
+            include: {
+              labTest: {
+                select: {
+                  thcTotalPercent: true,
+                  cbdPercent: true,
+                  terpenePercent: true,
+                  overallPassed: true,
+                  totalCannabinoidsPercent: true,
+                  batchCode: true,
+                  testIdCode: true,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  });
+}

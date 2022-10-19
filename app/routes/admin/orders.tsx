@@ -527,9 +527,6 @@ export default function OrderPage(): JSX.Element {
           {/* End Calendar */}
         </div>
         {/*  End Page Content */}
-        <div className="flex-1 p-6">
-          <Outlet />
-        </div>
       </div>
     </>
   );

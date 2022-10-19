@@ -16,9 +16,14 @@ import { createColumnHelper } from "@tanstack/react-table";
 import BasicGroupingTable from "~/components/BasicGroupingTable";
 import type { PackageWithNesting } from "~/types/types";
 import { getAllPackagesOnOrder } from "~/modules/package/queries";
+import { getAllOrders } from "~/modules/order/queries";
+
+// TODO: streamline the amount of db calls needed to make a process
+// Can likely restructure to pull data using matches.
 
 type LoaderData = {
   authSession: AuthSession;
+  order: Awaited<ReturnType<typeof getAllOrders>>;
   orderPackages: Awaited<ReturnType<typeof getAllPackagesOnOrder>>;
 };
 
@@ -26,9 +31,11 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const authSession = await requireAuthSession(request, {
     onFailRedirectTo: "/login",
   });
+  const orders = await getAllOrders();
   const orderPackages = await getAllPackagesOnOrder(params.toString());
   return json<LoaderData>({
     authSession,
+    orders,
     orderPackages,
   });
 };
@@ -39,9 +46,10 @@ const columnHelper = createColumnHelper<PackageWithNesting>();
 
 export default function SingleOrderPage() {
   const uoms = useUoms();
-  const orders = useOrders();
+  // const orders = useOrders();
   const { orderId } = useParams();
   invariant(orderId, "orderId is required");
+  const { orders } = useLoaderData<LoaderData>();
   const orderPackages = useLoaderData<LoaderData>().orderPackages;
   // const data = matches[2]!.data;
 
