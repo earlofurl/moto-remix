@@ -348,8 +348,8 @@ export default function AddPackageSlideIn(): JSX.Element {
                   replace
                   className="flex h-full flex-col divide-y divide-gray-200 bg-white shadow-xl"
                 >
-                  {/* Slide Out Header */}
                   <div className="h-0 flex-1 overflow-y-auto">
+                    {/* SlideIn Header */}
                     <div className="bg-indigo-700 py-6 px-4 sm:px-6">
                       <div className="flex items-center justify-between">
                         <Dialog.Title className="text-lg font-medium text-white">
@@ -377,6 +377,7 @@ export default function AddPackageSlideIn(): JSX.Element {
                         </p>
                       </div>
                     </div>
+                    {/* End SlideIn Header */}
                     {/* Form Content */}
                     <div className="flex flex-1 flex-col justify-between">
                       <div className="divide-y divide-gray-200 px-4 sm:px-6">

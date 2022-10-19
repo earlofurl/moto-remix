@@ -1,7 +1,7 @@
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import type { PackageWithNesting } from "~/types/types";
-import { useNavigate } from "@remix-run/react";
+import { Link, useNavigate } from "@remix-run/react";
 import { Row } from "@tanstack/react-table";
 import {
   ArrowRightCircleIcon,
@@ -10,6 +10,7 @@ import {
   TrashIcon,
   PlusIcon,
   ArrowRightOnRectangleIcon,
+  TagIcon,
 } from "@heroicons/react/20/solid";
 
 function classNames(
@@ -30,6 +31,12 @@ export default function PackageTableRowActions({
       state: { selectedParentPackageId: row.original.id },
     });
   }
+
+  // function handleAssignTagButtonClick() {
+  //   return navigate("assign-tag", {
+  //     state: { selectedParentPackageId: row.original.id },
+  //   });
+  // }
 
   return (
     <Menu
@@ -97,7 +104,7 @@ export default function PackageTableRowActions({
               {({ active }) => (
                 <button
                   type="button"
-                  // onClick={handleAddToOrderButtonClick}
+                  // onClick={handleCreateFromButtonClick}
                   className={classNames(
                     active ? "bg-gray-100 text-gray-900" : "text-gray-700",
                     "group flex items-center px-4 py-2 text-sm"
@@ -109,6 +116,23 @@ export default function PackageTableRowActions({
                   />
                   Add to Order
                 </button>
+              )}
+            </Menu.Item>
+            <Menu.Item>
+              {({ active }) => (
+                <Link
+                  to="assign-tag"
+                  className={classNames(
+                    active ? "bg-gray-100 text-gray-900" : "text-gray-700",
+                    "group flex items-center px-4 py-2 text-sm"
+                  )}
+                >
+                  <TagIcon
+                    className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+                    aria-hidden="true"
+                  />
+                  Assign Tag
+                </Link>
               )}
             </Menu.Item>
           </div>
