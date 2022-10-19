@@ -46,12 +46,11 @@ export const action: ActionFunction = async ({ request }) => {
   const body = await request.formData();
   const tagId = JSON.parse(body.get("tag-object") as string).id;
   const packageId = body.get("parent-package-id") as string;
-  console.log("tagId", tagId);
-  console.log("packageId", packageId);
+  // console.log("tagId", tagId);
+  // console.log("packageId", packageId);
 
   const newPackage = await assignTagToPackage({ packageId, tagId });
   return redirect(`/admin/inventory/`);
-  //   return null
 };
 
 function classNames(...classes: (string | boolean)[]) {
