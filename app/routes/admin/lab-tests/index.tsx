@@ -4,7 +4,7 @@ import { json } from "@remix-run/node";
 import { Outlet, useCatch, useLoaderData, useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import dayjs from "dayjs";
-import BasicGroupingTable from "~/components/BasicGroupingTable";
+import BasicGroupingTable from "~/components/tables/BasicGroupingTable";
 import { getAllLabTests } from "~/modules/labTest/queries/get-lab-tests.server";
 import { requireAuthSession } from "~/modules/auth/guards";
 import { AuthSession } from "~/modules/auth/session.server";

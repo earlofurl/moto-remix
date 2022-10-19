@@ -1,4 +1,4 @@
-import { PencilSquareIcon, PlusIcon } from "@heroicons/react/24/outline";
+import { PencilSquareIcon, PlusIcon } from "@heroicons/react/20/solid";
 import { PackageWithNesting } from "~/types/types";
 import { useNavigate } from "@remix-run/react";
 import { Row } from "@tanstack/react-table";

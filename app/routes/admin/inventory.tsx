@@ -4,11 +4,11 @@ import { json } from "@remix-run/node";
 import { Outlet, useCatch, useLoaderData, useNavigate } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { createColumnHelper } from "@tanstack/react-table";
-import BasicGroupingTable from "~/components/BasicGroupingTable";
+import BasicGroupingTable from "~/components/tables/BasicGroupingTable";
 import { getAllPackagesAvailable } from "~/modules/package/queries/get-packages.server";
 import { requireAuthSession } from "~/modules/auth/guards";
 import { AuthSession } from "~/modules/auth/session.server";
-import PackageTableRowActions from "../../components/table/PackageTableRowActions";
+import PackageTableRowActions from "../../components/tables/PackageTableRowActions";
 
 type LoaderData = {
   authSession: AuthSession;

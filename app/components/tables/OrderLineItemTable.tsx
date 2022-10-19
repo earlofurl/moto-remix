@@ -1,5 +1,9 @@
 import { Popover, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
+import {
+  RectangleGroupIcon,
+  RectangleStackIcon,
+} from "@heroicons/react/20/solid";
 import { useCatch } from "@remix-run/react";
 import type { ColumnDef } from "@tanstack/react-table";
 import {
@@ -67,7 +71,7 @@ const fuzzySort: SortingFn<any> = (rowA, rowB, columnId) => {
   return dir === 0 ? sortingFns.alphanumeric(rowA, rowB, columnId) : dir;
 };
 
-export default function BasicGroupingTable({
+export default function OrderLineItemTable({
   tableTitle,
   tableDescription,
   columnData,
@@ -204,9 +208,11 @@ export default function BasicGroupingTable({
                                   },
                                 }}
                               >
-                                {header.column.getIsGrouped()
-                                  ? `🛑(${header.column.getGroupedIndex()}) `
-                                  : `👊 `}
+                                {header.column.getIsGrouped() ? (
+                                  <RectangleStackIcon className="h-4 w-4" />
+                                ) : (
+                                  <RectangleGroupIcon className="h-4 w-4" />
+                                )}
                               </button>
                             ) : null}{" "}
                             {/* {flexRender(

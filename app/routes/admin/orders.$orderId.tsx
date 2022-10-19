@@ -1,7 +1,11 @@
 import type { Order } from "@prisma/client";
 import invariant from "tiny-invariant";
 import dayjs from "dayjs";
-import { CheckCircleIcon } from "@heroicons/react/24/solid";
+import {
+  CheckCircleIcon,
+  PencilIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/solid";
 import { ArrowDownCircleIcon } from "@heroicons/react/24/outline";
 import { useLoaderData, useParams } from "@remix-run/react";
 import type { LoaderFunction } from "@remix-run/node";
@@ -13,13 +17,17 @@ import { useUoms } from "~/hooks/matches/use-uoms";
 import { useOrders } from "~/hooks/matches/use-orders";
 import type { ColumnDef } from "@tanstack/react-table";
 import { createColumnHelper } from "@tanstack/react-table";
-import BasicGroupingTable from "~/components/BasicGroupingTable";
+import OrderLineItemTable from "~/components/tables/OrderLineItemTable";
+import OrderLineItemTableRowActions from "~/components/tables/OrderLineItemTableRowActions";
 import type { PackageWithNesting } from "~/types/types";
 import { getAllPackagesOnOrder } from "~/modules/package/queries";
 import { getAllOrders } from "~/modules/order/queries";
 
 // TODO: streamline the amount of db calls needed to make a process
 // Can likely restructure to pull data using matches.
+
+// TODO: redo ui
+// stat cards at top. narrow timeline underneath. table at bottom.
 
 type LoaderData = {
   authSession: AuthSession;
@@ -73,14 +81,14 @@ export default function SingleOrderPage() {
 
   // Column structure for table
   const columnData: ColumnDef<PackageWithNesting>[] = [
-    // columnHelper.display({
-    //   id: "actions",
-    //   cell: (props) => <PackageTableRowActions row={props.row} />,
-    //   enableGrouping: false,
-    //   enableColumnFilter: false,
-    //   enableGlobalFilter: false,
-    //   enableSorting: false,
-    // }),
+    columnHelper.display({
+      id: "actions",
+      cell: (props) => <OrderLineItemTableRowActions row={props.row} />,
+      enableGrouping: false,
+      enableColumnFilter: false,
+      enableGlobalFilter: false,
+      enableSorting: false,
+    }),
     columnHelper.group({
       id: "main",
       enableGrouping: false,
@@ -163,8 +171,8 @@ export default function SingleOrderPage() {
         columnHelper.accessor((row: any) => `${row.item.strain?.type}`, {
           id: "type",
           header: () => <span>Type</span>,
-          enableGrouping: true,
-          enableColumnFilter: true,
+          enableGrouping: false,
+          enableColumnFilter: false,
           enableGlobalFilter: true,
           enableSorting: true,
         }),
@@ -272,288 +280,161 @@ export default function SingleOrderPage() {
 
   return (
     <>
-      <div className="min-h-full">
-        <main className="py-10">
-          {/* Page header */}
-          <div className="mx-auto max-w-4xl px-4 sm:px-6 md:flex md:items-center md:justify-between md:space-x-5 lg:max-w-7xl lg:px-8">
-            <div className="flex items-center space-x-5">
-              <div className="flex-shrink-0">
-                <div className="relative">
-                  {/* <img
-                    className='h-16 w-16 rounded-full'
-                    src='https://images.unsplash.com/photo-1463453091185-61582044d556?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80'
-                    alt=''
-                  /> */}
-                  <span
-                    className="absolute inset-0 rounded-full shadow-inner"
-                    aria-hidden="true"
-                  />
+      <div className="flex h-screen overflow-hidden">
+        {/* Content area */}
+        <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden bg-white">
+          <div className="lg:relative lg:flex">
+            {/* Content */}
+            <div className="max-w-9xl mx-auto w-full px-4 py-8 sm:px-6 lg:px-8">
+              {/* Page header */}
+              <div className="mb-5 sm:flex sm:items-center sm:justify-between">
+                {/* Left: Title */}
+                <div className="mb-4 sm:mb-0">
+                  <h1 className="text-2xl font-bold text-slate-800 md:text-3xl">
+                    {order?.customerName}
+                  </h1>
                 </div>
-              </div>
-              <div>
-                <h1 className="text-2xl font-bold text-gray-900">
-                  {order?.customerName}
-                </h1>
-                <p className="text-sm font-medium text-gray-500">
-                  Placed on {dayjs(order?.createdAt).format("MMM D, YYYY")}
-                </p>
-              </div>
-            </div>
-            <div className="justify-stretch mt-6 flex flex-col-reverse space-y-4 space-y-reverse sm:flex-row-reverse sm:justify-end sm:space-y-0 sm:space-x-3 sm:space-x-reverse md:mt-0 md:flex-row md:space-x-3">
-              <button
-                type="button"
-                className="inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-100"
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                className="inline-flex items-center justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-100"
-              >
-                Advance
-              </button>
-            </div>
-          </div>
 
-          <div className="mx-auto mt-8 max-w-3xl sm:px-6 lg:max-w-full">
-            <div className="grid grid-cols-1 flex-col gap-6 lg:grid-cols-3 lg:grid-rows-3">
-              {/* Description list*/}
-              <section
-                aria-labelledby="customer-information-title"
-                className="lg:col-span-2 lg:col-start-1 lg:row-span-1 lg:row-start-1"
-              >
-                <div className="bg-white shadow sm:rounded-lg">
-                  <div className="px-4 py-5 sm:px-6">
-                    <h2
-                      id="applicant-information-title"
-                      className="text-lg font-medium leading-6 text-gray-900"
-                    >
-                      Customer Information
-                    </h2>
-                    <p className="mt-1 max-w-2xl text-sm text-gray-500">
-                      Details
-                    </p>
-                  </div>
-                  <div className="border-t border-gray-200 px-4 py-5 sm:px-6">
-                    <dl className="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2">
-                      <div className="sm:col-span-1">
-                        <dt className="text-sm font-medium text-gray-500">
-                          Address
-                        </dt>
-                        {/*<dd className="mt-1 text-sm text-gray-900">*/}
-                        {/*  {order?.customerFacility?.addressStreet1}{" "}*/}
-                        {/*  {order?.customerFacility?.addressStreet2}*/}
-                        {/*  {<br />}*/}
-                        {/*  {order?.customerFacility?.addressCity}{" "}*/}
-                        {/*  {order?.customerFacility?.addressState}{" "}*/}
-                        {/*  {order?.customerFacility?.addressZip}*/}
-                        {/*</dd>*/}
-                      </div>
-                      <div className="sm:col-span-1">
-                        <dt className="text-sm font-medium text-gray-500">
-                          Email address
-                        </dt>
-                        {/*<dd className="mt-1 text-sm text-gray-900">*/}
-                        {/*  {order?.customerFacility?.contacts[0]?.contact.email}*/}
-                        {/*</dd>*/}
-                      </div>
-                      <div className="sm:col-span-1">
-                        <dt className="text-sm font-medium text-gray-500">
-                          Phone
-                        </dt>
-                        {/*<dd className="mt-1 text-sm text-gray-900">*/}
-                        {/*  {order?.customerFacility?.contacts[0]?.contact.phone}*/}
-                        {/*</dd>*/}
-                      </div>
-                      <div className="sm:col-span-1">
-                        <dt className="text-sm font-medium text-gray-500">
-                          Items
-                        </dt>
-                        <dd className="mt-1 text-sm text-gray-900">
-                          {order?.lineItemPackages?.length}
-                        </dd>
-                      </div>
-                      <div className="sm:col-span-1">
-                        <dt className="text-sm font-medium text-gray-500">
-                          Order Total
-                        </dt>
-                        {/*<dd className="mt-1 text-sm text-gray-900">*/}
-                        {/*  ${totalPrice}*/}
-                        {/*</dd>*/}
-                      </div>
-                    </dl>
-                  </div>
-                </div>
-              </section>
-
-              {/* Timeline Section */}
-              <section
-                aria-labelledby="timeline-title"
-                className="lg:col-span-1 lg:col-start-3 lg:row-span-1 lg:row-start-1"
-              >
-                <div className="bg-white px-4 py-5 shadow sm:rounded-lg sm:px-6">
-                  <h2
-                    id="timeline-title"
-                    className="text-lg font-medium text-gray-900"
+                {/* Add card button */}
+                <button className="btn bg-indigo-500 text-white hover:bg-indigo-600">
+                  <svg
+                    className="h-4 w-4 shrink-0 fill-current opacity-50"
+                    viewBox="0 0 16 16"
                   >
-                    Timeline
-                  </h2>
+                    <path d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
+                  </svg>
+                  <span className="xs:block ml-2 hidden">Add Item</span>
+                </button>
+              </div>
 
-                  {/* Activity Feed */}
-                  <div className="mt-6 flow-root">
-                    <ul className="-mb-8">
-                      <li>
-                        <div className="relative pb-8">
-                          <span
-                            className="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-200"
-                            aria-hidden="true"
-                          />
-
-                          <div className="relative flex space-x-3">
-                            <div>
-                              <span className="flex h-8 w-8 items-center justify-center rounded-full ring-8 ring-white">
-                                <CheckCircleIcon className="text-green-400" />
-                              </span>
-                            </div>
-                            <div className="flex min-w-0 flex-1 justify-between space-x-4 pt-1.5">
-                              <div>
-                                <p className="text-sm text-gray-500">
-                                  Order Placed{" "}
-                                </p>
-                              </div>
-                              <div className="whitespace-nowrap text-right text-sm text-gray-500">
-                                {dayjs(order?.createdAt).format(
-                                  "MMM D, h:mm a"
-                                )}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </li>
-                      <li>
-                        <div className="relative pb-8">
-                          <span
-                            className="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-200"
-                            aria-hidden="true"
-                          />
-
-                          <div className="relative flex space-x-3">
-                            <div>
-                              <span className="flex h-8 w-8 items-center justify-center rounded-full ring-8 ring-white">
-                                {order?.status === "Open" ? (
-                                  <ArrowDownCircleIcon />
-                                ) : (
-                                  <CheckCircleIcon className="text-green-400" />
-                                )}
-                              </span>
-                            </div>
-                            <div className="flex min-w-0 flex-1 justify-between space-x-4 pt-1.5">
-                              <div>
-                                <p className="text-sm text-gray-500">
-                                  Scheduled Pack By{" "}
-                                </p>
-                              </div>
-                              <div className="whitespace-nowrap text-right text-sm text-gray-500">
-                                {dayjs(order?.scheduledPackDateTime).format(
-                                  "ddd MMM D, h:mm a"
-                                )}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </li>
-                      <li>
-                        <div className="relative pb-8">
-                          <span
-                            className="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-200"
-                            aria-hidden="true"
-                          />
-
-                          <div className="relative flex space-x-3">
-                            <div>
-                              <span className="flex h-8 w-8 items-center justify-center rounded-full ring-8 ring-white">
-                                {order?.status === "Open" ||
-                                order?.status === "Packed" ? (
-                                  <ArrowDownCircleIcon />
-                                ) : (
-                                  <CheckCircleIcon className="text-green-400" />
-                                )}
-                              </span>
-                            </div>
-                            <div className="flex min-w-0 flex-1 justify-between space-x-4 pt-1.5">
-                              <div>
-                                <p className="text-sm text-gray-500">
-                                  Scheduled Ship By{" "}
-                                </p>
-                              </div>
-                              <div className="whitespace-nowrap text-right text-sm text-gray-500">
-                                {dayjs(order?.scheduledShipDateTime).format(
-                                  "ddd MMM D, h:mm a"
-                                )}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </li>
-                      <li>
-                        <div className="relative pb-8">
-                          <div className="relative flex space-x-3">
-                            <div>
-                              <span className="flex h-8 w-8 items-center justify-center rounded-full ring-8 ring-white">
-                                {order?.status === "Open" ||
-                                order?.status === "Packed" ||
-                                order?.status === "Shipped" ? (
-                                  <ArrowDownCircleIcon />
-                                ) : (
-                                  <CheckCircleIcon className="text-green-400" />
-                                )}
-                              </span>
-                            </div>
-                            <div className="flex min-w-0 flex-1 justify-between space-x-4 pt-1.5">
-                              <div>
-                                <p className="text-sm text-gray-500">
-                                  Scheduled Delivery{" "}
-                                </p>
-                              </div>
-                              <div className="whitespace-nowrap text-right text-sm text-gray-500">
-                                {dayjs(order?.scheduledDeliveryDateTime).format(
-                                  "ddd MMM D, h:mm a"
-                                )}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </li>
-                    </ul>
-                  </div>
-                  <div className="justify-stretch mt-6 flex flex-col">
-                    <button
-                      type="button"
-                      className="inline-flex items-center justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                    >
-                      Advance
+              {/* Filters */}
+              <div className="mb-5">
+                <ul className="-m-1 flex flex-wrap">
+                  <li className="m-1">
+                    <button className="inline-flex items-center justify-center rounded-full border border-transparent bg-indigo-500 px-3 py-1 text-sm font-medium leading-5 text-white shadow-sm duration-150 ease-in-out">
+                      View All
                     </button>
-                  </div>
-                </div>
-              </section>
+                  </li>
+                  <li className="m-1">
+                    <button className="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white px-3 py-1 text-sm font-medium leading-5 text-slate-500 shadow-sm duration-150 ease-in-out hover:border-slate-300">
+                      Open Items
+                    </button>
+                  </li>
+                  <li className="m-1">
+                    <button className="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white px-3 py-1 text-sm font-medium leading-5 text-slate-500 shadow-sm duration-150 ease-in-out hover:border-slate-300">
+                      Completed Items
+                    </button>
+                  </li>
+                </ul>
+              </div>
 
-              {/* Line Item Table */}
-              <section
-                aria-labelledby="items-title"
-                className="space-y-6 lg:col-span-3 lg:row-span-2 lg:row-start-2"
-              >
+              {/* Line Items */}
+              <div className="space-y-2">
                 <div className="bg-white shadow sm:overflow-hidden sm:rounded-lg">
-                  <BasicGroupingTable
+                  <OrderLineItemTable
                     tableTitle={tableTitle}
                     tableDescription={tableDescription}
                     columnData={columnData}
                     tableData={order.lineItemPackages}
                   />
                 </div>
-              </section>
+              </div>
+            </div>
+
+            {/* Order Overview Sidebar */}
+            <div>
+              <div className="no-scrollbar border-t border-slate-200 bg-slate-50 lg:sticky lg:top-16 lg:h-[calc(100vh-64px)] lg:w-[390px] lg:shrink-0 lg:overflow-y-auto lg:overflow-x-hidden lg:border-t-0 lg:border-l">
+                <div className="py-8 px-4 lg:px-8">
+                  <div className="mx-auto max-w-sm lg:max-w-none">
+                    {/* Details */}
+                    <div className="mt-6">
+                      <div className="mb-1 text-sm font-semibold text-slate-800">
+                        Details
+                      </div>
+                      <ul>
+                        <li className="flex items-center justify-between border-b border-slate-200 py-3">
+                          <div className="text-sm">Customer Name</div>
+                          <div className="ml-2 text-sm font-medium text-slate-800">
+                            {order?.customerName}
+                          </div>
+                        </li>
+                        <li className="flex items-center justify-between border-b border-slate-200 py-3">
+                          <div className="text-sm">Status</div>
+                          <div className="flex items-center whitespace-nowrap">
+                            <div className="mr-2 h-2 w-2 rounded-full bg-emerald-500" />
+                            <div className="text-sm font-medium text-slate-800">
+                              {order?.status}
+                            </div>
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+
+                    {/* Detail Zone 1 */}
+                    <div className="mt-6">
+                      <div className="mb-4 text-sm font-semibold text-slate-800">
+                        Pack Date
+                      </div>
+                      <div className="border-b border-slate-200 pb-4">
+                        <div className="mb-2 flex justify-between text-sm">
+                          <div>
+                            {dayjs(order?.scheduledPackDateTime).format(
+                              "MMM DD YY"
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Detail Zone 2 */}
+                    <div className="mt-6">
+                      <div className="mb-4 text-sm font-semibold text-slate-800">
+                        Ship Date
+                      </div>
+                      <div className="border-b border-slate-200 pb-4">
+                        <div className="mb-2 flex justify-between text-sm">
+                          <div>
+                            {dayjs(order?.scheduledShipDateTime).format(
+                              "MMM DD YY"
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Edit / Delete */}
+                    <div className="mt-6 flex items-center space-x-3">
+                      <div className="w-1/2">
+                        <button
+                          type="button"
+                          className="inline-flex items-center rounded-md border border-transparent bg-indigo-500 px-3 py-2 text-sm font-medium leading-4 text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        >
+                          <PencilIcon
+                            className="-ml-0.5 mr-2 h-4 w-4"
+                            aria-hidden="true"
+                          />
+                          Edit Order
+                        </button>
+                      </div>
+                      <div className="w-1/2">
+                        <button
+                          type="button"
+                          className="inline-flex items-center rounded-md border border-transparent bg-red-500 px-3 py-2 text-sm font-medium leading-4 text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        >
+                          <XMarkIcon
+                            className="-ml-0.5 mr-2 h-4 w-4"
+                            aria-hidden="true"
+                          />
+                          Cancel Order
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-        </main>
+        </div>
       </div>
     </>
   );
