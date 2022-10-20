@@ -134,7 +134,12 @@ export default function AddPckgToOrderSlideIn(): JSX.Element {
                 <div className="space-y-6 pt-6 pb-5">
                   <div>
                     <span>Assigning package: </span>
-                    <span>{JSON.stringify(selectedPackage)}</span>
+                    {/*<span>{JSON.stringify(selectedPackage)}</span>*/}
+                    {/*<span>{selectedPackage?.tag.tagNumber}</span>*/}
+                    {/*<span>{selectedPackage?.strain.name}</span>*/}
+                    {/*<span>{selectedPackage?.labTests[0].batchCode}</span>*/}
+                    {/*<span>{selectedPackage?.quantity}</span>*/}
+                    {/*<span>{selectedPackage?.uom.abbreviation}</span>*/}
                   </div>
                   <input
                     type="hidden"
