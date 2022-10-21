@@ -1,186 +1,176 @@
+
+import type {ActionArgs, LoaderArgs, MetaFunction} from "@remix-run/node";
+import {json, redirect} from "@remix-run/node";
+import {Form, useActionData, useSearchParams, useTransition,} from "@remix-run/react";
 import * as React from "react";
+import {getFormData, useFormInputProps} from "remix-params-helper";
+import {z} from "zod";
+import {ContinueWithEmailForm} from "~/modules/auth/components";
+import {signInWithEmail} from "~/modules/auth/mutations";
+import {createAuthSession, getAuthSession,} from "~/modules/auth/session.server";
+import {assertIsPost} from "~/utils/http.server";
 
-import type { ActionArgs, LoaderArgs, MetaFunction } from "@remix-run/node";
-import { json, redirect } from "@remix-run/node";
-import {
-  Form,
-  Link,
-  useActionData,
-  useSearchParams,
-  useTransition,
-} from "@remix-run/react";
-import { getFormData, useFormInputProps } from "remix-params-helper";
-import { z } from "zod";
+export async function loader({request}: LoaderArgs) {
+    const authSession = await getAuthSession(request);
+    if (authSession) {return redirect("/admin");}
 
-import { ContinueWithEmailForm } from "~/modules/auth/components";
-import { signInWithEmail } from "~/modules/auth/mutations";
-import {
-  createAuthSession,
-  getAuthSession,
-} from "~/modules/auth/session.server";
-import { assertIsPost } from "~/utils/http.server";
-
-export async function loader({ request }: LoaderArgs) {
-  const authSession = await getAuthSession(request);
-  if (authSession) return redirect("/admin");
-
-  return null;
+    return null;
 }
 
 const LoginFormSchema = z.object({
-  email: z
-    .string()
-    .email("invalid-email")
-    .transform((email) => email.toLowerCase()),
-  password: z.string().min(8, "password-too-short"),
-  redirectTo: z.string().optional(),
+    email: z
+        .string()
+        .email("invalid-email")
+        .transform((email) => email.toLowerCase()),
+    password: z.string().min(8, "password-too-short"),
+    redirectTo: z.string().optional(),
 });
 
-export async function action({ request }: ActionArgs) {
-  assertIsPost(request);
+export async function action({request}: ActionArgs) {
+    assertIsPost(request);
 
-  const formValidation = await getFormData(request, LoginFormSchema);
+    const formValidation = await getFormData(request, LoginFormSchema);
 
-  if (!formValidation.success) {
-    return json(
-      {
-        errors: {
-          email: formValidation.errors.email,
-          password: formValidation.errors.password,
-        },
-      },
-      { status: 400 }
-    );
-  }
+    if (!formValidation.success) {
+        return json(
+            {
+                errors: {
+                    email: formValidation.errors.email,
+                    password: formValidation.errors.password,
+                },
+            },
+            {status: 400}
+        );
+    }
 
-  const { email, password, redirectTo = "/admin" } = formValidation.data;
+    const {email, password, redirectTo = "/admin"} = formValidation.data;
 
-  const authSession = await signInWithEmail(email, password);
+    const authSession = await signInWithEmail(email, password);
 
-  if (!authSession) {
-    return json(
-      { errors: { email: "invalid-email-password", password: null } },
-      { status: 400 }
-    );
-  }
+    if (!authSession) {
+        return json(
+            {errors: {email: "invalid-email-password", password: null}},
+            {status: 400}
+        );
+    }
 
-  return createAuthSession({
-    request,
-    authSession,
-    redirectTo,
-  });
+    return createAuthSession({
+        request,
+        authSession,
+        redirectTo,
+    });
 }
 
 export const meta: MetaFunction = () => ({
-  title: "Login",
+    title: "Login",
 });
 
 export default function LoginPage() {
-  const [searchParams] = useSearchParams();
-  const redirectTo = searchParams.get("redirectTo") ?? undefined;
-  const actionData = useActionData<typeof action>();
-  const emailRef = React.useRef<HTMLInputElement>(null);
-  const passwordRef = React.useRef<HTMLInputElement>(null);
-  const inputProps = useFormInputProps(LoginFormSchema);
-  const transition = useTransition();
-  const disabled =
-    transition.state === "submitting" || transition.state === "loading";
+    const [searchParams] = useSearchParams();
+    const redirectTo = searchParams.get("redirectTo") ?? undefined;
+    const actionData = useActionData<typeof action>();
+    const emailRef = React.useRef<HTMLInputElement>(null);
+    const passwordRef = React.useRef<HTMLInputElement>(null);
+    const inputProps = useFormInputProps(LoginFormSchema);
+    const transition = useTransition();
+    const disabled =
+        transition.state === "submitting" || transition.state === "loading";
 
-  React.useEffect(() => {
-    if (actionData?.errors?.email) {
-      emailRef.current?.focus();
-    } else if (actionData?.errors?.password) {
-      passwordRef.current?.focus();
-    }
-  }, [actionData]);
+    React.useEffect(() => {
+        if (actionData?.errors?.email) {
+            emailRef.current?.focus();
+        } else if (actionData?.errors?.password) {
+            passwordRef.current?.focus();
+        }
+    }, [actionData]);
 
-  return (
-    <div className="flex min-h-full flex-col justify-center">
-      <div className="mx-auto w-full max-w-md px-8">
-        <Form
-          method="post"
-          className="space-y-6"
-          replace
-        >
-          <div>
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Email
-            </label>
-
-            <div className="mt-1">
-              <input
-                {...inputProps("email")}
-                data-test-id="email"
-                ref={emailRef}
-                id="email"
-                type="email"
-                required
-                autoFocus={true}
-                autoComplete="email"
-                aria-invalid={actionData?.errors?.email ? true : undefined}
-                aria-describedby="email-error"
-                className="w-full rounded border border-gray-500 px-2 py-1 text-lg"
-                disabled={disabled}
-              />
-              {actionData?.errors?.email && (
-                <div
-                  className="pt-1 text-red-700"
-                  id="email-error"
+    return (
+        <div className="flex min-h-full flex-col justify-center">
+            <div className="mx-auto w-full max-w-md px-8">
+                <Form
+                    method="post"
+                    className="space-y-6"
+                    replace
                 >
-                  {actionData.errors.email}
-                </div>
-              )}
-            </div>
-          </div>
+                    <div>
+                        <label
+                            htmlFor="email"
+                            className="block text-sm font-medium text-gray-700"
+                        >
+                            Email
+                        </label>
 
-          <div>
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Password
-            </label>
-            <div className="mt-1">
-              <input
-                {...inputProps("password")}
-                data-test-id="password"
-                type="password"
-                id="password"
-                ref={passwordRef}
-                autoComplete="new-password"
-                aria-invalid={actionData?.errors?.password ? true : undefined}
-                aria-describedby="password-error"
-                className="w-full rounded border border-gray-500 px-2 py-1 text-lg"
-                disabled={disabled}
-              />
-              {actionData?.errors?.password && (
-                <div
-                  className="pt-1 text-red-700"
-                  id="password-error"
-                >
-                  {actionData.errors.password}
-                </div>
-              )}
-            </div>
-          </div>
+                        <div className="mt-1">
+                            <input
+                                {...inputProps("email")}
+                                data-test-id="email"
+                                ref={emailRef}
+                                id="email"
+                                type="email"
+                                required
+                                autoFocus
+                                autoComplete="email"
+                                aria-invalid={actionData?.errors?.email ? true : undefined}
+                                aria-describedby="email-error"
+                                className="w-full rounded border border-gray-500 px-2 py-1 text-lg"
+                                disabled={disabled}
+                            />
+                            {actionData?.errors?.email && (
+                                <div
+                                    className="pt-1 text-red-700"
+                                    id="email-error"
+                                >
+                                    {actionData.errors.email}
+                                </div>
+                            )}
+                        </div>
+                    </div>
 
-          <input
-            type="hidden"
-            name="redirectTo"
-            value={redirectTo}
-          />
-          <button
-            data-test-id="login"
-            type="submit"
-            className="w-full rounded bg-blue-500  py-2 px-4 text-white hover:bg-blue-600 focus:bg-blue-400"
-            disabled={disabled}
-          >
-            Login with Email
-          </button>
-          {/* <div className="flex items-center justify-center">
+                    <div>
+                        <label
+                            htmlFor="password"
+                            className="block text-sm font-medium text-gray-700"
+                        >
+                            Password
+                        </label>
+                        <div className="mt-1">
+                            <input
+                                {...inputProps("password")}
+                                data-test-id="password"
+                                type="password"
+                                id="password"
+                                ref={passwordRef}
+                                autoComplete="new-password"
+                                aria-invalid={actionData?.errors?.password ? true : undefined}
+                                aria-describedby="password-error"
+                                className="w-full rounded border border-gray-500 px-2 py-1 text-lg"
+                                disabled={disabled}
+                            />
+                            {actionData?.errors?.password && (
+                                <div
+                                    className="pt-1 text-red-700"
+                                    id="password-error"
+                                >
+                                    {actionData.errors.password}
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                    <input
+                        type="hidden"
+                        name="redirectTo"
+                        value={redirectTo}
+                    />
+                    <button
+                        data-test-id="login"
+                        type="submit"
+                        className="w-full rounded bg-blue-500  py-2 px-4 text-white hover:bg-blue-600 focus:bg-blue-400"
+                        disabled={disabled}
+                    >
+                        Login with Email
+                    </button>
+                    {/* <div className="flex items-center justify-center">
             <div className="text-center text-sm text-gray-500">
               No Account?{" "}
               <Link
@@ -194,23 +184,23 @@ export default function LoginPage() {
               </Link>
             </div>
           </div> */}
-        </Form>
-        <div className="mt-6">
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-300" />
-            </div>
-            <div className="relative flex justify-center text-sm">
+                </Form>
+                <div className="mt-6">
+                    <div className="relative">
+                        <div className="absolute inset-0 flex items-center">
+                            <div className="w-full border-t border-gray-300"/>
+                        </div>
+                        <div className="relative flex justify-center text-sm">
               <span className="bg-white px-2 text-gray-500">
                 Login using Magic Link
               </span>
+                        </div>
+                    </div>
+                    <div className="mt-6">
+                        <ContinueWithEmailForm/>
+                    </div>
+                </div>
             </div>
-          </div>
-          <div className="mt-6">
-            <ContinueWithEmailForm />
-          </div>
         </div>
-      </div>
-    </div>
-  );
+    );
 }
