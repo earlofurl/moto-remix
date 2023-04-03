@@ -21,7 +21,7 @@ export default function TW404page({
               <span className="sr-only">Moto Perpetuo Farm Logo</span>
               <img
                 className="h-12 w-auto"
-                src="https://res.cloudinary.com/spark-visions/image/upload/q_auto:good,f_auto/v1654562278/Moto_Logo_Primary_BLACK_fyxgwa.png"
+                src="https://res.cloudinary.com/spark-visions/image/upload/q_auto:good,f_auto/v1654562278/moto/Moto_Logo_Primary_BLACK_fyxgwa.png"
                 alt="Moto Logo"
               />
             </a>

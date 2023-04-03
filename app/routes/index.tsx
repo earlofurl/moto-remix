@@ -94,7 +94,7 @@ export default function Index(): JSX.Element {
               <div className="absolute inset-0">
                 <img
                   className="h-full w-full object-cover"
-                  src="https://res.cloudinary.com/spark-visions/image/upload/q_auto,f_auto/v1654560593/moto_trellis_splash.jpg"
+                  src="https://res.cloudinary.com/spark-visions/image/upload/q_auto,f_auto/v1654560593/moto/moto_trellis_splash.jpg"
                   alt="Cannabis in trellis"
                 />
                 <div className="absolute inset-0 bg-gradient-to-b from-brand-primary to-brand-primary/25" />
@@ -102,7 +102,7 @@ export default function Index(): JSX.Element {
               <div className="relative px-4 py-16 sm:px-6 sm:py-24 lg:py-32 lg:px-8">
                 <img
                   className="mx-auto mb-6 h-64 w-64 rounded-full bg-brand-primary bg-opacity-60"
-                  src="https://res.cloudinary.com/spark-visions/image/upload/q_auto:good,f_auto/v1654562278/Moto_Logo_Primary_BLACK_fyxgwa.png"
+                  src="https://res.cloudinary.com/spark-visions/image/upload/q_auto:good,f_auto/v1654562278/moto/Moto_Logo_Primary_BLACK_fyxgwa.png"
                   alt="Moto Perpetuo Farm Logo"
                 />
                 <h1 className="text-center text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl">
@@ -143,7 +143,7 @@ export default function Index(): JSX.Element {
                 <span className="sr-only">NW Kind</span>
                 <img
                   className="h-12"
-                  src="https://res.cloudinary.com/spark-visions/image/upload/v1654629741/NWKind_Logo_nbr1xn.png"
+                  src="https://res.cloudinary.com/spark-visions/image/upload/v1654629741/moto/NWKind_Logo_nbr1xn.png"
                   alt="NW Kind"
                 />
               </a>
@@ -262,7 +262,7 @@ export default function Index(): JSX.Element {
                 <span className="sr-only">Dr. Jolly's</span>
                 <img
                   className="h-16 pr-8 pb-2"
-                  src="https://res.cloudinary.com/spark-visions/image/upload/q_auto:good,f_auto/v1654649530/DRJ_web_rip_ze7zyo.png"
+                  src="https://res.cloudinary.com/spark-visions/image/upload/q_auto:good,f_auto/v1654649530/moto/DRJ_web_rip_ze7zyo.png"
                   alt="Dr. Jolly's"
                 />
               </a>
@@ -288,7 +288,7 @@ export default function Index(): JSX.Element {
                     {/* />*/}
                     <img
                       className="object-cover lg:h-full lg:w-full"
-                      src="https://res.cloudinary.com/spark-visions/image/upload/q_auto:good,f_auto/v1655925824/IG_B6_8U9KKN8u.png"
+                      src="https://res.cloudinary.com/spark-visions/image/upload/q_auto:good,f_auto/v1655925824/moto/IG_B6_8U9KKN8u.png"
                       alt=""
                     />
                   </div>
@@ -462,7 +462,7 @@ export default function Index(): JSX.Element {
                 <div className="-mr-48 pl-4 sm:pl-6 md:-mr-16 lg:relative lg:m-0 lg:h-full lg:px-0">
                   <img
                     className="w-full rounded-xl shadow-xl ring-1 ring-black ring-opacity-5 lg:absolute lg:left-0 lg:h-full lg:w-auto lg:max-w-none"
-                    src="https://res.cloudinary.com/spark-visions/image/upload/q_auto,f_auto/v1655925822/JPEG_20181012_092822.427_kewqdb.jpg"
+                    src="https://res.cloudinary.com/spark-visions/image/upload/q_auto,f_auto/v1655925822/moto/JPEG_20181012_092822.427_kewqdb.jpg"
                     alt="Frosty Bud."
                   />
                 </div>
@@ -521,7 +521,7 @@ export default function Index(): JSX.Element {
                 <div className="-ml-48 pr-4 sm:pr-6 md:-ml-16 lg:relative lg:m-0 lg:h-full lg:px-0">
                   <img
                     className="w-full rounded-xl shadow-xl ring-1 ring-black ring-opacity-5 lg:absolute lg:right-0 lg:h-full lg:w-auto lg:max-w-none"
-                    src="https://res.cloudinary.com/spark-visions/image/upload/q_auto,f_auto/v1654564806/moto_card_1920x1280_cola_01_y5kena.jpg"
+                    src="https://res.cloudinary.com/spark-visions/image/upload/q_auto,f_auto/v1654564806/moto/moto_card_1920x1280_cola_01_y5kena.jpg"
                     alt="Cola"
                   />
                 </div>
@@ -588,7 +588,7 @@ export default function Index(): JSX.Element {
                     <dd className="flex">
                       <img
                         className="h-6 w-6 flex-shrink-0"
-                        src="https://res.cloudinary.com/spark-visions/image/upload/q_auto,f_auto,h_20,w_20/v1655324486/Instagram_Glyph_Black_c0soj4.png"
+                        src="https://res.cloudinary.com/spark-visions/image/upload/q_auto,f_auto,h_20,w_20/v1655324486/moto/Instagram_Glyph_Black_c0soj4.png"
                         alt="Instagram Logo"
                       />
                       <span className="ml-3">

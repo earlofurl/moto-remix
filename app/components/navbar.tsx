@@ -44,7 +44,7 @@ export default function Navbar(): JSX.Element {
             <span className="sr-only">Moto Perpetuo Farm</span>
             <img
               className="h-10 w-auto sm:h-10"
-              src="https://res.cloudinary.com/spark-visions/image/upload/q_auto:good,f_auto,h_75,w_75/v1654565806/Moto_Logo_Badge_Dark_x2xjut.png"
+              src="https://res.cloudinary.com/spark-visions/image/upload/q_auto:good,f_auto,h_75,w_75/v1654565806/moto/Moto_Logo_Badge_Dark_x2xjut.png"
               alt="Moto Logo"
             />
           </Link>
@@ -252,7 +252,7 @@ export default function Navbar(): JSX.Element {
                 <div>
                   <img
                     className="h-8 w-auto"
-                    src="https://res.cloudinary.com/spark-visions/image/upload/q_auto:good,f_auto,h_75,w_75/v1654565806/Moto_Logo_Badge_Dark_x2xjut.png"
+                    src="https://res.cloudinary.com/spark-visions/image/upload/q_auto:good,f_auto,h_75,w_75/v1654565806/moto/Moto_Logo_Badge_Dark_x2xjut.png"
                     alt="Moto Logo"
                   />
                 </div>

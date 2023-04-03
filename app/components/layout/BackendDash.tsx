@@ -109,7 +109,7 @@ export default function BackendDash() {
                     <div className="flex flex-shrink-0 items-center px-4">
                       <img
                         className="h-10 w-auto"
-                        src="https://res.cloudinary.com/spark-visions/image/upload/q_auto:good,f_auto,h_100,w_100/v1654565806/Moto_Logo_Badge_Dark_x2xjut.png"
+                        src="https://res.cloudinary.com/spark-visions/image/upload/q_auto:good,f_auto,h_100,w_100/v1654565806/moto/Moto_Logo_Badge_Dark_x2xjut.png"
                         alt="Moto Perpetuo Farm"
                       />
                     </div>
@@ -180,7 +180,7 @@ export default function BackendDash() {
               <div className="flex flex-shrink-0 items-center px-4">
                 <img
                   className="h-10 w-auto"
-                  src="https://res.cloudinary.com/spark-visions/image/upload/q_auto:good,f_auto,h_100,w_100/v1654565806/Moto_Logo_Badge_Dark_x2xjut.png"
+                  src="https://res.cloudinary.com/spark-visions/image/upload/q_auto:good,f_auto,h_100,w_100/v1654565806/moto/Moto_Logo_Badge_Dark_x2xjut.png"
                   alt="Moto Perpetuo Farm"
                 />
               </div>

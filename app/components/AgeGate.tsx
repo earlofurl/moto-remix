@@ -12,7 +12,7 @@ export default function AgeGate(): JSX.Element {
             <div>
               <img
                 className="mx-auto h-64 w-auto"
-                src="https://res.cloudinary.com/spark-visions/image/upload/q_auto:good,f_auto/v1654562278/Moto_Logo_Primary_BLACK_fyxgwa.png"
+                src="https://res.cloudinary.com/spark-visions/image/upload/q_auto:good,f_auto/v1654562278/moto/Moto_Logo_Primary_BLACK_fyxgwa.png"
                 alt="Moto Logo"
               />
               <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
